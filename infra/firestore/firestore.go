@@ -2,12 +2,12 @@ package firestore
 
 import (
 	"context"
-	"os"
 
 	"cloud.google.com/go/firestore"
-	firebase "firebase.google.com/go"
 	"github.com/google/wire"
 	"github.com/ww24/linebot/domain/repository"
+	"golang.org/x/oauth2/google"
+	f "google.golang.org/api/firestore/v1"
 	"google.golang.org/api/option"
 )
 
@@ -26,13 +26,13 @@ type ClientConfig struct {
 }
 
 func New(ctx context.Context, cfg ClientConfig) (*Client, error) {
-	sa := option.WithCredentialsFile(os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-	app, err := firebase.NewApp(ctx, nil, sa)
+	cred, err := google.FindDefaultCredentials(ctx, f.DatastoreScope)
 	if err != nil {
 		return nil, err
 	}
 
-	cli, err := app.Firestore(ctx)
+	opt := option.WithCredentials(cred)
+	cli, err := firestore.NewClient(ctx, cred.ProjectID, opt)
 	if err != nil {
 		return nil, err
 	}
