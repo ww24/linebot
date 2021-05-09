@@ -29,10 +29,36 @@ func (m *ShoppingItem) Validate() error {
 
 type ShoppingItems []*ShoppingItem
 
-func (l ShoppingItems) Print() string {
+type ListType int
+
+const (
+	ListTypeDotted ListType = iota
+	ListTypeOrdered
+)
+
+func (l ShoppingItems) Print(typ ListType) string {
 	var b strings.Builder
 	for i, item := range l {
-		fmt.Fprintf(&b, "%d. %s\n", i+1, item.Name)
+		switch typ {
+		case ListTypeOrdered:
+			fmt.Fprintf(&b, "%d. %s\n", i+1, item.Name)
+
+		default:
+			fmt.Fprintf(&b, "・%s\n", item.Name)
+		}
 	}
 	return strings.TrimRight(b.String(), "\n")
+}
+
+func (l ShoppingItems) FilterByNames(names []string) ShoppingItems {
+	res := make([]*ShoppingItem, 0)
+	for _, item := range l {
+		for _, name := range names {
+			if strings.Contains(item.Name, name) {
+				res = append(res, item)
+				break
+			}
+		}
+	}
+	return res
 }

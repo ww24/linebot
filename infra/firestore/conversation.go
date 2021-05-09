@@ -71,7 +71,9 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 }
 
 func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID string) ([]*model.ShoppingItem, error) {
-	iter := c.shopping(conversationID).Documents(ctx)
+	iter := c.shopping(conversationID).
+		OrderBy("created_at", firestore.Asc).
+		Documents(ctx)
 	docs, err := iter.GetAll()
 	if err != nil {
 		return nil, err
@@ -90,9 +92,14 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID stri
 	return items, nil
 }
 
-func (c *Conversation) DeleteShoppingItem(ctx context.Context, conversationID, id string) error {
-	item := c.shopping(conversationID).Doc(id)
-	if _, err := item.Delete(ctx, firestore.Exists); err != nil {
+func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID string, ids []string) error {
+	batch := c.cli.Batch()
+	for _, id := range ids {
+		item := c.shopping(conversationID).Doc(id)
+		batch.Delete(item, firestore.Exists)
+	}
+
+	if _, err := batch.Commit(ctx); err != nil {
 		return err
 	}
 
@@ -113,7 +120,7 @@ func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID
 			return err
 		}
 
-		batch.Delete(doc)
+		batch.Delete(doc, firestore.Exists)
 		nothing = false
 	}
 

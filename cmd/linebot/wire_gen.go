@@ -19,7 +19,10 @@ func register(contextContext context.Context, config bot.Config, clientConfig fi
 		return nil, err
 	}
 	conversation := firestore.NewConversation(client)
-	shoppingService := bot.NewShoppingService(conversation)
+	shoppingService, err := bot.NewShoppingService(conversation)
+	if err != nil {
+		return nil, err
+	}
 	botBot, err := bot.New(config, shoppingService)
 	if err != nil {
 		return nil, err
