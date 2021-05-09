@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -32,13 +31,6 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	// health check endpoint
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		//nolint:errcheck
-		io.WriteString(w, "healthy")
-	})
-	// line webhook endpoint
 	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Request received")
 
