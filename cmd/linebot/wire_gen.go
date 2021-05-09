@@ -13,8 +13,8 @@ import (
 
 // Injectors from wire.go:
 
-func register(contextContext context.Context, config bot.Config, clientConfig firestore.ClientConfig) (*bot.Bot, error) {
-	client, err := firestore.New(contextContext, clientConfig)
+func register(contextContext context.Context, config bot.Config) (*bot.Bot, error) {
+	client, err := firestore.New(contextContext)
 	if err != nil {
 		return nil, err
 	}
