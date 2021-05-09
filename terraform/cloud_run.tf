@@ -16,7 +16,7 @@ resource "google_cloud_run_service" "linebot" {
 
   template {
     spec {
-      service_account_name = google_service_account.linebot.name
+      service_account_name = google_service_account.linebot.email
 
       containers {
         image = local.image
@@ -79,18 +79,4 @@ data "google_iam_policy" "noauth" {
       "allUsers",
     ]
   }
-}
-
-resource "google_service_account" "linebot" {
-  account_id   = "linebot"
-  display_name = "linebot Service Account"
-}
-
-resource "google_service_account_iam_binding" "datastore" {
-  service_account_id = google_service_account.linebot.name
-  role               = "roles/datastore.user"
-
-  members = [
-    "serviceAccount:${google_service_account.linebot.email}",
-  ]
 }
