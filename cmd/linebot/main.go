@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/ww24/linebot/bot"
-	"github.com/ww24/linebot/infra/firestore"
 )
 
 func main() {
@@ -22,10 +21,7 @@ func main() {
 		ChannelToken:    os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
 		ConversationIDs: strings.Split(os.Getenv("ALLOW_CONV_IDS"), ","),
 	}
-	storeCfg := firestore.ClientConfig{
-		ProjectID: os.Getenv("GCP_PROJECT_ID"),
-	}
-	bot, err := register(ctx, botCfg, storeCfg)
+	bot, err := register(ctx, botCfg)
 	if err != nil {
 		log.Printf("Error: %+v\n", err)
 	}

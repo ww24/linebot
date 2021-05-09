@@ -21,11 +21,7 @@ type Client struct {
 	cli *firestore.Client
 }
 
-type ClientConfig struct {
-	ProjectID string
-}
-
-func New(ctx context.Context, cfg ClientConfig) (*Client, error) {
+func New(ctx context.Context) (*Client, error) {
 	cred, err := google.FindDefaultCredentials(ctx, f.DatastoreScope)
 	if err != nil {
 		return nil, err

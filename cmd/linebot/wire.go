@@ -13,7 +13,6 @@ import (
 func register(
 	context.Context,
 	bot.Config,
-	firestore.ClientConfig,
 ) (*bot.Bot, error) {
 	wire.Build(
 		firestore.Set,
