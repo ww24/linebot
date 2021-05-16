@@ -267,7 +267,7 @@ func (s *ShoppingService) addQuickReplies(msg linebot.SendingMessage, typ shoppi
 	})
 }
 
-func (s *ShoppingService) deleteFromItem(ctx context.Context, conversationID string, item *nl.Item) (model.ShoppingItems, error) {
+func (s *ShoppingService) deleteFromItem(ctx context.Context, conversationID model.ConversationID, item *nl.Item) (model.ShoppingItems, error) {
 	items, err := s.conversation.FindShoppingItem(ctx, conversationID)
 	if err != nil {
 		return nil, err

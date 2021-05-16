@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"github.com/ww24/linebot/domain/model"
 )
 
 var Set = wire.NewSet(
@@ -21,7 +22,7 @@ type Handler interface {
 
 type Bot struct {
 	cli                    *linebot.Client
-	allowedConversationIDs map[string]struct{}
+	allowedConversationIDs map[model.ConversationID]struct{}
 	handlers               []Handler
 }
 
@@ -41,9 +42,9 @@ func New(
 		return nil, err
 	}
 
-	allowedConversationIDs := make(map[string]struct{}, len(c.ConversationIDs))
+	allowedConversationIDs := make(map[model.ConversationID]struct{}, len(c.ConversationIDs))
 	for _, id := range c.ConversationIDs {
-		allowedConversationIDs[id] = struct{}{}
+		allowedConversationIDs[model.ConversationID(id)] = struct{}{}
 	}
 
 	bot := &Bot{

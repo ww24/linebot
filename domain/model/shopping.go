@@ -10,7 +10,7 @@ type ShoppingItem struct {
 	ID             string
 	Name           string
 	Quantity       int
-	ConversationID string
+	ConversationID ConversationID
 	CreatedAt      int64
 }
 

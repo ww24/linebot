@@ -21,8 +21,28 @@ type ShoppingItem struct {
 	CreatedAt      int64  `firestore:"created_at"`
 }
 
+func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
+	return &ShoppingItem{
+		ID:             src.ID,
+		Name:           src.Name,
+		Quantity:       src.Quantity,
+		ConversationID: string(src.ConversationID),
+		CreatedAt:      src.CreatedAt,
+	}
+}
+
+func (c *ShoppingItem) Model() *model.ShoppingItem {
+	return &model.ShoppingItem{
+		ID:             c.ID,
+		Name:           c.Name,
+		Quantity:       c.Quantity,
+		ConversationID: model.ConversationID(c.ConversationID),
+		CreatedAt:      c.CreatedAt,
+	}
+}
+
 type ConversationStatus struct {
-	ConversationID string
+	ConversationID model.ConversationID
 	Type           int `firestore:"type"`
 }
 
@@ -44,11 +64,11 @@ func NewConversation(cli *Client) *Conversation {
 	return &Conversation{Client: cli}
 }
 
-func (c *Conversation) conversation(conversationID string) *firestore.DocumentRef {
-	return c.cli.Collection("conversations").Doc(conversationID)
+func (c *Conversation) conversation(conversationID model.ConversationID) *firestore.DocumentRef {
+	return c.cli.Collection("conversations").Doc(string(conversationID))
 }
 
-func (c *Conversation) shopping(conversationID string) *firestore.CollectionRef {
+func (c *Conversation) shopping(conversationID model.ConversationID) *firestore.CollectionRef {
 	return c.conversation(conversationID).Collection("shoppings")
 }
 
@@ -59,7 +79,7 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 			return err
 		}
 
-		entity := (*ShoppingItem)(item)
+		entity := NewShoppingItem(item)
 		shopping := c.shopping(item.ConversationID)
 		batch.Create(shopping.NewDoc(), entity)
 	}
@@ -70,7 +90,7 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 	return nil
 }
 
-func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID string) ([]*model.ShoppingItem, error) {
+func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID model.ConversationID) ([]*model.ShoppingItem, error) {
 	iter := c.shopping(conversationID).
 		OrderBy("created_at", firestore.Asc).
 		Documents(ctx)
@@ -86,13 +106,13 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID stri
 			return nil, err
 		}
 		item.ID = doc.Ref.ID
-		items = append(items, (*model.ShoppingItem)(&item))
+		items = append(items, item.Model())
 	}
 
 	return items, nil
 }
 
-func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID string, ids []string) error {
+func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID model.ConversationID, ids []string) error {
 	batch := c.cli.Batch()
 	for _, id := range ids {
 		item := c.shopping(conversationID).Doc(id)
@@ -106,7 +126,7 @@ func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID s
 	return nil
 }
 
-func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID string) error {
+func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID model.ConversationID) error {
 	iter := c.shopping(conversationID).DocumentRefs(ctx)
 	batch := c.cli.Batch()
 
@@ -148,7 +168,7 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 	return nil
 }
 
-func (c *Conversation) GetStatus(ctx context.Context, conversationID string) (*model.ConversationStatus, error) {
+func (c *Conversation) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
 	doc, err := c.conversation(conversationID).Collection("status").Doc("#").Get(ctx)
 	if err != nil {
 		return nil, err

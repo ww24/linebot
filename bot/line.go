@@ -1,16 +1,19 @@
 package bot
 
-import "github.com/line/line-bot-sdk-go/v7/linebot"
+import (
+	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"github.com/ww24/linebot/domain/model"
+)
 
-func ConversationID(source *linebot.EventSource) string {
+func ConversationID(source *linebot.EventSource) model.ConversationID {
 	switch source.Type {
 	case linebot.EventSourceTypeGroup:
-		return "LG_" + source.GroupID
+		return model.NewConversationID("LG", source.GroupID)
 	case linebot.EventSourceTypeRoom:
-		return "LR_" + source.RoomID
+		return model.NewConversationID("LR", source.RoomID)
 	case linebot.EventSourceTypeUser:
-		return "LU_" + source.UserID
+		return model.NewConversationID("LU", source.UserID)
 	default:
-		return "LX_" + source.UserID
+		return model.NewConversationID("LX", source.UserID)
 	}
 }
