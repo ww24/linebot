@@ -49,6 +49,7 @@ resource "google_cloud_run_service" "linebot" {
     metadata {
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
+        "autoscaling.knative.dev/minScale" = "1"
       }
 
       labels = {
