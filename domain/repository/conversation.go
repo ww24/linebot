@@ -7,10 +7,10 @@ import (
 )
 
 type Conversation interface {
-	AddShoppingItem(ctx context.Context, item ...*model.ShoppingItem) error
-	FindShoppingItem(ctx context.Context, conversationID string) ([]*model.ShoppingItem, error)
-	DeleteShoppingItems(ctx context.Context, conversationID string, ids []string) error
-	DeleteAllShoppingItem(ctx context.Context, conversationID string) error
-	SetStatus(ctx context.Context, status *model.ConversationStatus) error
-	GetStatus(ctx context.Context, conversationID string) (*model.ConversationStatus, error)
+	AddShoppingItem(context.Context, ...*model.ShoppingItem) error
+	FindShoppingItem(context.Context, model.ConversationID) ([]*model.ShoppingItem, error)
+	DeleteShoppingItems(ctx context.Context, conversationID model.ConversationID, ids []string) error
+	DeleteAllShoppingItem(context.Context, model.ConversationID) error
+	SetStatus(context.Context, *model.ConversationStatus) error
+	GetStatus(context.Context, model.ConversationID) (*model.ConversationStatus, error)
 }

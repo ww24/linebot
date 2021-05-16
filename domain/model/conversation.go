@@ -1,6 +1,9 @@
 package model
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 type ConversationStatusType int
 
@@ -10,8 +13,24 @@ const (
 	ConversationStatusTypeShoppingAdd
 )
 
+const conversationIDSep = "_"
+
+type ConversationID string
+
+func NewConversationID(prefix, sourceID string) ConversationID {
+	return ConversationID(prefix + conversationIDSep + sourceID)
+}
+
+func (c ConversationID) SourceID() string {
+	s := strings.SplitN(string(c), conversationIDSep, 2)
+	if len(s) < 2 {
+		return ""
+	}
+	return s[1]
+}
+
 type ConversationStatus struct {
-	ConversationID string
+	ConversationID ConversationID
 	Type           ConversationStatusType
 }
 

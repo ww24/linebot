@@ -8,6 +8,7 @@ package main
 import (
 	"context"
 	"github.com/ww24/linebot/bot"
+	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/firestore"
 )
 
@@ -19,7 +20,11 @@ func register(contextContext context.Context, config bot.Config) (*bot.Bot, erro
 		return nil, err
 	}
 	conversation := firestore.NewConversation(client)
-	shoppingService, err := bot.NewShoppingService(conversation)
+	shoppingImpl, err := service.NewShopping(conversation)
+	if err != nil {
+		return nil, err
+	}
+	shoppingService, err := bot.NewShoppingService(shoppingImpl)
 	if err != nil {
 		return nil, err
 	}
