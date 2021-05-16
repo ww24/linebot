@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/wire"
 	"github.com/ww24/linebot/bot"
+	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/firestore"
 )
 
@@ -16,6 +17,7 @@ func register(
 ) (*bot.Bot, error) {
 	wire.Build(
 		firestore.Set,
+		service.Set,
 		bot.Set,
 	)
 	return nil, nil

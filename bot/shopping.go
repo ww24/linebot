@@ -9,8 +9,9 @@ import (
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/ww24/linebot/domain/model"
-	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/nl"
+	"golang.org/x/xerrors"
 )
 
 const (
@@ -23,20 +24,20 @@ var (
 )
 
 type ShoppingService struct {
-	conversation repository.Conversation
-	nlParser     *nl.Parser
-	now          func() time.Time
+	shopping service.Shopping
+	nlParser *nl.Parser
+	now      func() time.Time
 }
 
-func NewShoppingService(conversation repository.Conversation) (*ShoppingService, error) {
+func NewShoppingService(shopping service.Shopping) (*ShoppingService, error) {
 	parser, err := nl.NewParser()
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to initialize nl parser: %w", err)
 	}
 	return &ShoppingService{
-		conversation: conversation,
-		nlParser:     parser,
-		now:          time.Now,
+		shopping: shopping,
+		nlParser: parser,
+		now:      time.Now,
 	}, nil
 }
 
@@ -63,13 +64,9 @@ func (s *ShoppingService) Handle(ctx context.Context, bot *Bot, e *linebot.Event
 }
 
 func (s *ShoppingService) handleMenu(ctx context.Context, bot *Bot, e *linebot.Event, texts ...string) error {
-	if err := s.setStatusShopping(ctx, bot, e); err != nil {
-		return err
-	}
-
-	items, err := s.conversation.FindShoppingItem(ctx, ConversationID(e.Source))
+	items, err := s.shopping.List(ctx, ConversationID(e.Source))
 	if err != nil {
-		return err
+		return xerrors.Errorf("failed to list shopping items: %w", err)
 	}
 
 	prefixMsg := prefixShopping
@@ -83,7 +80,7 @@ func (s *ShoppingService) handleMenu(ctx context.Context, bot *Bot, e *linebot.E
 		msg = s.addQuickReplies(msg, shoppingRepliesTypeEmptyList)
 		c := bot.cli.ReplyMessage(e.ReplyToken, msg)
 		if _, err := c.WithContext(ctx).Do(); err != nil {
-			return err
+			return xerrors.Errorf("failed to reply message: %w", err)
 		}
 		return nil
 	}
@@ -95,13 +92,15 @@ func (s *ShoppingService) handleMenu(ctx context.Context, bot *Bot, e *linebot.E
 	msg = s.addQuickReplies(msg, shoppingRepliesTypeWithoutView)
 	c := bot.cli.ReplyMessage(e.ReplyToken, msg)
 	if _, err := c.WithContext(ctx).Do(); err != nil {
-		return err
+		return xerrors.Errorf("failed to reply message: %w", err)
 	}
 
 	return nil
 }
 
 func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *linebot.Event) error {
+	conversationID := ConversationID(e.Source)
+
 	switch e.Postback.Data {
 	case "Shopping#delete":
 		var msg linebot.SendingMessage
@@ -115,23 +114,20 @@ func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *lineb
 		})
 		c := bot.cli.ReplyMessage(e.ReplyToken, msg)
 		if _, err := c.WithContext(ctx).Do(); err != nil {
-			return err
+			return xerrors.Errorf("failed to reply message: %w", err)
 		}
 
 	case "Shopping#deleteConfirm":
-		if err := s.conversation.DeleteAllShoppingItem(ctx, ConversationID(e.Source)); err != nil {
-			return err
-		}
-		if err := s.setStatusShopping(ctx, bot, e); err != nil {
-			return err
+		if err := s.shopping.DeleteAllItem(ctx, conversationID); err != nil {
+			return xerrors.Errorf("failed to delete all shopping items: %w", err)
 		}
 		if err := s.handleMenu(ctx, bot, e); err != nil {
 			return err
 		}
 
 	case "Shopping#deleteCancel":
-		if err := s.setStatusShopping(ctx, bot, e); err != nil {
-			return err
+		if err := s.shopping.SetStatusShopping(ctx, conversationID); err != nil {
+			return xerrors.Errorf("failed to set status: %w", err)
 		}
 		if err := s.handleMenu(ctx, bot, e); err != nil {
 			return err
@@ -139,11 +135,11 @@ func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *lineb
 
 	case "Shopping#add":
 		status := &model.ConversationStatus{
-			ConversationID: ConversationID(e.Source),
+			ConversationID: conversationID,
 			Type:           model.ConversationStatusTypeShoppingAdd,
 		}
-		if err := s.conversation.SetStatus(ctx, status); err != nil {
-			return err
+		if err := s.shopping.SetStatus(ctx, status); err != nil {
+			return xerrors.Errorf("failed to set status: %w", err)
 		}
 		text := prefixShopping + "追加する商品を1行に1つずつ入力してください。"
 		if err := bot.replyTestMessage(ctx, e, text); err != nil {
@@ -151,9 +147,9 @@ func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *lineb
 		}
 
 	case "Shopping#view":
-		items, err := s.conversation.FindShoppingItem(ctx, ConversationID(e.Source))
+		items, err := s.shopping.List(ctx, conversationID)
 		if err != nil {
-			return err
+			return xerrors.Errorf("failed to list shopping items: %w", err)
 		}
 
 		var msg linebot.SendingMessage
@@ -162,7 +158,7 @@ func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *lineb
 		msg = s.addQuickReplies(msg, shoppingRepliesTypeWithoutView)
 		c := bot.cli.ReplyMessage(e.ReplyToken, msg)
 		if _, err := c.WithContext(ctx).Do(); err != nil {
-			return err
+			return xerrors.Errorf("failed to reply message: %w", err)
 		}
 	}
 
@@ -171,9 +167,9 @@ func (s *ShoppingService) handlePostBack(ctx context.Context, bot *Bot, e *lineb
 
 func (s *ShoppingService) handleStatus(ctx context.Context, bot *Bot, e *linebot.Event) error {
 	conversationID := ConversationID(e.Source)
-	status, err := s.conversation.GetStatus(ctx, conversationID)
+	status, err := s.shopping.GetStatus(ctx, conversationID)
 	if err != nil {
-		return err
+		return xerrors.Errorf("failed to get status: %w", err)
 	}
 
 	switch status.Type {
@@ -203,11 +199,8 @@ func (s *ShoppingService) handleStatus(ctx context.Context, bot *Bot, e *linebot
 			}
 			items = append(items, item)
 		}
-		if err := s.conversation.AddShoppingItem(ctx, items...); err != nil {
-			return err
-		}
-		if err := s.setStatusShopping(ctx, bot, e); err != nil {
-			return err
+		if err := s.shopping.AddItem(ctx, conversationID, items...); err != nil {
+			return xerrors.Errorf("failed to add item: %w", err)
 		}
 
 		var msg linebot.SendingMessage
@@ -216,21 +209,10 @@ func (s *ShoppingService) handleStatus(ctx context.Context, bot *Bot, e *linebot
 		msg = s.addQuickReplies(msg, shoppingRepliesTypeAll)
 		c := bot.cli.ReplyMessage(e.ReplyToken, msg)
 		if _, err := c.WithContext(ctx).Do(); err != nil {
-			return err
+			return xerrors.Errorf("failed to reply message: %w", err)
 		}
 	}
 
-	return nil
-}
-
-func (s *ShoppingService) setStatusShopping(ctx context.Context, bot *Bot, e *linebot.Event) error {
-	status := &model.ConversationStatus{
-		ConversationID: ConversationID(e.Source),
-		Type:           model.ConversationStatusTypeShopping,
-	}
-	if err := s.conversation.SetStatus(ctx, status); err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -268,9 +250,9 @@ func (s *ShoppingService) addQuickReplies(msg linebot.SendingMessage, typ shoppi
 }
 
 func (s *ShoppingService) deleteFromItem(ctx context.Context, conversationID model.ConversationID, item *nl.Item) (model.ShoppingItems, error) {
-	items, err := s.conversation.FindShoppingItem(ctx, conversationID)
+	items, err := s.shopping.List(ctx, conversationID)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to list shopping items: %w", err)
 	}
 
 	ret := make([]*model.ShoppingItem, 0)
@@ -285,8 +267,8 @@ func (s *ShoppingService) deleteFromItem(ctx context.Context, conversationID mod
 			ret = append(ret, item)
 			ids = append(ids, item.ID)
 		}
-		if err := s.conversation.DeleteShoppingItems(ctx, conversationID, ids); err != nil {
-			return nil, err
+		if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
+			return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
 		}
 
 		return ret, nil

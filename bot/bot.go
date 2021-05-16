@@ -9,6 +9,7 @@ import (
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/ww24/linebot/domain/model"
+	"golang.org/x/xerrors"
 )
 
 var Set = wire.NewSet(
@@ -39,7 +40,7 @@ func New(
 	hc := &http.Client{}
 	cli, err := linebot.New(c.ChannelSecret, c.ChannelToken, linebot.WithHTTPClient(hc))
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to initialize LINE Bot client: %w", err)
 	}
 
 	allowedConversationIDs := make(map[model.ConversationID]struct{}, len(c.ConversationIDs))
@@ -60,7 +61,7 @@ func New(
 func (b *Bot) HandleRequest(r *http.Request) error {
 	events, err := b.cli.ParseRequest(r)
 	if err != nil {
-		return err
+		return xerrors.Errorf("failed to parse request: %w", err)
 	}
 
 	ctx := r.Context()
@@ -73,7 +74,7 @@ func (b *Bot) HandleRequest(r *http.Request) error {
 
 		for _, handler := range b.handlers {
 			if err := handler.Handle(ctx, b, e); err != nil {
-				return err
+				return xerrors.Errorf("failed to handle event: %w", err)
 			}
 		}
 	}
@@ -85,7 +86,7 @@ func (b *Bot) replyTestMessage(ctx context.Context, e *linebot.Event, str string
 	msg := linebot.NewTextMessage(str)
 	c := b.cli.ReplyMessage(e.ReplyToken, msg)
 	if _, err := c.WithContext(ctx).Do(); err != nil {
-		return err
+		return xerrors.Errorf("failed to reply message: %w", err)
 	}
 	return nil
 }
