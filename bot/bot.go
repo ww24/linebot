@@ -9,11 +9,13 @@ import (
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/domain/repository"
 	"golang.org/x/xerrors"
 )
 
 var Set = wire.NewSet(
 	New,
+	wire.Bind(new(repository.Bot), new(*Bot)),
 	NewShoppingService,
 )
 
@@ -79,6 +81,15 @@ func (b *Bot) HandleRequest(r *http.Request) error {
 		}
 	}
 
+	return nil
+}
+
+func (b *Bot) PostMessage(ctx context.Context, conversationID model.ConversationID, message string) error {
+	msg := linebot.NewTextMessage(message)
+	c := b.cli.PushMessage(conversationID.SourceID(), msg)
+	if _, err := c.WithContext(ctx).Do(); err != nil {
+		return xerrors.Errorf("failed to push message: %w", err)
+	}
 	return nil
 }
 
