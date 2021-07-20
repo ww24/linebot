@@ -191,11 +191,13 @@ func (s *ShoppingService) handleStatus(ctx context.Context, bot *Bot, e *linebot
 	case model.ConversationStatusTypeShoppingAdd:
 		lines := bot.readTextLines(e)
 		items := make([]*model.ShoppingItem, 0, len(lines))
-		for _, line := range lines {
+		ts := s.now().Unix()
+		for i, line := range lines {
 			item := &model.ShoppingItem{
 				ConversationID: ConversationID(e.Source),
 				Name:           line,
-				CreatedAt:      s.now().Unix(),
+				CreatedAt:      ts,
+				Order:          i,
 			}
 			items = append(items, item)
 		}

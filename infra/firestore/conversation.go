@@ -19,6 +19,7 @@ type ShoppingItem struct {
 	Quantity       int    `firestore:"quantity"`
 	ConversationID string `firestore:"conversation_id"`
 	CreatedAt      int64  `firestore:"created_at"`
+	Order          int    `firestore:"order"`
 }
 
 func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
@@ -28,6 +29,7 @@ func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
 		Quantity:       src.Quantity,
 		ConversationID: string(src.ConversationID),
 		CreatedAt:      src.CreatedAt,
+		Order:          src.Order,
 	}
 }
 
@@ -38,6 +40,7 @@ func (c *ShoppingItem) Model() *model.ShoppingItem {
 		Quantity:       c.Quantity,
 		ConversationID: model.ConversationID(c.ConversationID),
 		CreatedAt:      c.CreatedAt,
+		Order:          c.Order,
 	}
 }
 
@@ -93,6 +96,7 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID model.ConversationID) ([]*model.ShoppingItem, error) {
 	iter := c.shopping(conversationID).
 		OrderBy("created_at", firestore.Asc).
+		OrderBy("order", firestore.Asc).
 		Documents(ctx)
 	docs, err := iter.GetAll()
 	if err != nil {
