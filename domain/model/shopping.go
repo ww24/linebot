@@ -12,6 +12,7 @@ type ShoppingItem struct {
 	Quantity       int
 	ConversationID ConversationID
 	CreatedAt      int64
+	Order          int
 }
 
 func (m *ShoppingItem) Validate() error {

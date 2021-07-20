@@ -2,6 +2,7 @@ package firestore
 
 import (
 	"context"
+	"os"
 
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
@@ -22,13 +23,26 @@ type Client struct {
 }
 
 func New(ctx context.Context) (*Client, error) {
-	cred, err := google.FindDefaultCredentials(ctx, f.DatastoreScope)
-	if err != nil {
-		return nil, err
+	var opts []option.ClientOption
+	var projectID string
+
+	isEmulator := os.Getenv("FIRESTORE_EMULATOR_HOST") != ""
+	if isEmulator {
+		projectID = os.Getenv("GOOGLE_CLOUD_PROJECT")
+		if projectID == "" {
+			projectID = "emulator"
+		}
+	} else {
+		cred, err := google.FindDefaultCredentials(ctx, f.DatastoreScope)
+		if err != nil {
+			return nil, err
+		}
+
+		opts = append(opts, option.WithCredentials(cred))
+		projectID = cred.ProjectID
 	}
 
-	opt := option.WithCredentials(cred)
-	cli, err := firestore.NewClient(ctx, cred.ProjectID, opt)
+	cli, err := firestore.NewClient(ctx, projectID, opts...)
 	if err != nil {
 		return nil, err
 	}
