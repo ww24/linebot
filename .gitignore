@@ -53,3 +53,5 @@ terraform.rc
 
 # project settings
 .envrc
+.firebaserc
+*-debug.log
