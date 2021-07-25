@@ -14,3 +14,9 @@ type Conversation interface {
 	SetStatus(context.Context, *model.ConversationStatus) error
 	GetStatus(context.Context, model.ConversationID) (*model.ConversationStatus, error)
 }
+
+type Reminder interface {
+	Add(context.Context, model.ConversationID, *model.ReminderItem) error
+	Find(context.Context, model.ConversationID) ([]*model.ReminderItem, error)
+	Delete(context.Context, model.ConversationID, string) error
+}
