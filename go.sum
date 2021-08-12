@@ -111,7 +111,6 @@ github.com/google/pprof v0.0.0-20201023163331-3e6fc7fc9c4c/go.mod h1:kpwsk12EmLe
 github.com/google/pprof v0.0.0-20201203190320-1bf35d6f28c2/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/pprof v0.0.0-20201218002935-b9804c9f04c2/go.mod h1:kpwsk12EmLew5upagYY7GY0pfYCcupk39gWOCRROcvE=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
-github.com/google/subcommands v1.0.1 h1:/eqq+otEXm5vhfBrbREPCSVQbvofip6kIz+mX5TUH7k=
 github.com/google/subcommands v1.0.1/go.mod h1:ZjhPrFU+Olkh9WazFPsl27BQ4UPiG37m3yTrtFlrHVk=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/wire v0.5.0 h1:I7ELFeVBr3yfPIcc8+MWvrjk+3VjbcSzoXm3JVa+jD8=
@@ -123,12 +122,14 @@ github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
-github.com/ikawaha/kagome-dict v1.0.2 h1:RlrQcNm7AcgBrzBcZC+1sniAWxmOECdeJHpJ5G1XFlU=
 github.com/ikawaha/kagome-dict v1.0.2/go.mod h1:JCwHr4WOrGRsC2cJU3751mJvL1hIAAZVeIrkl8n3jkk=
+github.com/ikawaha/kagome-dict v1.0.3 h1:x9i49EDy3tx7HPgQ9+l0AqTB5rEkKPoSTD6NyIe9nF8=
+github.com/ikawaha/kagome-dict v1.0.3/go.mod h1:8Ma5E21J2kyaak6KumYLWGLKxm1kaAkCCWKWnrc5o/o=
 github.com/ikawaha/kagome-dict/ipa v1.0.2 h1:vBT1bXZbJpf1Ogw07GDlJmKQ5JyexeeIUJ5DkqcMNwo=
 github.com/ikawaha/kagome-dict/ipa v1.0.2/go.mod h1:CmdUPFC1ISLK+ycFo8J6jYFVngDMuXhWtcdz39jni3A=
-github.com/ikawaha/kagome-dict/uni v1.1.1 h1:18Zc8D1XC5mSUDm02/dksxc6lfG26LC7c43j7ebZzLU=
 github.com/ikawaha/kagome-dict/uni v1.1.1/go.mod h1:iipUtdM9UhHIfaY7Hq1ITLVix5OBZf/FgxMYZpGe5fg=
+github.com/ikawaha/kagome-dict/uni v1.1.2 h1:3ryxYAbhOlMrZ4sp55/2nxxPejx5zS6A1iEnvk6lu1I=
+github.com/ikawaha/kagome-dict/uni v1.1.2/go.mod h1:3rH19G7Fp+BQcRMv9GDwZzbXNkHttfcoOVdv9Pi+zyU=
 github.com/ikawaha/kagome/v2 v2.4.4 h1:DAJDbjz6D5BtekIsow6laVRQ9y74CPKgNInR1l+q9B0=
 github.com/ikawaha/kagome/v2 v2.4.4/go.mod h1:4yR0rtgtJwfOZsnxXx87R4i8An11v4Mj+V6dTcJmwr4=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
