@@ -5,7 +5,7 @@ go 1.16
 require (
 	cloud.google.com/go/firestore v1.5.0
 	github.com/google/wire v0.5.0
-	github.com/ikawaha/kagome-dict/uni v1.1.2
+	github.com/ikawaha/kagome-dict/uni v1.1.3
 	github.com/ikawaha/kagome/v2 v2.6.2
 	github.com/line/line-bot-sdk-go/v7 v7.10.0
 	github.com/stretchr/testify v1.7.0

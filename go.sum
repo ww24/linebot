@@ -155,8 +155,9 @@ github.com/ikawaha/kagome-dict v1.0.4 h1:sxRKBqQ5FiJKeQwhvUmtumFqCm+GvCYiKRVgA08
 github.com/ikawaha/kagome-dict v1.0.4/go.mod h1:s6LsRECNl13K4miPTTG3/n6Pt7v3ClQfohMbK7qitzo=
 github.com/ikawaha/kagome-dict/ipa v1.0.3 h1:jt2toGpRha7PPD5mqKEOabmAssichf1IwJykpstgN0s=
 github.com/ikawaha/kagome-dict/ipa v1.0.3/go.mod h1:zpMcAFSLDYEq+UI3GnF3IcZE5a0rKB2J0rrKGY6HYW8=
-github.com/ikawaha/kagome-dict/uni v1.1.2 h1:3ryxYAbhOlMrZ4sp55/2nxxPejx5zS6A1iEnvk6lu1I=
 github.com/ikawaha/kagome-dict/uni v1.1.2/go.mod h1:3rH19G7Fp+BQcRMv9GDwZzbXNkHttfcoOVdv9Pi+zyU=
+github.com/ikawaha/kagome-dict/uni v1.1.3 h1:ea34C5lBms/U4ECoczXBu2rmJ0KG6UC8Si4wE9NDilI=
+github.com/ikawaha/kagome-dict/uni v1.1.3/go.mod h1:3rH19G7Fp+BQcRMv9GDwZzbXNkHttfcoOVdv9Pi+zyU=
 github.com/ikawaha/kagome/v2 v2.6.2 h1:guVeGMbjVbz+nSP8Jh4ZBFHR57mdcrYT8Yo7XzvkdZs=
 github.com/ikawaha/kagome/v2 v2.6.2/go.mod h1:SZz4crAe9wgMptnie7a5L6DFzq1iaQ2aqLJzxqJs3DE=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
