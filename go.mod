@@ -25,6 +25,7 @@ require (
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/tenntenn/testtime v0.2.2 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.4.2 // indirect
