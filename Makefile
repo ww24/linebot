@@ -1,4 +1,4 @@
-GO = go
+GO ?= go
 FIRESTORE_EMULATOR_HOST = :8833
 GOOGLE_CLOUD_PROJECT = emulator
 TESTTIME = go run github.com/tenntenn/testtime/cmd/testtime
