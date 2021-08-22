@@ -1,0 +1,7 @@
+services:
+  firestore:
+    container_name: firestore-emulator
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:340.0.0
+    command: ["gcloud", "beta", "emulators", "firestore", "start", "--host-port=:8833"]
+    ports:
+      - "8833:8833"
