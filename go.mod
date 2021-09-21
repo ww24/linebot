@@ -3,7 +3,7 @@ module github.com/ww24/linebot
 go 1.17
 
 require (
-	cloud.google.com/go/firestore v1.5.0
+	cloud.google.com/go/firestore v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/uni v1.1.3
 	github.com/ikawaha/kagome/v2 v2.7.0
