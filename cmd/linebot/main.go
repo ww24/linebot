@@ -10,11 +10,23 @@ import (
 	"syscall"
 	"time"
 
+	"cloud.google.com/go/profiler"
+
 	"github.com/ww24/linebot/bot"
+)
+
+const (
+	serviceName = "linebot"
+)
+
+var (
+	// version is set during build
+	version string
 )
 
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	botCfg := bot.Config{
 		ChannelSecret:   os.Getenv("LINE_CHANNEL_SECRET"),
@@ -23,7 +35,21 @@ func main() {
 	}
 	bot, err := register(ctx, botCfg)
 	if err != nil {
-		log.Printf("Error: %+v\n", err)
+		log.Fatalf("Error: %+v", err)
+	}
+
+	// initialize cloud profiler if build is production
+	if version != "" {
+		profilerConfig := profiler.Config{
+			Service:           serviceName,
+			ServiceVersion:    version,
+			MutexProfiling:    true,
+			EnableOCTelemetry: true,
+		}
+		if err := profiler.Start(profilerConfig); err != nil {
+			// just log the error if failed to initialize profiler
+			log.Printf("failed to start cloud profiler: %+v", err)
+		}
 	}
 
 	mux := http.NewServeMux()
@@ -32,7 +58,7 @@ func main() {
 
 		if err := bot.HandleRequest(r); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("Request Error: %+v\n", err)
+			log.Printf("Request Error: %+v", err)
 			return
 		}
 
@@ -47,7 +73,7 @@ func main() {
 		Handler: mux,
 		Addr:    addr,
 	}
-	log.Println("start server")
+	log.Printf("start server: %s", version)
 	//nolint:errcheck
 	go srv.ListenAndServe()
 
@@ -58,6 +84,6 @@ func main() {
 	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
-		log.Printf("Error: %+v\n", err)
+		log.Printf("Error: %+v", err)
 	}
 }

@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	cloud.google.com/go/firestore v1.6.0
+	cloud.google.com/go/profiler v0.1.0
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/uni v1.1.3
 	github.com/ikawaha/kagome/v2 v2.7.0
@@ -21,6 +22,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/google/pprof v0.0.0-20210804190019-f964ff605595 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
