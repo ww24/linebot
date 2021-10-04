@@ -21,6 +21,6 @@ jobs:
       - uses: pipe-cd/actions-gh-release@v1.2.0
         with:
           release_file: "RELEASE"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
           changelog_only_use_merge_commit: true
           changelog_show_committer: false
