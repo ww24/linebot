@@ -146,6 +146,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
+          build-args: |
+            VERSION=v${{ needs.docker_build.outputs.image_tag }}
           tags: |
             ${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ needs.docker_build.outputs.image_tag }}
 
