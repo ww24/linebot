@@ -2,13 +2,13 @@ package bot
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/ww24/linebot/domain/model"
+	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 )
 
@@ -25,6 +25,7 @@ type Bot struct {
 	cli                    *linebot.Client
 	allowedConversationIDs map[model.ConversationID]struct{}
 	handlers               []Handler
+	Log                    *zap.Logger
 }
 
 type Config struct {
@@ -35,6 +36,7 @@ type Config struct {
 
 func New(
 	c Config,
+	log *zap.Logger,
 	shopping *ShoppingService,
 ) (*Bot, error) {
 	hc := &http.Client{}
@@ -54,6 +56,7 @@ func New(
 		handlers: []Handler{
 			shopping,
 		},
+		Log: log,
 	}
 	return bot, nil
 }
@@ -68,7 +71,9 @@ func (b *Bot) HandleRequest(r *http.Request) error {
 
 	for _, e := range events {
 		if !b.filter(e) {
-			log.Printf("ConversationID: %s\n", ConversationID(e.Source))
+			b.Log.Info("handle request",
+				zap.String("ConversationID", string(ConversationID(e.Source))),
+			)
 			return nil
 		}
 
