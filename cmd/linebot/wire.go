@@ -1,4 +1,5 @@
-//+build wireinject
+//go:build wireinject
+// +build wireinject
 
 package main
 
@@ -16,6 +17,7 @@ func register(
 	bot.Config,
 ) (*bot.Bot, error) {
 	wire.Build(
+		newLogger,
 		firestore.Set,
 		service.Set,
 		bot.Set,

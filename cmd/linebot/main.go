@@ -11,8 +11,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/profiler"
+	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/bot"
+	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -48,17 +50,17 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			log.Printf("failed to start cloud profiler: %+v", err)
+			bot.Log.Error("failed to start cloud profiler", zap.Error(err))
 		}
 	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Request received")
+		bot.Log.Info("Request received")
 
 		if err := bot.HandleRequest(r); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("Request Error: %+v", err)
+			bot.Log.Error("Request Error", zap.Error(err))
 			return
 		}
 
@@ -73,7 +75,7 @@ func main() {
 		Handler: mux,
 		Addr:    addr,
 	}
-	log.Printf("start server: %s", version)
+	bot.Log.Info("start server")
 	//nolint:errcheck
 	go srv.ListenAndServe()
 
@@ -84,6 +86,10 @@ func main() {
 	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
-		log.Printf("Error: %+v", err)
+		bot.Log.Error("failed to shutdown server", zap.Error(err))
 	}
+}
+
+func newLogger() (*zap.Logger, error) {
+	return logger.New(serviceName, version)
 }
