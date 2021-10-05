@@ -15,6 +15,7 @@ import (
 
 	"github.com/ww24/linebot/bot"
 	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/tracer"
 )
 
 const (
@@ -40,7 +41,7 @@ func main() {
 		log.Fatalf("Error: %+v", err)
 	}
 
-	// initialize cloud profiler if build is production
+	// initialize cloud profiler and tracing if build is production
 	if version != "" {
 		profilerConfig := profiler.Config{
 			Service:           serviceName,
@@ -52,27 +53,26 @@ func main() {
 			// just log the error if failed to initialize profiler
 			bot.Log.Error("failed to start cloud profiler", zap.Error(err))
 		}
-	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
-		bot.Log.Info("Request received")
-
-		if err := bot.HandleRequest(r); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			bot.Log.Error("Request Error", zap.Error(err))
-			return
+		tp, err := tracer.New(serviceName, version)
+		if err != nil {
+			bot.Log.Error("failed to initialize tracer", zap.Error(err))
 		}
-
-		w.WriteHeader(http.StatusOK)
-	})
+		tpShutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		defer cancel()
+		defer func() {
+			if err := tp.Shutdown(tpShutdownCtx); err != nil {
+				bot.Log.Error("failed to shutdown tracer", zap.Error(err))
+			}
+		}()
+	}
 
 	addr := ":8000"
 	if a := os.Getenv("PORT"); a != "" {
 		addr = ":" + a
 	}
 	srv := &http.Server{
-		Handler: mux,
+		Handler: handler(bot),
 		Addr:    addr,
 	}
 	bot.Log.Info("start server")
@@ -92,4 +92,22 @@ func main() {
 
 func newLogger() (*zap.Logger, error) {
 	return logger.New(serviceName, version)
+}
+
+func handler(bot *bot.Bot) http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		bot.Log.Info("Request received")
+
+		if err := bot.HandleRequest(ctx, r); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			bot.Log.Error("Request Error", zap.Error(err))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	})
+	return mux
 }

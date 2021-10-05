@@ -7,9 +7,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
 	"github.com/ww24/linebot/domain/repository"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/oauth2/google"
 	f "google.golang.org/api/firestore/v1"
 	"google.golang.org/api/option"
+	"google.golang.org/grpc"
 )
 
 var Set = wire.NewSet(
@@ -41,6 +43,15 @@ func New(ctx context.Context) (*Client, error) {
 		opts = append(opts, option.WithCredentials(cred))
 		projectID = cred.ProjectID
 	}
+
+	opts = append(opts,
+		option.WithGRPCDialOption(
+			grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+		),
+		option.WithGRPCDialOption(
+			grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
+		),
+	)
 
 	cli, err := firestore.NewClient(ctx, projectID, opts...)
 	if err != nil {
