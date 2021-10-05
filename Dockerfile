@@ -14,7 +14,7 @@ go build \
   -o /usr/local/bin/linebot ./cmd/linebot
 EOF
 
-FROM gcr.io/distroless/static
+FROM gcr.io/distroless/base:nonroot
 
 COPY --from=build /usr/local/bin/linebot /usr/local/bin/linebot
 ENTRYPOINT [ "linebot" ]
