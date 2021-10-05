@@ -61,13 +61,11 @@ func New(
 	return bot, nil
 }
 
-func (b *Bot) HandleRequest(r *http.Request) error {
+func (b *Bot) HandleRequest(ctx context.Context, r *http.Request) error {
 	events, err := b.cli.ParseRequest(r)
 	if err != nil {
 		return xerrors.Errorf("failed to parse request: %w", err)
 	}
-
-	ctx := r.Context()
 
 	for _, e := range events {
 		if !b.filter(e) {
