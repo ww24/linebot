@@ -8,6 +8,7 @@ import (
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/logger"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 )
@@ -25,7 +26,7 @@ type Bot struct {
 	cli                    *linebot.Client
 	allowedConversationIDs map[model.ConversationID]struct{}
 	handlers               []Handler
-	Log                    *zap.Logger
+	Log                    *logger.Logger
 }
 
 type Config struct {
@@ -36,7 +37,7 @@ type Config struct {
 
 func New(
 	c Config,
-	log *zap.Logger,
+	log *logger.Logger,
 	shopping *ShoppingService,
 ) (*Bot, error) {
 	hc := &http.Client{}
@@ -67,9 +68,11 @@ func (b *Bot) HandleRequest(ctx context.Context, r *http.Request) error {
 		return xerrors.Errorf("failed to parse request: %w", err)
 	}
 
+	cl := b.Log.WithTraceFromContext(ctx)
+
 	for _, e := range events {
 		if !b.filter(e) {
-			b.Log.Info("handle request",
+			cl.Info("handle request",
 				zap.String("ConversationID", string(ConversationID(e.Source))),
 			)
 			return nil
