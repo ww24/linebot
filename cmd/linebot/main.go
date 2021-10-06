@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/profiler"
+	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
+	"go.opentelemetry.io/otel/propagation"
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/bot"
@@ -90,20 +92,22 @@ func main() {
 	}
 }
 
-func newLogger() (*zap.Logger, error) {
-	return logger.New(serviceName, version)
+func newLogger(ctx context.Context) (*logger.Logger, error) {
+	return logger.New(ctx, serviceName, version)
 }
 
 func handler(bot *bot.Bot) http.Handler {
 	mux := http.NewServeMux()
+	prop := propagator.New()
 	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+		ctx := prop.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
 
-		bot.Log.Info("Request received")
+		cl := bot.Log.WithTraceFromContext(ctx)
+		cl.Info("Request received")
 
 		if err := bot.HandleRequest(ctx, r); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			bot.Log.Error("Request Error", zap.Error(err))
+			cl.Error("Request Error", zap.Error(err))
 			return
 		}
 

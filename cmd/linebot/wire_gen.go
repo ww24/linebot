@@ -16,7 +16,7 @@ import (
 // Injectors from wire.go:
 
 func register(contextContext context.Context, config bot.Config) (*bot.Bot, error) {
-	logger, err := newLogger()
+	logger, err := newLogger(contextContext)
 	if err != nil {
 		return nil, err
 	}
