@@ -13,7 +13,7 @@ run:
 
 .PHONY: generate
 generate:
-	$(GO) generate ./...
+	GOFLAGS=-mod=mod $(GO) generate ./...
 
 .PHONY: lint
 lint:
