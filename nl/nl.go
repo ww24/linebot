@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ikawaha/kagome-dict/uni"
+	"github.com/ikawaha/kagome-dict/ipa"
 	"github.com/ikawaha/kagome/v2/filter"
 	"github.com/ikawaha/kagome/v2/tokenizer"
 	"golang.org/x/text/unicode/norm"
@@ -16,10 +16,11 @@ const (
 	posVerb = "動詞"
 
 	// POS 2
-	posNumeral = "数詞" // 名詞, 数詞
+	posNumeral = "数"  // 名詞, 数
+	posSuffix  = "接尾" // 名詞, 接尾
 
 	// POS 3
-	posQuantifier = "助数詞可能" // 名詞, *, 助数詞可能
+	posQuantifier = "助数詞" // 名詞, 接尾, 助数詞
 )
 
 type ActionType int
@@ -43,7 +44,7 @@ type Parser struct {
 }
 
 func NewParser() (*Parser, error) {
-	tk, err := tokenizer.New(uni.Dict(), tokenizer.OmitBosEos())
+	tk, err := tokenizer.New(ipa.Dict(), tokenizer.OmitBosEos())
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +54,7 @@ func NewParser() (*Parser, error) {
 		filter.POS{posVerb},
 	)
 	denyFilter := filter.NewPOSFilter(
-		filter.POS{posNoun, filter.Any, posQuantifier},
+		filter.POS{posNoun, posSuffix, posQuantifier},
 	)
 	replacer := strings.NewReplacer(",", "、")
 
@@ -69,6 +70,12 @@ func (p *Parser) Parse(str string) *Item {
 	str = norm.NFKC.String(str)
 	str = p.replacer.Replace(str)
 	tokens := p.tokenizer.Tokenize(str)
+
+	// debug code
+	// for _, token := range tokens {
+	// 	fmt.Printf("%+v, %+v\n", token.Surface, token.Features())
+	// }
+
 	p.allow.Keep(&tokens)
 	p.deny.Drop(&tokens)
 
@@ -92,7 +99,10 @@ func (p *Parser) Parse(str string) *Item {
 				continue
 			}
 
-			item.Name = append(item.Name, token.Surface)
+			// add name if reading feature exists
+			if _, ok := token.Reading(); ok {
+				item.Name = append(item.Name, token.Surface)
+			}
 		}
 	}
 

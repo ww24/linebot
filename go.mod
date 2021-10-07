@@ -9,7 +9,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.0.0-RC2
 	github.com/blendle/zapdriver v1.3.1
 	github.com/google/wire v0.5.0
-	github.com/ikawaha/kagome-dict/uni v1.1.3
+	github.com/ikawaha/kagome-dict/ipa v1.0.4
 	github.com/ikawaha/kagome/v2 v2.7.0
 	github.com/line/line-bot-sdk-go/v7 v7.10.1
 	github.com/stretchr/testify v1.7.0
