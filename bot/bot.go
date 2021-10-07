@@ -7,10 +7,12 @@ import (
 
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"github.com/ww24/linebot/domain/model"
-	"github.com/ww24/linebot/logger"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
+
+	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/logger"
 )
 
 var Set = wire.NewSet(
@@ -40,7 +42,7 @@ func New(
 	log *logger.Logger,
 	shopping *ShoppingService,
 ) (*Bot, error) {
-	hc := &http.Client{}
+	hc := &http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	cli, err := linebot.New(c.ChannelSecret, c.ChannelToken, linebot.WithHTTPClient(hc))
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize LINE Bot client: %w", err)

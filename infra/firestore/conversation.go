@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/ww24/linebot/domain/model"
+	"go.opentelemetry.io/otel"
 	"google.golang.org/api/iterator"
 )
 
@@ -76,6 +77,10 @@ func (c *Conversation) shopping(conversationID model.ConversationID) *firestore.
 }
 
 func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.ShoppingItem) error {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "AddShoppingItem")
+	defer span.End()
+
 	batch := c.cli.Batch()
 	for _, item := range items {
 		if err := item.Validate(); err != nil {
@@ -94,6 +99,10 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 }
 
 func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID model.ConversationID) ([]*model.ShoppingItem, error) {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "FindShoppingItem")
+	defer span.End()
+
 	iter := c.shopping(conversationID).
 		OrderBy("created_at", firestore.Asc).
 		OrderBy("order", firestore.Asc).
@@ -117,6 +126,10 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID mode
 }
 
 func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID model.ConversationID, ids []string) error {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "DeleteShoppingItems")
+	defer span.End()
+
 	batch := c.cli.Batch()
 	for _, id := range ids {
 		item := c.shopping(conversationID).Doc(id)
@@ -131,6 +144,10 @@ func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID m
 }
 
 func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID model.ConversationID) error {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "DeleteAllShoppingItem")
+	defer span.End()
+
 	iter := c.shopping(conversationID).DocumentRefs(ctx)
 	batch := c.cli.Batch()
 
@@ -159,6 +176,10 @@ func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID
 }
 
 func (c *Conversation) SetStatus(ctx context.Context, status *model.ConversationStatus) error {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "SetStatus")
+	defer span.End()
+
 	if err := status.Validate(); err != nil {
 		return err
 	}
@@ -173,6 +194,10 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 }
 
 func (c *Conversation) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
+	tracer := otel.Tracer("infra/firestore")
+	ctx, span := tracer.Start(ctx, "GetStatus")
+	defer span.End()
+
 	doc, err := c.conversation(conversationID).Collection("status").Doc("#").Get(ctx)
 	if err != nil {
 		return nil, err
