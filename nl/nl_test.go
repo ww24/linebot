@@ -38,13 +38,6 @@ func TestParser_Parse(t *testing.T) {
 			},
 		},
 		{
-			src: "りんご削除",
-			want: &Item{
-				Name:   []string{"りんご"},
-				Action: ActionTypeDelete,
-			},
-		},
-		{
 			src: "りんごを除去",
 			want: &Item{
 				Name:   []string{"りんご"},
@@ -104,6 +97,27 @@ func TestParser_Parse(t *testing.T) {
 			src: "1と2と3を除去",
 			want: &Item{
 				Indexes: []int{1, 2, 3},
+				Action:  ActionTypeDelete,
+			},
+		},
+		{
+			src: "11を削除",
+			want: &Item{
+				Indexes: []int{11},
+				Action:  ActionTypeDelete,
+			},
+		},
+		{
+			src: "11,12を削除",
+			want: &Item{
+				Indexes: []int{11, 12},
+				Action:  ActionTypeDelete,
+			},
+		},
+		{
+			src: "11と12を削除",
+			want: &Item{
+				Indexes: []int{11, 12},
 				Action:  ActionTypeDelete,
 			},
 		},
