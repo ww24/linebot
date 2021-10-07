@@ -25,7 +25,7 @@ resource "google_cloud_run_service" "linebot" {
         resources {
           limits = {
             cpu    = "1000m"
-            memory = "640Mi"
+            memory = "300Mi"
           }
         }
 
