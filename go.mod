@@ -13,7 +13,7 @@ require (
 	github.com/ikawaha/kagome/v2 v2.7.0
 	github.com/line/line-bot-sdk-go/v7 v7.10.1
 	github.com/stretchr/testify v1.7.0
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.24.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.25.0
 	go.opentelemetry.io/otel v1.0.1
 	go.opentelemetry.io/otel/sdk v1.0.1
 	go.opentelemetry.io/otel/trace v1.0.1
