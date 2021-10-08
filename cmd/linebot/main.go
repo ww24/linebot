@@ -14,6 +14,7 @@ import (
 	"cloud.google.com/go/profiler"
 	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	"go.opentelemetry.io/otel/propagation"
+	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/bot"
@@ -42,6 +43,11 @@ func main() {
 	bot, err := register(ctx, botCfg)
 	if err != nil {
 		log.Fatalf("Error: %+v", err)
+	}
+
+	// set GOMAXPROCS
+	if _, err := maxprocs.Set(maxprocs.Logger(bot.Log.Sugar().Infof)); err != nil {
+		bot.Log.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	// initialize cloud profiler and tracing if build is production
