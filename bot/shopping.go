@@ -269,6 +269,9 @@ func (s *ShoppingService) deleteFromItem(ctx context.Context, conversationID mod
 			ret = append(ret, item)
 			ids = append(ids, item.ID)
 		}
+		if len(ids) == 0 {
+			return ret, nil
+		}
 		if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
 			return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
 		}
