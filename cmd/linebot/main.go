@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -77,7 +78,7 @@ func main() {
 		Handler: handler(bot),
 		Addr:    addr,
 	}
-	bot.Log.Info("start server")
+	bot.Log.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
 	//nolint:errcheck
 	go srv.ListenAndServe()
 
