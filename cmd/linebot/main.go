@@ -7,18 +7,13 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"strings"
 	"syscall"
 	"time"
 
 	"cloud.google.com/go/profiler"
-	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
-	"go.opentelemetry.io/otel/propagation"
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 
-	"github.com/ww24/linebot/bot"
-	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 )
 
@@ -35,19 +30,14 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	botCfg := bot.Config{
-		ChannelSecret:   os.Getenv("LINE_CHANNEL_SECRET"),
-		ChannelToken:    os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
-		ConversationIDs: strings.Split(os.Getenv("ALLOW_CONV_IDS"), ","),
-	}
-	bot, err := register(ctx, botCfg)
+	bot, err := register(ctx)
 	if err != nil {
-		log.Fatalf("Error: %+v", err)
+		log.Fatalf("initialize failed: %+v", err)
 	}
 
 	// set GOMAXPROCS
-	if _, err := maxprocs.Set(maxprocs.Logger(bot.Log.Sugar().Infof)); err != nil {
-		bot.Log.Warn("failed to set GOMAXPROCS", zap.Error(err))
+	if _, err := maxprocs.Set(maxprocs.Logger(bot.log.Sugar().Infof)); err != nil {
+		bot.log.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	// initialize cloud profiler and tracing if build is production
@@ -60,18 +50,18 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			bot.Log.Error("failed to start cloud profiler", zap.Error(err))
+			bot.log.Error("failed to start cloud profiler", zap.Error(err))
 		}
 
 		tp, err := tracer.New(serviceName, version)
 		if err != nil {
-			bot.Log.Error("failed to initialize tracer", zap.Error(err))
+			bot.log.Error("failed to initialize tracer", zap.Error(err))
 		}
 		defer func() {
 			tpShutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 			defer cancel()
 			if err := tp.Shutdown(tpShutdownCtx); err != nil {
-				bot.Log.Error("failed to shutdown tracer", zap.Error(err))
+				bot.log.Error("failed to shutdown tracer", zap.Error(err))
 			}
 		}()
 	}
@@ -81,10 +71,10 @@ func main() {
 		addr = ":" + a
 	}
 	srv := &http.Server{
-		Handler: handler(bot),
+		Handler: bot.handler,
 		Addr:    addr,
 	}
-	bot.Log.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
+	bot.log.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
 	//nolint:errcheck
 	go srv.ListenAndServe()
 
@@ -95,30 +85,6 @@ func main() {
 	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
-		bot.Log.Error("failed to shutdown server", zap.Error(err))
+		bot.log.Error("failed to shutdown server", zap.Error(err))
 	}
-}
-
-func newLogger(ctx context.Context) (*logger.Logger, error) {
-	return logger.New(ctx, serviceName, version)
-}
-
-func handler(bot *bot.Bot) http.Handler {
-	mux := http.NewServeMux()
-	prop := propagator.New()
-	mux.HandleFunc("/line_callback", func(w http.ResponseWriter, r *http.Request) {
-		ctx := prop.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
-
-		cl := bot.Log.WithTraceFromContext(ctx)
-		cl.Info("Request received")
-
-		if err := bot.HandleRequest(ctx, r); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			cl.Error("Request Error", zap.Error(err))
-			return
-		}
-
-		w.WriteHeader(http.StatusOK)
-	})
-	return mux
 }
