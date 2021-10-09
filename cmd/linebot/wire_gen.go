@@ -8,18 +8,29 @@ package main
 
 import (
 	"context"
-	"github.com/ww24/linebot/bot"
+	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/infra/external/linebot"
 	"github.com/ww24/linebot/infra/firestore"
+	"github.com/ww24/linebot/interactor"
+	"github.com/ww24/linebot/nl"
+	"github.com/ww24/linebot/presentation/http"
 )
 
 // Injectors from wire.go:
 
-func register(contextContext context.Context, config bot.Config) (*bot.Bot, error) {
+func register(contextContext context.Context) (*bot, error) {
 	logger, err := newLogger(contextContext)
 	if err != nil {
 		return nil, err
 	}
+	configConfig := config.NewConfig()
+	lineBot, err := linebot.NewLINEBot(configConfig, logger)
+	if err != nil {
+		return nil, err
+	}
+	messageProviderSet := linebot.NewMessageProviderSet()
+	botImpl := service.NewBot(lineBot, messageProviderSet)
 	client, err := firestore.New(contextContext)
 	if err != nil {
 		return nil, err
@@ -29,13 +40,15 @@ func register(contextContext context.Context, config bot.Config) (*bot.Bot, erro
 	if err != nil {
 		return nil, err
 	}
-	shoppingService, err := bot.NewShoppingService(shoppingImpl)
+	parser, err := nl.NewParser()
 	if err != nil {
 		return nil, err
 	}
-	botBot, err := bot.New(config, logger, shoppingService)
+	eventHandler, err := interactor.NewEventHandler(shoppingImpl, parser, messageProviderSet, botImpl, configConfig, logger)
 	if err != nil {
 		return nil, err
 	}
-	return botBot, nil
+	handler := http.NewHandler(logger, botImpl, eventHandler)
+	mainBot := newBot(logger, handler)
+	return mainBot, nil
 }

@@ -4,10 +4,20 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/google/wire"
 	"github.com/ikawaha/kagome-dict/ipa"
 	"github.com/ikawaha/kagome/v2/filter"
 	"github.com/ikawaha/kagome/v2/tokenizer"
 	"golang.org/x/text/unicode/norm"
+
+	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/domain/repository"
+)
+
+// Set provides a wire set.
+var Set = wire.NewSet(
+	NewParser,
+	wire.Bind(new(repository.NLParser), new(*Parser)),
 )
 
 const (
@@ -22,19 +32,6 @@ const (
 	// POS 3
 	posQuantifier = "助数詞" // 名詞, 接尾, 助数詞
 )
-
-type ActionType int
-
-const (
-	ActionTypeUnknown ActionType = iota
-	ActionTypeDelete
-)
-
-type Item struct {
-	Indexes []int
-	Name    []string
-	Action  ActionType
-}
 
 type Parser struct {
 	tokenizer *tokenizer.Tokenizer
@@ -66,7 +63,7 @@ func NewParser() (*Parser, error) {
 	}, nil
 }
 
-func (p *Parser) Parse(str string) *Item {
+func (p *Parser) Parse(str string) *model.Item {
 	str = norm.NFKC.String(str)
 	str = p.replacer.Replace(str)
 	tokens := p.tokenizer.Tokenize(str)
@@ -79,10 +76,10 @@ func (p *Parser) Parse(str string) *Item {
 	p.allow.Keep(&tokens)
 	p.deny.Drop(&tokens)
 
-	item := &Item{}
+	item := &model.Item{}
 	for _, token := range tokens {
 		at := p.selectAction(token)
-		if at != ActionTypeUnknown {
+		if at != model.ActionTypeUnknown {
 			item.Action = at
 			continue
 		}
@@ -124,7 +121,7 @@ func (*Parser) parseNumber(str string) (int, error) {
 	return num, nil
 }
 
-func (*Parser) selectAction(t tokenizer.Token) ActionType {
+func (*Parser) selectAction(t tokenizer.Token) model.ActionType {
 	keyword := ""
 	if bf, ok := t.BaseForm(); ok {
 		keyword = bf
@@ -134,9 +131,9 @@ func (*Parser) selectAction(t tokenizer.Token) ActionType {
 
 	switch keyword {
 	case "削除", "除去", "消す":
-		return ActionTypeDelete
+		return model.ActionTypeDelete
 	default:
-		return ActionTypeUnknown
+		return model.ActionTypeUnknown
 	}
 }
 

@@ -29,6 +29,10 @@ func (c ConversationID) SourceID() string {
 	return s[1]
 }
 
+func (c ConversationID) String() string {
+	return string(c)
+}
+
 type ConversationStatus struct {
 	ConversationID ConversationID
 	Type           ConversationStatusType
