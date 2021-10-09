@@ -5,9 +5,10 @@ import (
 	"errors"
 
 	"cloud.google.com/go/firestore"
-	"github.com/ww24/linebot/domain/model"
 	"go.opentelemetry.io/otel"
 	"google.golang.org/api/iterator"
+
+	"github.com/ww24/linebot/domain/model"
 )
 
 type Conversation struct {

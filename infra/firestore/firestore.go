@@ -6,12 +6,13 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
-	"github.com/ww24/linebot/domain/repository"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/oauth2/google"
 	f "google.golang.org/api/firestore/v1"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
+
+	"github.com/ww24/linebot/domain/repository"
 )
 
 var Set = wire.NewSet(

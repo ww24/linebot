@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 
+	"golang.org/x/xerrors"
+
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
-	"golang.org/x/xerrors"
 )
 
 type Shopping interface {
