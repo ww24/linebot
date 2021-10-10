@@ -168,8 +168,10 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		items := make([]*model.ShoppingItem, 0, len(lines))
 		for i, line := range lines {
 			item := &model.ShoppingItem{
-				ConversationID: e.ConversationID(),
+				ID:             "", // it will generate in datastore dto
 				Name:           line,
+				Quantity:       1,
+				ConversationID: e.ConversationID(),
 				CreatedAt:      time.Now().Unix(),
 				Order:          i,
 			}
