@@ -4,9 +4,14 @@ import (
 	"errors"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+)
+
+var (
+	errInvalidMessageType = errors.New("invalid given message type")
 )
 
 // MessageProviderSet implements repository.MessageProviderSet.
@@ -34,7 +39,7 @@ func (s *MessageProviderSet) ShoppingMenu(text string, rt model.ShoppingReplyTyp
 func asMessage(msg linebot.SendingMessage, v interface{}) error {
 	m, ok := v.(*linebot.SendingMessage)
 	if !ok {
-		return errors.New("invalid given message type")
+		return xerrors.Errorf("invalid message: %w", errInvalidMessageType)
 	}
 
 	*m = msg
@@ -80,6 +85,7 @@ func (p *ShoppingMenu) AsMessage(v interface{}) error {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 
+	//nolint: exhaustive
 	switch p.replyType {
 	case model.ShoppingReplyTypeEmptyList:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{

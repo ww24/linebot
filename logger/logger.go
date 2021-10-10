@@ -2,12 +2,12 @@ package logger
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/blendle/zapdriver"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2/google"
+	"golang.org/x/xerrors"
 )
 
 type Logger struct {
@@ -23,7 +23,7 @@ func New(ctx context.Context, name, version string) (*Logger, error) {
 
 	logger, err := zapdriver.NewProductionWithCore(core)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to initialize zapdriver: %w", err)
 	}
 
 	logger = logger.With(zap.String("version", version))
@@ -57,11 +57,11 @@ func (l *Logger) WithTraceFromContext(ctx context.Context) *zap.Logger {
 func getProjectID(ctx context.Context) (string, error) {
 	cred, err := google.FindDefaultCredentials(ctx)
 	if err != nil {
-		return "", fmt.Errorf("failed to find default credentials: %w", err)
+		return "", xerrors.Errorf("failed to find default credentials: %w", err)
 	}
 
 	if cred.ProjectID == "" {
-		return "", fmt.Errorf("project ID not found")
+		return "", xerrors.Errorf("project ID not found")
 	}
 
 	return cred.ProjectID, nil

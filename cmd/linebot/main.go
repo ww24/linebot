@@ -18,7 +18,8 @@ import (
 )
 
 const (
-	serviceName = "linebot"
+	serviceName     = "linebot"
+	shutdownTimeout = 10 * time.Second
 )
 
 var (
@@ -58,7 +59,7 @@ func main() {
 			bot.log.Error("failed to initialize tracer", zap.Error(err))
 		}
 		defer func() {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+			ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 			defer cancel()
 			if err := tp.Shutdown(ctx); err != nil {
 				bot.log.Error("failed to shutdown tracer", zap.Error(err))
@@ -78,7 +79,7 @@ func main() {
 	<-ctx.Done()
 	stop()
 
-	c, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	c, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
 		bot.log.Error("failed to shutdown server", zap.Error(err))

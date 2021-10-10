@@ -51,11 +51,11 @@ func (s *Shopping) Handle(ctx context.Context, e *model.Event) error {
 		return s.handleStatus(ctx, e)
 	})
 	if err != nil {
-		return err
+		return xerrors.Errorf("failed to handle type message: %w", err)
 	}
 
 	if err := e.HandleTypePostback(ctx, s.handlePostBack); err != nil {
-		return err
+		return xerrors.Errorf("failed to handle type postback: %w", err)
 	}
 
 	return nil
@@ -82,7 +82,7 @@ func (s *Shopping) handleMenu(ctx context.Context, e *model.Event, texts ...stri
 	}
 
 	text := fmt.Sprintf(prefixMsg+"%d件登録されています。\n%s\n\n何をしますか？",
-		len(items), model.ShoppingItems(items).Print(model.ListTypeOrdered))
+		len(items), items.Print(model.ListTypeOrdered))
 	msg := s.message.ShoppingMenu(text, model.ShoppingReplyTypeWithoutView)
 	if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 		return xerrors.Errorf("failed to reply message: %w", err)
@@ -137,7 +137,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 			return xerrors.Errorf("failed to list shopping items: %w", err)
 		}
 
-		text := prefixShopping + "\n" + model.ShoppingItems(items).Print(model.ListTypeOrdered)
+		text := prefixShopping + "\n" + items.Print(model.ListTypeOrdered)
 		msg := s.message.ShoppingMenu(text, model.ShoppingReplyTypeWithoutView)
 		if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
@@ -161,14 +161,17 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		if err := s.handleMessageAction(ctx, e, item); err != nil {
 			return xerrors.Errorf("failed to handle message action: %w", err)
 		}
+		return nil
 
 	case model.ConversationStatusTypeShoppingAdd:
 		lines := e.ReadTextLines()
 		items := make([]*model.ShoppingItem, 0, len(lines))
 		for i, line := range lines {
 			item := &model.ShoppingItem{
-				ConversationID: e.ConversationID(),
+				ID:             "", // it will generate in datastore dto
 				Name:           line,
+				Quantity:       1,
+				ConversationID: e.ConversationID(),
 				CreatedAt:      time.Now().Unix(),
 				Order:          i,
 			}
@@ -183,9 +186,16 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-	}
+		return nil
 
-	return nil
+	case model.ConversationStatusTypeNeutral:
+		// do nothing
+		return nil
+
+	default:
+		// do nothing
+		return nil
+	}
 }
 
 func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item *model.Item) error {
@@ -209,6 +219,9 @@ func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item
 
 		return nil
 
+	case model.ActionTypeUnknown:
+		// do nothing
+		return nil
 	default:
 		// do nothing
 		return nil

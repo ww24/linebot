@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"go.opentelemetry.io/otel"
+	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 
 	"github.com/ww24/linebot/domain/model"
@@ -85,7 +86,7 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 	batch := c.cli.Batch()
 	for _, item := range items {
 		if err := item.Validate(); err != nil {
-			return err
+			return xerrors.Errorf("shopping item validation failed: %w", err)
 		}
 
 		entity := NewShoppingItem(item)
@@ -94,7 +95,7 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 	}
 
 	if _, err := batch.Commit(ctx); err != nil {
-		return err
+		return xerrors.Errorf("failed to commit: %w", err)
 	}
 	return nil
 }
@@ -110,14 +111,14 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID mode
 		Documents(ctx)
 	docs, err := iter.GetAll()
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to get all: %w", err)
 	}
 
 	items := make([]*model.ShoppingItem, 0, len(docs))
 	for _, doc := range docs {
 		var item ShoppingItem
 		if err := doc.DataTo(&item); err != nil {
-			return nil, err
+			return nil, xerrors.Errorf("failed to convert response as ShoppingItem: %w", err)
 		}
 		item.ID = doc.Ref.ID
 		items = append(items, item.Model())
@@ -138,7 +139,7 @@ func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID m
 	}
 
 	if _, err := batch.Commit(ctx); err != nil {
-		return err
+		return xerrors.Errorf("failed to commit: %w", err)
 	}
 
 	return nil
@@ -159,7 +160,7 @@ func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID
 			break
 		}
 		if err != nil {
-			return err
+			return xerrors.Errorf("failed to iterate: %w", err)
 		}
 
 		batch.Delete(doc, firestore.Exists)
@@ -171,7 +172,7 @@ func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID
 	}
 
 	if _, err := batch.Commit(ctx); err != nil {
-		return err
+		return xerrors.Errorf("failed to commit: %w", err)
 	}
 	return nil
 }
@@ -182,13 +183,13 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 	defer span.End()
 
 	if err := status.Validate(); err != nil {
-		return err
+		return xerrors.Errorf("conversation status validation failed: %w", err)
 	}
 
 	dr := c.conversation(status.ConversationID).Collection("status").Doc("#")
 	entity := NewConversationStatus(status)
 	if _, err := dr.Set(ctx, entity); err != nil {
-		return err
+		return xerrors.Errorf("failed to set conversation status: %w", err)
 	}
 
 	return nil
@@ -201,12 +202,12 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 
 	doc, err := c.conversation(conversationID).Collection("status").Doc("#").Get(ctx)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to get conversation status: %w", err)
 	}
 
 	var ret ConversationStatus
 	if err := doc.DataTo(&ret); err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to convert response as ConversationStatus: %w", err)
 	}
 	return ret.Model(), nil
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"golang.org/x/xerrors"
+
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
 )
@@ -27,5 +29,10 @@ func newBot(
 }
 
 func newLogger(ctx context.Context) (*logger.Logger, error) {
-	return logger.New(ctx, serviceName, version)
+	log, err := logger.New(ctx, serviceName, version)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to initialize logger: %w", err)
+	}
+
+	return log, nil
 }

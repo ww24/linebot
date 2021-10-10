@@ -3,6 +3,8 @@ package model
 import (
 	"errors"
 	"strings"
+
+	"golang.org/x/xerrors"
 )
 
 type ConversationStatusType int
@@ -13,7 +15,12 @@ const (
 	ConversationStatusTypeShoppingAdd
 )
 
-const conversationIDSep = "_"
+const (
+	conversationIDSep        = "_"
+	conversationSeparateSize = 2
+)
+
+var errConversationStatusValidationFailed = errors.New("conversation status validation failed")
 
 type ConversationID string
 
@@ -22,8 +29,8 @@ func NewConversationID(prefix, sourceID string) ConversationID {
 }
 
 func (c ConversationID) SourceID() string {
-	s := strings.SplitN(string(c), conversationIDSep, 2)
-	if len(s) < 2 {
+	s := strings.SplitN(string(c), conversationIDSep, conversationSeparateSize)
+	if len(s) < conversationSeparateSize {
 		return ""
 	}
 	return s[1]
@@ -40,7 +47,7 @@ type ConversationStatus struct {
 
 func (m *ConversationStatus) Validate() error {
 	if m.ConversationID == "" {
-		return errors.New("invalid empty conversation id")
+		return xerrors.Errorf("invalid empty conversation id: %w", errConversationStatusValidationFailed)
 	}
 	return nil
 }
