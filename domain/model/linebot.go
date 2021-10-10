@@ -24,16 +24,14 @@ func (e *Event) ConversationID() ConversationID {
 }
 
 func (e *Event) HandleTypeMessage(ctx context.Context, f func(context.Context, *Event) error) error {
-	switch e.Type {
-	case linebot.EventTypeMessage:
+	if e.Type == linebot.EventTypeMessage {
 		return f(ctx, e)
 	}
 	return nil
 }
 
 func (e *Event) HandleTypePostback(ctx context.Context, f func(context.Context, *Event) error) error {
-	switch e.Type {
-	case linebot.EventTypePostback:
+	if e.Type == linebot.EventTypePostback {
 		return f(ctx, e)
 	}
 	return nil

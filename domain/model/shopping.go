@@ -50,7 +50,7 @@ func (l ShoppingItems) Print(typ ListType) string {
 		case ListTypeOrdered:
 			fmt.Fprintf(&b, "%d. %s\n", i+1, item.Name)
 
-		default:
+		case ListTypeDotted:
 			fmt.Fprintf(&b, "・%s\n", item.Name)
 		}
 	}

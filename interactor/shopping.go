@@ -161,6 +161,7 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		if err := s.handleMessageAction(ctx, e, item); err != nil {
 			return xerrors.Errorf("failed to handle message action: %w", err)
 		}
+		return nil
 
 	case model.ConversationStatusTypeShoppingAdd:
 		lines := e.ReadTextLines()
@@ -183,9 +184,16 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-	}
+		return nil
 
-	return nil
+	case model.ConversationStatusTypeNeutral:
+		// do nothing
+		return nil
+
+	default:
+		// do nothing
+		return nil
+	}
 }
 
 func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item *model.Item) error {
@@ -209,6 +217,9 @@ func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item
 
 		return nil
 
+	case model.ActionTypeUnknown:
+		// do nothing
+		return nil
 	default:
 		// do nothing
 		return nil
