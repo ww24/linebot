@@ -19,6 +19,10 @@ generate:
 lint:
 	golangci-lint run
 
+.PHONY: test
+test:
+	go test -race ./...
+
 .PHONY: emulator
 emulator:
 	firebase emulators:start --project="$(GOOGLE_CLOUD_PROJECT)"
