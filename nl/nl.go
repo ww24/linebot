@@ -78,8 +78,9 @@ func (p *Parser) Parse(str string) *model.Item {
 	p.allow.Keep(&tokens)
 	p.deny.Drop(&tokens)
 
-	item := &model.Item{}
-	for _, token := range tokens {
+	item := new(model.Item)
+	for i := range tokens {
+		token := &tokens[i]
 		at := p.selectAction(token)
 		if at != model.ActionTypeUnknown {
 			item.Action = at
@@ -124,7 +125,7 @@ func (*Parser) parseNumber(str string) (int, error) {
 	return num, nil
 }
 
-func (*Parser) selectAction(t tokenizer.Token) model.ActionType {
+func (*Parser) selectAction(t *tokenizer.Token) model.ActionType {
 	keyword := ""
 	if bf, ok := t.BaseForm(); ok {
 		keyword = bf
