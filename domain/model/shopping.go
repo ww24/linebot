@@ -4,6 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"golang.org/x/xerrors"
+)
+
+var (
+	errShoppingItemValidationFailed = errors.New("shopping item validation failed")
 )
 
 type ShoppingItem struct {
@@ -17,13 +23,13 @@ type ShoppingItem struct {
 
 func (m *ShoppingItem) Validate() error {
 	if m.ConversationID == "" {
-		return errors.New("invalid empty conversation id")
+		return xerrors.Errorf("invalid empty conversation id: %w", errShoppingItemValidationFailed)
 	}
 	if m.Name == "" {
-		return errors.New("invalid empty name")
+		return xerrors.Errorf("invalid empty name: %w", errShoppingItemValidationFailed)
 	}
 	if m.CreatedAt == 0 {
-		return errors.New("invalid created at")
+		return xerrors.Errorf("invalid created at: %w", errShoppingItemValidationFailed)
 	}
 	return nil
 }

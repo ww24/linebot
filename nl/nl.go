@@ -9,6 +9,7 @@ import (
 	"github.com/ikawaha/kagome/v2/filter"
 	"github.com/ikawaha/kagome/v2/tokenizer"
 	"golang.org/x/text/unicode/norm"
+	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
@@ -43,7 +44,7 @@ type Parser struct {
 func NewParser() (*Parser, error) {
 	tk, err := tokenizer.New(ipa.Dict(), tokenizer.OmitBosEos())
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("failed to initialize tokenizer: %w", err)
 	}
 
 	allowFilter := filter.NewPOSFilter(
@@ -116,7 +117,7 @@ func (*Parser) parseNumber(str string) (int, error) {
 			}
 		}
 
-		return 0, err
+		return 0, xerrors.Errorf("failed to convert Chinese numeral: %w", err)
 	}
 	return num, nil
 }

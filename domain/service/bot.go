@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"golang.org/x/xerrors"
+
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 )
@@ -30,14 +32,24 @@ func NewBot(
 }
 
 func (b *BotImpl) EventsFromRequest(r *http.Request) ([]*model.Event, error) {
-	return b.bot.EventsFromRequest(r)
+	events, err := b.bot.EventsFromRequest(r)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to call EventsFromRequest: %w", err)
+	}
+	return events, nil
 }
 
 func (b *BotImpl) ReplyTextMessage(ctx context.Context, e *model.Event, text string) error {
 	msg := b.message.Text(text)
-	return b.bot.ReplyMessage(ctx, e, msg)
+	if err := b.bot.ReplyMessage(ctx, e, msg); err != nil {
+		return xerrors.Errorf("failed to call ReplyMessage: %w", err)
+	}
+	return nil
 }
 
 func (b *BotImpl) ReplyMessage(ctx context.Context, e *model.Event, msg repository.MessageProvider) error {
-	return b.bot.ReplyMessage(ctx, e, msg)
+	if err := b.bot.ReplyMessage(ctx, e, msg); err != nil {
+		return xerrors.Errorf("failed to call ReplyMessage: %w", err)
+	}
+	return nil
 }

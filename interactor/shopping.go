@@ -51,11 +51,11 @@ func (s *Shopping) Handle(ctx context.Context, e *model.Event) error {
 		return s.handleStatus(ctx, e)
 	})
 	if err != nil {
-		return err
+		return xerrors.Errorf("failed to handle type message: %w", err)
 	}
 
 	if err := e.HandleTypePostback(ctx, s.handlePostBack); err != nil {
-		return err
+		return xerrors.Errorf("failed to handle type postback: %w", err)
 	}
 
 	return nil
