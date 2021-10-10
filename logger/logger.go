@@ -6,6 +6,7 @@ import (
 	"github.com/blendle/zapdriver"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/xerrors"
 )
@@ -18,7 +19,6 @@ type Logger struct {
 func New(ctx context.Context, name, version string) (*Logger, error) {
 	core := zapdriver.WrapCore(
 		zapdriver.ReportAllErrors(true),
-		zapdriver.ServiceName(name),
 	)
 
 	logger, err := zapdriver.NewProductionWithCore(core)
@@ -26,7 +26,9 @@ func New(ctx context.Context, name, version string) (*Logger, error) {
 		return nil, xerrors.Errorf("failed to initialize zapdriver: %w", err)
 	}
 
-	logger = logger.With(zap.String("version", version))
+	logger = logger.With(
+		zap.Object("serviceContext", newServiceContext(name, version)),
+	)
 
 	projectID, err := getProjectID(ctx)
 	if err != nil {
@@ -65,4 +67,26 @@ func getProjectID(ctx context.Context) (string, error) {
 	}
 
 	return cred.ProjectID, nil
+}
+
+// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext
+// see: https://cloud.google.com/error-reporting/docs/formatting-error-messages
+type serviceContext struct {
+	service string
+	version string
+}
+
+func newServiceContext(service, version string) *serviceContext {
+	return &serviceContext{
+		service: service,
+		version: version,
+	}
+}
+
+func (c *serviceContext) MarshalLogObject(enc zapcore.ObjectEncoder) error {
+	enc.AddString("service", c.service)
+	if c.version != "" {
+		enc.AddString("version", c.version)
+	}
+	return nil
 }
