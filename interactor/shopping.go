@@ -82,7 +82,7 @@ func (s *Shopping) handleMenu(ctx context.Context, e *model.Event, texts ...stri
 	}
 
 	text := fmt.Sprintf(prefixMsg+"%d件登録されています。\n%s\n\n何をしますか？",
-		len(items), model.ShoppingItems(items).Print(model.ListTypeOrdered))
+		len(items), items.Print(model.ListTypeOrdered))
 	msg := s.message.ShoppingMenu(text, model.ShoppingReplyTypeWithoutView)
 	if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 		return xerrors.Errorf("failed to reply message: %w", err)
@@ -137,7 +137,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 			return xerrors.Errorf("failed to list shopping items: %w", err)
 		}
 
-		text := prefixShopping + "\n" + model.ShoppingItems(items).Print(model.ListTypeOrdered)
+		text := prefixShopping + "\n" + items.Print(model.ListTypeOrdered)
 		msg := s.message.ShoppingMenu(text, model.ShoppingReplyTypeWithoutView)
 		if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
