@@ -66,13 +66,9 @@ func main() {
 		}()
 	}
 
-	addr := ":8000"
-	if a := os.Getenv("PORT"); a != "" {
-		addr = ":" + a
-	}
 	srv := &http.Server{
 		Handler: bot.handler,
-		Addr:    addr,
+		Addr:    bot.config.Addr(),
 	}
 	bot.log.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
 	//nolint:errcheck

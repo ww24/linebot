@@ -21,6 +21,7 @@ type Config struct {
 	lineChannelSecret string
 	lineChannelToken  string
 	conversationIDs   *ConversationIDs
+	addr              string
 }
 
 func NewConfig() *Config {
@@ -34,10 +35,16 @@ func NewConfig() *Config {
 		conversationIDs.set[conversationID] = struct{}{}
 	}
 
+	addr := ":8000"
+	if port := os.Getenv("PORT"); port == "" {
+		addr = ":" + port
+	}
+
 	return &Config{
 		lineChannelSecret: os.Getenv("LINE_CHANNEL_SECRET"),
 		lineChannelToken:  os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
 		conversationIDs:   conversationIDs,
+		addr:              addr,
 	}
 }
 
@@ -71,4 +78,8 @@ func (c *ConversationIDs) Available(conversationID model.ConversationID) bool {
 
 	_, ok := c.set[conversationID]
 	return ok
+}
+
+func (c *Config) Addr() string {
+	return c.addr
 }
