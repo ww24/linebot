@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/wire"
 	"go.uber.org/zap"
+	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
@@ -23,6 +24,7 @@ type EventHandler struct {
 	handlers []repository.Handler
 	conf     repository.Config
 	log      *logger.Logger
+	bot      service.Bot
 }
 
 func NewEventHandler(
@@ -39,6 +41,7 @@ func NewEventHandler(
 		},
 		conf: conf,
 		log:  log,
+		bot:  bot,
 	}, nil
 }
 
@@ -53,11 +56,19 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 			return nil
 		}
 
-		for _, h := range h.handlers {
-			if err := h.Handle(ctx, e); err != nil {
-				return err
+		for _, handler := range h.handlers {
+			if err := handler.Handle(ctx, e); err != nil {
+				return h.handleError(ctx, e)
 			}
 		}
+	}
+
+	return nil
+}
+
+func (h *EventHandler) handleError(ctx context.Context, e *model.Event) error {
+	if err := h.bot.ReplyTextMessage(ctx, e, "予期せぬエラーが発生しました"); err != nil {
+		return xerrors.Errorf("failed to reply text message: %w", err)
 	}
 
 	return nil

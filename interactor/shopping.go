@@ -2,6 +2,7 @@ package interactor
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -11,13 +12,14 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
-	"github.com/ww24/linebot/usecase"
 )
 
 const (
 	triggerShopping = "買い物リスト"
 	prefixShopping  = "【買い物リスト】"
 )
+
+var errItemNotFound = errors.New("item not found")
 
 type Shopping struct {
 	shopping service.Shopping
@@ -191,6 +193,13 @@ func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item
 	case model.ActionTypeDelete:
 		foundItems, err := s.deleteFromItem(ctx, e.ConversationID(), item)
 		if err != nil {
+			if errors.Is(err, errItemNotFound) {
+				text := "削除する商品が見つかりませんでした。\n削除する場合は「○番を削除」と入力してみて下さい。"
+				if err := s.bot.ReplyTextMessage(ctx, e, text); err != nil {
+					return xerrors.Errorf("failed to reply text message: %w", err)
+				}
+			}
+
 			return err
 		}
 		text := "次の商品を削除しました。\n" + foundItems.Print(model.ListTypeDotted)
@@ -216,7 +225,7 @@ func (s *Shopping) deleteFromItem(ctx context.Context, conversationID model.Conv
 
 	indexes := item.UniqueIndexes()
 	if len(indexes) == 0 {
-		return ret, xerrors.Errorf("item not found: %w", usecase.ErrItemNotFound)
+		return ret, xerrors.Errorf("item not found: %w", errItemNotFound)
 	}
 
 	ids := make([]string, 0, len(indexes))
