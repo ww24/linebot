@@ -6,6 +6,7 @@ type Config interface {
 	LINEChannelSecret() string
 	LINEChannelToken() string
 	ConversationIDs() ConversationIDs
+	Addr() string
 }
 
 type ConversationIDs interface {
