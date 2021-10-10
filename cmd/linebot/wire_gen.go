@@ -20,11 +20,11 @@ import (
 // Injectors from wire.go:
 
 func register(contextContext context.Context) (*bot, error) {
+	configConfig := config.NewConfig()
 	logger, err := newLogger(contextContext)
 	if err != nil {
 		return nil, err
 	}
-	configConfig := config.NewConfig()
 	lineBot, err := linebot.NewLINEBot(configConfig, logger)
 	if err != nil {
 		return nil, err
@@ -49,6 +49,6 @@ func register(contextContext context.Context) (*bot, error) {
 		return nil, err
 	}
 	handler := http.NewHandler(logger, botImpl, eventHandler)
-	mainBot := newBot(logger, handler)
+	mainBot := newBot(configConfig, logger, handler)
 	return mainBot, nil
 }
