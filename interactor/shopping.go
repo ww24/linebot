@@ -208,6 +208,7 @@ func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item
 				if err := s.bot.ReplyTextMessage(ctx, e, text); err != nil {
 					return xerrors.Errorf("failed to reply text message: %w", err)
 				}
+				return nil
 			}
 
 			return err
