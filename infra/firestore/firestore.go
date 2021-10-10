@@ -16,6 +16,8 @@ import (
 	"github.com/ww24/linebot/domain/repository"
 )
 
+// Set provides a wire set.
+//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	New,
 	NewConversation,

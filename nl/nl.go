@@ -16,6 +16,7 @@ import (
 )
 
 // Set provides a wire set.
+//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	NewParser,
 	wire.Bind(new(repository.NLParser), new(*Parser)),
