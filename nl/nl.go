@@ -109,6 +109,7 @@ func (p *Parser) Parse(str string) *model.Item {
 
 func (*Parser) parseNumber(str string) (int, error) {
 	// 漢数字対応
+	var cn = [...]string{"一", "二", "三", "四", "五", "六", "七", "八", "九"}
 	num, err := strconv.Atoi(str)
 	if err != nil {
 		for i, n := range cn {
@@ -137,5 +138,3 @@ func (*Parser) selectAction(t tokenizer.Token) model.ActionType {
 		return model.ActionTypeUnknown
 	}
 }
-
-var cn = [...]string{"一", "二", "三", "四", "五", "六", "七", "八", "九"}
