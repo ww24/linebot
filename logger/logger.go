@@ -17,18 +17,16 @@ type Logger struct {
 }
 
 func New(ctx context.Context, name, version string) (*Logger, error) {
-	core := zapdriver.WrapCore(
-		zapdriver.ReportAllErrors(true),
-	)
+	opt := zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+		return newCore(core)
+	})
 
-	logger, err := zapdriver.NewProductionWithCore(core)
+	logger, err := zapdriver.NewProduction(opt)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize zapdriver: %w", err)
 	}
 
-	logger = logger.With(
-		zap.Object("serviceContext", newServiceContext(name, version)),
-	)
+	logger = logger.With(newServiceContext(name, version))
 
 	projectID, err := getProjectID(ctx)
 	if err != nil {
@@ -67,26 +65,4 @@ func getProjectID(ctx context.Context) (string, error) {
 	}
 
 	return cred.ProjectID, nil
-}
-
-// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext
-// see: https://cloud.google.com/error-reporting/docs/formatting-error-messages
-type serviceContext struct {
-	service string
-	version string
-}
-
-func newServiceContext(service, version string) *serviceContext {
-	return &serviceContext{
-		service: service,
-		version: version,
-	}
-}
-
-func (c *serviceContext) MarshalLogObject(enc zapcore.ObjectEncoder) error {
-	enc.AddString("service", c.service)
-	if c.version != "" {
-		enc.AddString("version", c.version)
-	}
-	return nil
 }
