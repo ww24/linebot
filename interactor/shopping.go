@@ -146,8 +146,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 }
 
 func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
-	conversationID := e.ConversationID()
-	status, err := s.shopping.GetStatus(ctx, conversationID)
+	status, err := s.shopping.GetStatus(ctx, e.ConversationID())
 	if err != nil {
 		return xerrors.Errorf("failed to get status: %w", err)
 	}
@@ -155,17 +154,10 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 	switch status.Type {
 	case model.ConversationStatusTypeShopping:
 		itemText := strings.Join(e.ReadTextLines(), " ")
+		// parse message text
 		item := s.nlParser.Parse(itemText)
-		if item.Action != model.ActionTypeDelete {
-			return nil
-		}
-		foundItems, err := s.deleteFromItem(ctx, conversationID, item)
-		if err != nil {
-			return err
-		}
-		text := "次の商品を削除しました。\n" + foundItems.Print(model.ListTypeDotted)
-		if err := s.handleMenu(ctx, e, text); err != nil {
-			return err
+		if err := s.handleMessageAction(ctx, e, item); err != nil {
+			return xerrors.Errorf("failed to handle message action: %w", err)
 		}
 
 	case model.ConversationStatusTypeShoppingAdd:
@@ -180,7 +172,7 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 			}
 			items = append(items, item)
 		}
-		if err := s.shopping.AddItem(ctx, conversationID, items...); err != nil {
+		if err := s.shopping.AddItem(ctx, e.ConversationID(), items...); err != nil {
 			return xerrors.Errorf("failed to add item: %w", err)
 		}
 
@@ -192,6 +184,34 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 	}
 
 	return nil
+}
+
+func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item *model.Item) error {
+	switch item.Action {
+	case model.ActionTypeDelete:
+		indexes := item.UniqueIndexes()
+		if len(indexes) == 0 {
+			// do nothing
+			return nil
+		}
+
+		// TODO: handling 0 index
+
+		foundItems, err := s.deleteFromItem(ctx, e.ConversationID(), item)
+		if err != nil {
+			return err
+		}
+		text := "次の商品を削除しました。\n" + foundItems.Print(model.ListTypeDotted)
+		if err := s.handleMenu(ctx, e, text); err != nil {
+			return err
+		}
+
+		return nil
+
+	default:
+		// do nothing
+		return nil
+	}
 }
 
 func (s *Shopping) deleteFromItem(ctx context.Context, conversationID model.ConversationID, item *model.Item) (model.ShoppingItems, error) {

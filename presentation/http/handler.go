@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
@@ -72,6 +73,10 @@ func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 
 		if err := h.eventHandler.Handle(ctx, events); err != nil {
 			cl.Error("failed to handle events", zap.Error(err))
+
+			// DEBUG
+			cl.Warn("DEBUG", zap.String("errTest", fmt.Sprintf("%+v", err)))
+
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
