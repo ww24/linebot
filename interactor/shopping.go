@@ -189,14 +189,6 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item *model.Item) error {
 	switch item.Action {
 	case model.ActionTypeDelete:
-		indexes := item.UniqueIndexes()
-		if len(indexes) == 0 {
-			// do nothing
-			return nil
-		}
-
-		// TODO: handling 0 index
-
 		foundItems, err := s.deleteFromItem(ctx, e.ConversationID(), item)
 		if err != nil {
 			return err
@@ -222,28 +214,26 @@ func (s *Shopping) deleteFromItem(ctx context.Context, conversationID model.Conv
 
 	ret := make([]*model.ShoppingItem, 0)
 
-	if len(item.Indexes) > 0 {
-		ids := make([]string, 0, len(item.Indexes))
-		for _, idx := range item.Indexes {
-			if idx <= 0 || idx > len(items) {
-				continue
-			}
-			item := items[idx-1]
-			ret = append(ret, item)
-			ids = append(ids, item.ID)
-		}
-		if len(ids) == 0 {
-			return ret, nil
-		}
-		if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
-			return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
-		}
-
-		return ret, nil
+	indexes := item.UniqueIndexes()
+	if len(indexes) == 0 {
+		return ret, xerrors.Errorf("item not found: %w", usecase.ErrItemNotFound)
 	}
 
-	// TODO: search by name
-	// 固有名詞が分割されてしまうので実装が難しい
+	ids := make([]string, 0, len(indexes))
+	for _, idx := range indexes {
+		if idx <= 0 || idx > len(items) {
+			continue
+		}
+		item := items[idx-1]
+		ret = append(ret, item)
+		ids = append(ids, item.ID)
+	}
+	if len(ids) == 0 {
+		return ret, nil
+	}
+	if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
+		return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
+	}
 
-	return nil, usecase.ErrItemNotFound
+	return ret, nil
 }
