@@ -58,9 +58,9 @@ func main() {
 			bot.log.Error("failed to initialize tracer", zap.Error(err))
 		}
 		defer func() {
-			tpShutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 			defer cancel()
-			if err := tp.Shutdown(tpShutdownCtx); err != nil {
+			if err := tp.Shutdown(ctx); err != nil {
 				bot.log.Error("failed to shutdown tracer", zap.Error(err))
 			}
 		}()
