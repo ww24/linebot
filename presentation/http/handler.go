@@ -47,6 +47,7 @@ func NewHandler(
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", h.healthCheck())
 	mux.HandleFunc("/line_callback", h.lineCallback())
 	h.registerMiddleware(mux).ServeHTTP(w, r)
 }
@@ -58,6 +59,12 @@ func (h *Handler) registerMiddleware(handler http.Handler) http.Handler {
 	return handler
 }
 
+func (h *Handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
 func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := prop.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
@@ -67,8 +74,8 @@ func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 
 		events, err := h.bot.EventsFromRequest(r)
 		if err != nil {
-			cl.Error("failed to parse request", zap.Error(err))
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			cl.Info("failed to parse request", zap.Error(err))
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 

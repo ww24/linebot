@@ -37,7 +37,7 @@ func NewConfig() *Config {
 	}
 
 	addr := ":8000"
-	if port := os.Getenv("PORT"); port == "" {
+	if port := os.Getenv("PORT"); port != "" {
 		addr = ":" + port
 	}
 
