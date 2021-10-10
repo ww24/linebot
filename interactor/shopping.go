@@ -2,6 +2,7 @@ package interactor
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -11,13 +12,14 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
-	"github.com/ww24/linebot/usecase"
 )
 
 const (
 	triggerShopping = "買い物リスト"
 	prefixShopping  = "【買い物リスト】"
 )
+
+var errItemNotFound = errors.New("item not found")
 
 type Shopping struct {
 	shopping service.Shopping
@@ -189,16 +191,15 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item *model.Item) error {
 	switch item.Action {
 	case model.ActionTypeDelete:
-		indexes := item.UniqueIndexes()
-		if len(indexes) == 0 {
-			// do nothing
-			return nil
-		}
-
-		// TODO: handling 0 index
-
 		foundItems, err := s.deleteFromItem(ctx, e.ConversationID(), item)
 		if err != nil {
+			if errors.Is(err, errItemNotFound) {
+				text := "削除する商品が見つかりませんでした。\n削除する場合は「○番を削除」と入力してみて下さい。"
+				if err := s.bot.ReplyTextMessage(ctx, e, text); err != nil {
+					return xerrors.Errorf("failed to reply text message: %w", err)
+				}
+			}
+
 			return err
 		}
 		text := "次の商品を削除しました。\n" + foundItems.Print(model.ListTypeDotted)
@@ -222,28 +223,26 @@ func (s *Shopping) deleteFromItem(ctx context.Context, conversationID model.Conv
 
 	ret := make([]*model.ShoppingItem, 0)
 
-	if len(item.Indexes) > 0 {
-		ids := make([]string, 0, len(item.Indexes))
-		for _, idx := range item.Indexes {
-			if idx <= 0 || idx > len(items) {
-				continue
-			}
-			item := items[idx-1]
-			ret = append(ret, item)
-			ids = append(ids, item.ID)
-		}
-		if len(ids) == 0 {
-			return ret, nil
-		}
-		if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
-			return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
-		}
-
-		return ret, nil
+	indexes := item.UniqueIndexes()
+	if len(indexes) == 0 {
+		return ret, xerrors.Errorf("item not found: %w", errItemNotFound)
 	}
 
-	// TODO: search by name
-	// 固有名詞が分割されてしまうので実装が難しい
+	ids := make([]string, 0, len(indexes))
+	for _, idx := range indexes {
+		if idx <= 0 || idx > len(items) {
+			continue
+		}
+		item := items[idx-1]
+		ret = append(ret, item)
+		ids = append(ids, item.ID)
+	}
+	if len(ids) == 0 {
+		return ret, nil
+	}
+	if err := s.shopping.DeleteItems(ctx, conversationID, ids); err != nil {
+		return nil, xerrors.Errorf("failed to delete shopping items: %w", err)
+	}
 
-	return nil, usecase.ErrItemNotFound
+	return ret, nil
 }
