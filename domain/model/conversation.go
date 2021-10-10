@@ -15,7 +15,10 @@ const (
 	ConversationStatusTypeShoppingAdd
 )
 
-const conversationIDSep = "_"
+const (
+	conversationIDSep        = "_"
+	conversationSeparateSize = 2
+)
 
 var errConversationStatusValidationFailed = errors.New("conversation status validation failed")
 
@@ -26,8 +29,8 @@ func NewConversationID(prefix, sourceID string) ConversationID {
 }
 
 func (c ConversationID) SourceID() string {
-	s := strings.SplitN(string(c), conversationIDSep, 2)
-	if len(s) < 2 {
+	s := strings.SplitN(string(c), conversationIDSep, conversationSeparateSize)
+	if len(s) < conversationSeparateSize {
 		return ""
 	}
 	return s[1]
