@@ -67,8 +67,8 @@ func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 
 		events, err := h.bot.EventsFromRequest(r)
 		if err != nil {
-			cl.Error("failed to parse request", zap.Error(err))
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			cl.Info("failed to parse request", zap.Error(err))
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
