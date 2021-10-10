@@ -85,6 +85,7 @@ func (p *ShoppingMenu) AsMessage(v interface{}) error {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 
+	//nolint: exhaustive
 	switch p.replyType {
 	case model.ShoppingReplyTypeEmptyList:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
