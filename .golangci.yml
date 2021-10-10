@@ -1,0 +1,117 @@
+run:
+  timeout: 3m
+
+issues:
+  exclude-rules:
+    - linters:
+        - exhaustivestruct
+      path: _test\.go$
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  gocritic:
+    enabled-checks:
+      - appendCombine
+      - argOrder
+      - assignOp
+      - badCall
+      - badCond
+      - boolExprSimplify
+      - builtinShadow
+      - captLocal
+      - caseOrder
+      - codegenComment
+      - commentedOutCode
+      - commentedOutImport
+      - defaultCaseOrder
+      - deprecatedComment
+      - docStub
+      - dupArg
+      - dupBranchBody
+      - dupCase
+      - dupImport
+      - dupSubExpr
+      - elseif
+      - emptyFallthrough
+      - emptyStringTest
+      - equalFold
+      - flagDeref
+      - flagName
+      - hexLiteral
+      - hugeParam
+      - importShadow
+      - indexAlloc
+      - initClause
+      - methodExprCall
+      - nestingReduce
+      - newDeref
+      - nilValReturn
+      - octalLiteral
+      - offBy1
+      - paramTypeCombine
+      - ptrToRefParam
+      - rangeExprCopy
+      - rangeValCopy
+      - regexpMust
+      - sloppyLen
+      - sloppyReassign
+      - stringXbytes
+      - switchTrue
+      - typeAssertChain
+      - typeSwitchVar
+      - typeUnparen
+      - underef
+      - unnecessaryBlock
+      - unslice
+      - valSwap
+      - weakCond
+      - wrapperFunc
+      - yodaStyleExpr
+  gci:
+    local-prefixes: github.com/ww24/linebot
+  exhaustivestruct:
+    struct-patterns:
+      - "github.com/ww24/linebot/domain/*"
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - errcheck
+    - errorlint
+    - exportloopref
+    - gochecknoglobals
+    - goconst
+    - gocritic
+    - gocyclo
+    - goerr113
+    - goimports
+    - gci
+    - gomnd
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - noctx
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - nolintlint
+    - wrapcheck
+    - tparallel
+    - stylecheck
+    - prealloc
+    - exhaustive
+    - exhaustivestruct
+    - dogsled
+    - dupl
+    - gocognit
+    - gosec
+    - nestif
+    - nakedret
