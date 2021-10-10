@@ -47,6 +47,7 @@ func NewHandler(
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", h.healthCheck())
 	mux.HandleFunc("/line_callback", h.lineCallback())
 	h.registerMiddleware(mux).ServeHTTP(w, r)
 }
@@ -56,6 +57,12 @@ func (h *Handler) registerMiddleware(handler http.Handler) http.Handler {
 		handler = middleware(handler)
 	}
 	return handler
+}
+
+func (h *Handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}
 }
 
 func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
