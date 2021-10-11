@@ -16,6 +16,8 @@ type Logger struct {
 	projectID string
 }
 
+func NewNop() *Logger { return &Logger{Logger: zap.NewNop()} }
+
 func New(ctx context.Context, name, version string) (*Logger, error) {
 	opt := zap.WrapCore(func(core zapcore.Core) zapcore.Core {
 		return newCore(core)
