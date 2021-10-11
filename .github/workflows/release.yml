@@ -51,11 +51,10 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-      # ignore hadolint until fixed a bug
-      # - uses: hadolint/hadolint-action@v1.6.0
-      #   with:
-      #     dockerfile: Dockerfile
-      #     ignore: DL3018 DL3006
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          dockerfile: Dockerfile
+          ignore: DL3018 DL3006
       - name: Setup docker buildx
         uses: docker/setup-buildx-action@v1
       - name: Build docker image
