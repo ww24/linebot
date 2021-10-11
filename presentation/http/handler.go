@@ -3,9 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	"github.com/google/wire"
-	"go.opentelemetry.io/otel/propagation"
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/domain/service"
@@ -19,9 +17,6 @@ var Set = wire.NewSet(
 	NewHandler,
 	wire.Bind(new(http.Handler), new(*Handler)),
 )
-
-//nolint: gochecknoglobals
-var prop = propagator.New()
 
 type Handler struct {
 	log          *logger.Logger
@@ -40,6 +35,7 @@ func NewHandler(
 		bot:          bot,
 		eventHandler: eventHandler,
 		middlewares: []func(http.Handler) http.Handler{
+			XCTCOpenTelemetry(),
 			PanicHandler(log),
 		},
 	}
@@ -67,8 +63,7 @@ func (h *Handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := prop.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
-
+		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
 		cl.Info("line callback received")
 
