@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.6.0
 	cloud.google.com/go/profiler v0.1.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.0.0-RC2.0.20211006124648-ef4354fe23eb
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.0.0-RC2
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.0.0
 	github.com/blendle/zapdriver v1.3.1
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.4
