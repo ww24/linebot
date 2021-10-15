@@ -11,7 +11,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.4
 	github.com/ikawaha/kagome/v2 v2.7.0
-	github.com/line/line-bot-sdk-go/v7 v7.10.1
+	github.com/line/line-bot-sdk-go/v7 v7.11.0
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.25.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.25.0
