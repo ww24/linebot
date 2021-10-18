@@ -47,6 +47,8 @@ resource "google_cloud_run_service" "linebot" {
     }
 
     metadata {
+      name = var.image_tag == "latest" ? "" : "v${var.image_tag}"
+
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
         "autoscaling.knative.dev/minScale" = "1"
@@ -63,7 +65,7 @@ resource "google_cloud_run_service" "linebot" {
     latest_revision = true
   }
 
-  autogenerate_revision_name = true
+  autogenerate_revision_name = var.image_tag == "latest"
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
