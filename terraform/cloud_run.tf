@@ -47,7 +47,8 @@ resource "google_cloud_run_service" "linebot" {
     }
 
     metadata {
-      name = var.image_tag == "latest" ? "" : "v${var.image_tag}"
+      # The revision name must be prefixed by the name of the enclosing Service or Configuration with a trailing -
+      name = var.image_tag == "latest" ? "" : "${var.name}-v${var.image_tag}"
 
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
