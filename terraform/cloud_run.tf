@@ -7,6 +7,7 @@ locals {
   current_image = data.google_cloud_run_service.linebot.template != null ? data.google_cloud_run_service.linebot.template[0].spec[0].containers[0].image : null
   new_image     = "${var.location}-docker.pkg.dev/${var.project}/${var.gar_repository}/${var.image_name}:${var.image_tag}"
   image         = (local.current_image != null && var.image_tag == "latest") ? local.current_image : local.new_image
+  image_tag     = split(":", local.image)[1]
 }
 
 resource "google_cloud_run_service" "linebot" {
@@ -49,7 +50,7 @@ resource "google_cloud_run_service" "linebot" {
     metadata {
       # The revision name must be prefixed by the name of the enclosing Service or Configuration with a trailing -
       # Resource name must use only lowercase letters, numbers and '-'. Must begin with a letter and cannot end with a '-'. Maximum length is 63 characters.
-      name = var.image_tag == "latest" ? "" : "${var.name}-v${replace(var.image_tag, ".", "-")}"
+      name = local.image_tag == "latest" ? null : "${var.name}-v${replace(local.image_tag, ".", "-")}"
 
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
@@ -67,7 +68,7 @@ resource "google_cloud_run_service" "linebot" {
     latest_revision = true
   }
 
-  autogenerate_revision_name = var.image_tag == "latest"
+  autogenerate_revision_name = local.image_tag == "latest"
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
