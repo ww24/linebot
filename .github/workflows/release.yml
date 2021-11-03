@@ -15,7 +15,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
@@ -25,7 +25,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: actions/cache@v2
         with:
           path: ~/go/pkg/mod
@@ -44,7 +44,7 @@ jobs:
       image_tag: ${{ steps.tag.outputs.image_tag }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -93,7 +93,7 @@ jobs:
     name: Build and push docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -124,7 +124,7 @@ jobs:
     name: Build and push docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -160,7 +160,7 @@ jobs:
         working-directory: terraform
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.5
+      - uses: actions/checkout@v2.4.0
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.7
