@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"cloud.google.com/go/firestore"
-	"go.opentelemetry.io/otel"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 
@@ -79,7 +78,6 @@ func (c *Conversation) shopping(conversationID model.ConversationID) *firestore.
 }
 
 func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.ShoppingItem) error {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "AddShoppingItem")
 	defer span.End()
 
@@ -101,7 +99,6 @@ func (c *Conversation) AddShoppingItem(ctx context.Context, items ...*model.Shop
 }
 
 func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID model.ConversationID) ([]*model.ShoppingItem, error) {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "FindShoppingItem")
 	defer span.End()
 
@@ -128,7 +125,6 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID mode
 }
 
 func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID model.ConversationID, ids []string) error {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "DeleteShoppingItems")
 	defer span.End()
 
@@ -146,7 +142,6 @@ func (c *Conversation) DeleteShoppingItems(ctx context.Context, conversationID m
 }
 
 func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID model.ConversationID) error {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "DeleteAllShoppingItem")
 	defer span.End()
 
@@ -178,7 +173,6 @@ func (c *Conversation) DeleteAllShoppingItem(ctx context.Context, conversationID
 }
 
 func (c *Conversation) SetStatus(ctx context.Context, status *model.ConversationStatus) error {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "SetStatus")
 	defer span.End()
 
@@ -196,7 +190,6 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 }
 
 func (c *Conversation) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
-	tracer := otel.Tracer("infra/firestore")
 	ctx, span := tracer.Start(ctx, "GetStatus")
 	defer span.End()
 
