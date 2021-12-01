@@ -15,7 +15,6 @@ import (
 )
 
 // Set provides a wire set.
-//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	NewLINEBot,
 	wire.Bind(new(repository.Bot), new(*LINEBot)),

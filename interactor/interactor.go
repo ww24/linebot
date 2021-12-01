@@ -15,7 +15,6 @@ import (
 )
 
 // Set provides a wire set.
-//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	NewEventHandler,
 	wire.Bind(new(usecase.EventHandler), new(*EventHandler)),
