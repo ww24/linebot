@@ -7,6 +7,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/otel"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/xerrors"
 	f "google.golang.org/api/firestore/v1"
@@ -17,12 +18,13 @@ import (
 )
 
 // Set provides a wire set.
-//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	New,
 	NewConversation,
 	wire.Bind(new(repository.Conversation), new(*Conversation)),
 )
+
+var tracer = otel.Tracer("github.com/ww24/linebot/infra/firestore")
 
 type Client struct {
 	cli *firestore.Client

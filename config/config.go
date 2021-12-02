@@ -11,7 +11,6 @@ import (
 )
 
 // Set provides a wire set.
-//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	NewConfig,
 	wire.Bind(new(repository.Config), new(*Config)),

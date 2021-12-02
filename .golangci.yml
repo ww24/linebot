@@ -7,6 +7,12 @@ issues:
         - exhaustivestruct
         - errcheck
       path: _test\.go$
+    - linters:
+        - gochecknoglobals
+      source: "^var Set = wire.NewSet"
+    - linters:
+        - gochecknoglobals
+      source: "^var tracer = otel.Tracer"
 
 linters-settings:
   gocyclo:

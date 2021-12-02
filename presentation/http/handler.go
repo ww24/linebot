@@ -12,7 +12,6 @@ import (
 )
 
 // Set provides a wire set.
-//nolint: gochecknoglobals
 var Set = wire.NewSet(
 	NewHandler,
 	wire.Bind(new(http.Handler), new(*Handler)),
