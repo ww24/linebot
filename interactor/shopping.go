@@ -22,23 +22,26 @@ const (
 var errItemNotFound = errors.New("item not found")
 
 type Shopping struct {
-	shopping service.Shopping
-	nlParser repository.NLParser
-	message  repository.MessageProviderSet
-	bot      service.Bot
+	conversation service.Conversation
+	shopping     service.Shopping
+	nlParser     repository.NLParser
+	message      repository.MessageProviderSet
+	bot          service.Bot
 }
 
 func NewShopping(
+	conversation service.Conversation,
 	shopping service.Shopping,
 	nlParser repository.NLParser,
 	message repository.MessageProviderSet,
 	bot service.Bot,
 ) *Shopping {
 	return &Shopping{
-		shopping: shopping,
-		nlParser: nlParser,
-		message:  message,
-		bot:      bot,
+		conversation: conversation,
+		shopping:     shopping,
+		nlParser:     nlParser,
+		message:      message,
+		bot:          bot,
 	}
 }
 
@@ -111,7 +114,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 		}
 
 	case "Shopping#deleteCancel":
-		if err := s.shopping.SetStatusShopping(ctx, conversationID); err != nil {
+		if err := s.shopping.SetStatus(ctx, conversationID); err != nil {
 			return xerrors.Errorf("failed to set status: %w", err)
 		}
 		if err := s.handleMenu(ctx, e); err != nil {
@@ -123,7 +126,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 			ConversationID: conversationID,
 			Type:           model.ConversationStatusTypeShoppingAdd,
 		}
-		if err := s.shopping.SetStatus(ctx, status); err != nil {
+		if err := s.conversation.SetStatus(ctx, status); err != nil {
 			return xerrors.Errorf("failed to set status: %w", err)
 		}
 		text := prefixShopping + "追加する商品を1行に1つずつ入力してください。"
@@ -148,7 +151,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 }
 
 func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
-	status, err := s.shopping.GetStatus(ctx, e.ConversationID())
+	status, err := s.conversation.GetStatus(ctx, e.ConversationID())
 	if err != nil {
 		return xerrors.Errorf("failed to get status: %w", err)
 	}
