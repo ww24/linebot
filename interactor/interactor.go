@@ -28,6 +28,7 @@ type EventHandler struct {
 }
 
 func NewEventHandler(
+	conversation service.Conversation,
 	shopping service.Shopping,
 	nlParser repository.NLParser,
 	message repository.MessageProviderSet,
@@ -37,7 +38,7 @@ func NewEventHandler(
 ) (*EventHandler, error) {
 	return &EventHandler{
 		handlers: []repository.Handler{
-			NewShopping(shopping, nlParser, message, bot),
+			NewShopping(conversation, shopping, nlParser, message, bot),
 		},
 		conf: conf,
 		log:  log,
