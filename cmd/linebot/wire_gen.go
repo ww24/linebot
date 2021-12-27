@@ -36,15 +36,13 @@ func register(contextContext context.Context) (*bot, error) {
 		return nil, err
 	}
 	conversation := firestore.NewConversation(client)
-	shoppingImpl, err := service.NewShopping(conversation)
-	if err != nil {
-		return nil, err
-	}
+	conversationImpl := service.NewConversation(conversation)
+	shoppingImpl := service.NewShopping(conversation)
 	parser, err := nl.NewParser()
 	if err != nil {
 		return nil, err
 	}
-	eventHandler, err := interactor.NewEventHandler(shoppingImpl, parser, messageProviderSet, botImpl, configConfig, logger)
+	eventHandler, err := interactor.NewEventHandler(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl, configConfig, logger)
 	if err != nil {
 		return nil, err
 	}
