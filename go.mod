@@ -3,16 +3,21 @@ module github.com/ww24/linebot
 go 1.18
 
 require (
+	cloud.google.com/go/cloudtasks v1.3.0
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/profiler v0.2.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.3.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.3.0
 	github.com/blendle/zapdriver v1.3.1
+	github.com/go-oss/scheduler v0.1.0
+	github.com/golang/mock v1.6.0
+	github.com/google/go-jsonnet v0.18.0
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.4
 	github.com/ikawaha/kagome/v2 v2.7.0
 	github.com/line/line-bot-sdk-go/v7 v7.14.0
 	github.com/stretchr/testify v1.7.1
+	github.com/tenntenn/testtime v0.2.2
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.31.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.31.0
 	go.opentelemetry.io/otel v1.6.1
@@ -46,10 +51,12 @@ require (
 	go.opentelemetry.io/otel/metric v0.28.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
-	golang.org/x/sys v0.0.0-20220328115105-d36c6a25d886 // indirect
+	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
+	golang.org/x/sys v0.0.0-20220403205710-6acee93ad0eb // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220324131243-acbaeb5b85eb // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
+	google.golang.org/genproto v0.0.0-20220401170504-314d38edb7de // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	sigs.k8s.io/yaml v1.1.0 // indirect
 )
