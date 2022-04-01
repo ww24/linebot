@@ -1,6 +1,6 @@
 module github.com/ww24/linebot
 
-go 1.17
+go 1.18
 
 require (
 	cloud.google.com/go/firestore v1.6.1
