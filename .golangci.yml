@@ -76,7 +76,10 @@ linters-settings:
       - wrapperFunc
       - yodaStyleExpr
   gci:
-    local-prefixes: github.com/ww24/linebot
+    sections:
+      - standard
+      - default
+      - prefix(github.com/ww24/linebot)
   exhaustivestruct:
     struct-patterns:
       - "github.com/ww24/linebot/domain/*"
