@@ -22,6 +22,8 @@ var Set = wire.NewSet(
 	New,
 	NewConversation,
 	wire.Bind(new(repository.Conversation), new(*Conversation)),
+	NewReminder,
+	wire.Bind(new(repository.Reminder), new(*Reminder)),
 )
 
 var tracer = otel.Tracer("github.com/ww24/linebot/infra/firestore")

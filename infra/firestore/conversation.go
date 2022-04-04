@@ -69,8 +69,12 @@ func NewConversation(cli *Client) *Conversation {
 	return &Conversation{Client: cli}
 }
 
+func (c *Conversation) conversations() *firestore.CollectionRef {
+	return c.cli.Collection("conversations")
+}
+
 func (c *Conversation) conversation(conversationID model.ConversationID) *firestore.DocumentRef {
-	return c.cli.Collection("conversations").Doc(string(conversationID))
+	return c.conversations().Doc(string(conversationID))
 }
 
 func (c *Conversation) shopping(conversationID model.ConversationID) *firestore.CollectionRef {
