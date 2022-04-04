@@ -191,6 +191,10 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		}
 		return nil
 
+	case model.ConversationStatusTypeReminderAdd:
+		// do nothing
+		return nil
+
 	case model.ConversationStatusTypeNeutral:
 		// do nothing
 		return nil
@@ -262,4 +266,26 @@ func (s *Shopping) deleteFromItem(ctx context.Context, conversationID model.Conv
 	}
 
 	return ret, nil
+}
+
+func (s *Shopping) HandleReminder(ctx context.Context, item *model.ReminderItem) error {
+	if item.Executor.Type != model.ExecutorTypeShoppingList {
+		return nil
+	}
+
+	items, err := s.shopping.List(ctx, item.ConversationID)
+	if err != nil {
+		return xerrors.Errorf("failed to list shopping items: %w", err)
+	}
+	if len(items) == 0 {
+		return nil
+	}
+
+	text := "【リマインド】\n今日の買い物リストはこちらです。\n" + items.Print(model.ListTypeDotted)
+	msg := s.message.ShoppingMenu(text, model.ShoppingReplyTypeAll)
+	if err := s.bot.PushMessage(ctx, item.ConversationID, msg); err != nil {
+		return xerrors.Errorf("failed to reply message: %w", err)
+	}
+
+	return nil
 }

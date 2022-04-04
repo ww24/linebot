@@ -1,3 +1,5 @@
+//go:generate mockgen -source=$GOFILE -destination=../../mock/mock_$GOPACKAGE/mock_$GOFILE -package=mock_repository
+
 package repository
 
 import (
@@ -21,6 +23,10 @@ type MessageProviderSet interface {
 	Text(string) MessageProvider
 	ShoppingDeleteConfirmation(string) MessageProvider
 	ShoppingMenu(string, model.ShoppingReplyType) MessageProvider
+	ReminderMenu(string, model.ReminderReplyType, []*model.ReminderItem) MessageProvider
+	ReminderChoices(string, []string, []model.ExecutorType) MessageProvider
+	TimePicker(text, data string) MessageProvider
+	ReminderDeleteConfirmation(text, data string) MessageProvider
 }
 
 type MessageProvider interface {
