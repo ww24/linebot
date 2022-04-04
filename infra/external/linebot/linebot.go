@@ -74,3 +74,17 @@ func (b *LINEBot) ReplyMessage(ctx context.Context, e *model.Event, p repository
 
 	return nil
 }
+
+func (b *LINEBot) PushMessage(ctx context.Context, to model.ConversationID, p repository.MessageProvider) error {
+	var msg linebot.SendingMessage
+	if err := p.AsMessage(&msg); err != nil {
+		return xerrors.Errorf("failed to convert message: %w", err)
+	}
+
+	c := b.cli.PushMessage(to.SourceID(), msg)
+	if _, err := c.WithContext(ctx).Do(); err != nil {
+		return xerrors.Errorf("failed to reply message: %w", err)
+	}
+
+	return nil
+}

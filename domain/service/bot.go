@@ -12,8 +12,8 @@ import (
 
 type Bot interface {
 	EventsFromRequest(r *http.Request) ([]*model.Event, error)
-	ReplyTextMessage(context.Context, *model.Event, string) error
 	ReplyMessage(context.Context, *model.Event, repository.MessageProvider) error
+	PushMessage(context.Context, model.ConversationID, repository.MessageProvider) error
 }
 
 type BotImpl struct {
@@ -39,17 +39,16 @@ func (b *BotImpl) EventsFromRequest(r *http.Request) ([]*model.Event, error) {
 	return events, nil
 }
 
-func (b *BotImpl) ReplyTextMessage(ctx context.Context, e *model.Event, text string) error {
-	msg := b.message.Text(text)
+func (b *BotImpl) ReplyMessage(ctx context.Context, e *model.Event, msg repository.MessageProvider) error {
 	if err := b.bot.ReplyMessage(ctx, e, msg); err != nil {
 		return xerrors.Errorf("failed to call ReplyMessage: %w", err)
 	}
 	return nil
 }
 
-func (b *BotImpl) ReplyMessage(ctx context.Context, e *model.Event, msg repository.MessageProvider) error {
-	if err := b.bot.ReplyMessage(ctx, e, msg); err != nil {
-		return xerrors.Errorf("failed to call ReplyMessage: %w", err)
+func (b *BotImpl) PushMessage(ctx context.Context, conversationID model.ConversationID, msg repository.MessageProvider) error {
+	if err := b.bot.PushMessage(ctx, conversationID, msg); err != nil {
+		return xerrors.Errorf("failed to call PushMessage: %w", err)
 	}
 	return nil
 }

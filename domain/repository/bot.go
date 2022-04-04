@@ -10,6 +10,7 @@ import (
 type Bot interface {
 	EventsFromRequest(r *http.Request) ([]*model.Event, error)
 	ReplyMessage(context.Context, *model.Event, MessageProvider) error
+	PushMessage(context.Context, model.ConversationID, MessageProvider) error
 }
 
 type Handler interface {

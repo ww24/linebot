@@ -25,6 +25,7 @@ type EventHandler struct {
 	conf     repository.Config
 	log      *logger.Logger
 	bot      service.Bot
+	message  repository.MessageProviderSet
 }
 
 func NewEventHandler(
@@ -40,9 +41,10 @@ func NewEventHandler(
 		handlers: []repository.Handler{
 			NewShopping(conversation, shopping, nlParser, message, bot),
 		},
-		conf: conf,
-		log:  log,
-		bot:  bot,
+		conf:    conf,
+		log:     log,
+		bot:     bot,
+		message: message,
 	}, nil
 }
 
@@ -59,6 +61,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 
 		for _, handler := range h.handlers {
 			if err := handler.Handle(ctx, e); err != nil {
+				cl.Error("failed to handle event", zap.Error(err))
 				return h.handleError(ctx, e)
 			}
 		}
@@ -68,7 +71,8 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 }
 
 func (h *EventHandler) handleError(ctx context.Context, e *model.Event) error {
-	if err := h.bot.ReplyTextMessage(ctx, e, "予期せぬエラーが発生しました"); err != nil {
+	msg := h.message.Text("予期せぬエラーが発生しました")
+	if err := h.bot.PushMessage(ctx, e.ConversationID(), msg); err != nil {
 		return xerrors.Errorf("failed to reply text message: %w", err)
 	}
 

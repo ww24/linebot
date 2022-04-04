@@ -129,8 +129,8 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err := s.conversation.SetStatus(ctx, status); err != nil {
 			return xerrors.Errorf("failed to set status: %w", err)
 		}
-		text := prefixShopping + "追加する商品を1行に1つずつ入力してください。"
-		if err := s.bot.ReplyTextMessage(ctx, e, text); err != nil {
+		msg := s.message.Text(prefixShopping + "追加する商品を1行に1つずつ入力してください。")
+		if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply text message: %w", err)
 		}
 
@@ -207,8 +207,8 @@ func (s *Shopping) handleMessageAction(ctx context.Context, e *model.Event, item
 		foundItems, err := s.deleteFromItem(ctx, e.ConversationID(), item)
 		if err != nil {
 			if errors.Is(err, errItemNotFound) {
-				text := "削除する商品が見つかりませんでした。\n削除する場合は「○番を削除」と入力してみて下さい。"
-				if err := s.bot.ReplyTextMessage(ctx, e, text); err != nil {
+				msg := s.message.Text("削除する商品が見つかりませんでした。\n削除する場合は「○番を削除」と入力してみて下さい。")
+				if err := s.bot.ReplyMessage(ctx, e, msg); err != nil {
 					return xerrors.Errorf("failed to reply text message: %w", err)
 				}
 				return nil
