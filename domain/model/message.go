@@ -7,3 +7,10 @@ const (
 	ShoppingReplyTypeEmptyList
 	ShoppingReplyTypeWithoutView
 )
+
+type ReminderReplyType int
+
+const (
+	ReminderReplyTypeAll ReminderReplyType = iota
+	ReminderReplyTypeEmptyList
+)
