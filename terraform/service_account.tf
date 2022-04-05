@@ -21,6 +21,24 @@ resource "google_project_iam_member" "cloudprofiler" {
   member  = "serviceAccount:${google_service_account.linebot.email}"
 }
 
+resource "google_project_iam_member" "cloudtasks-viewer" {
+  project = var.project
+  role    = "roles/cloudtasks.viewer"
+  member  = "serviceAccount:${google_service_account.linebot.email}"
+}
+
+resource "google_project_iam_member" "cloudtasks-enqueuer" {
+  project = var.project
+  role    = "roles/cloudtasks.enqueuer"
+  member  = "serviceAccount:${google_service_account.linebot.email}"
+}
+
+resource "google_project_iam_member" "cloudtasks-deleter" {
+  project = var.project
+  role    = "roles/cloudtasks.taskDeleter"
+  member  = "serviceAccount:${google_service_account.linebot.email}"
+}
+
 resource "google_service_account" "invoker" {
   account_id   = "${var.name}-invoker"
   display_name = "${var.name}-invoker Service Account"
