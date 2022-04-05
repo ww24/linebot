@@ -2,6 +2,7 @@ package linebot
 
 import (
 	"errors"
+	"time"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"golang.org/x/xerrors"
@@ -33,6 +34,46 @@ func (s *MessageProviderSet) ShoppingMenu(text string, rt model.ShoppingReplyTyp
 	return &ShoppingMenu{
 		text:      text,
 		replyType: rt,
+	}
+}
+
+func (s *MessageProviderSet) ReminderMenu(text string, rt model.ReminderReplyType, items []*model.ReminderItem) repository.MessageProvider {
+	reminderMenu := &ReminderMenu{
+		text:      text,
+		replyType: rt,
+	}
+	t := time.Now()
+	if len(items) == 0 {
+		return reminderMenu
+	}
+
+	if data, err := makeReminderListMessage(items, t); err == nil {
+		if flexContainer, err := linebot.UnmarshalFlexMessageJSON(data); err == nil {
+			reminderMenu.flex = &flexContainer
+		}
+	}
+	return reminderMenu
+}
+
+func (s *MessageProviderSet) ReminderChoices(text string, labels []string, types []model.ExecutorType) repository.MessageProvider {
+	return &ReminderChoices{
+		text:   text,
+		labels: labels,
+		types:  types,
+	}
+}
+
+func (s *MessageProviderSet) TimePicker(text, data string) repository.MessageProvider {
+	return &TimePicker{
+		text: text,
+		data: data,
+	}
+}
+
+func (s *MessageProviderSet) ReminderDeleteConfirmation(text, data string) repository.MessageProvider {
+	return &ReminderDeleteConfirmation{
+		text: text,
+		data: data,
 	}
 }
 
@@ -109,6 +150,91 @@ func (p *ShoppingMenu) AsMessage(v interface{}) error {
 			},
 		})
 	}
+
+	return asMessage(msg, v)
+}
+
+// ShoppingMenu implements repository.MessageProvider.
+type ReminderMenu struct {
+	text      string
+	flex      *linebot.FlexContainer
+	replyType model.ReminderReplyType
+}
+
+func (r *ReminderMenu) AsMessage(v interface{}) error {
+	var msg linebot.SendingMessage
+	if r.flex != nil {
+		msg = linebot.NewFlexMessage(r.text, *r.flex)
+	} else {
+		msg = linebot.NewTextMessage(r.text)
+	}
+
+	//nolint: exhaustive
+	switch r.replyType {
+	default:
+		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
+			Items: []*linebot.QuickReplyButton{
+				{Action: linebot.NewPostbackAction("追加", "Reminder#add", "", "追加")},
+			},
+		})
+	}
+
+	return asMessage(msg, v)
+}
+
+type ReminderChoices struct {
+	text   string
+	labels []string
+	types  []model.ExecutorType
+}
+
+func (r *ReminderChoices) AsMessage(v interface{}) error {
+	items := make([]*linebot.QuickReplyButton, 0, len(r.labels))
+	for i := range r.labels {
+		label := r.labels[i]
+		items = append(items, &linebot.QuickReplyButton{
+			Action: linebot.NewPostbackAction(label, "Reminder#add#"+r.types[i].String(), "", label),
+		})
+	}
+
+	var msg linebot.SendingMessage
+	msg = linebot.NewTextMessage(r.text)
+	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{Items: items})
+
+	return asMessage(msg, v)
+}
+
+type TimePicker struct {
+	text string
+	data string
+}
+
+func (p *TimePicker) AsMessage(v interface{}) error {
+	var msg linebot.SendingMessage
+	msg = linebot.NewTextMessage(p.text)
+	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
+		Items: []*linebot.QuickReplyButton{
+			{Action: linebot.NewDatetimePickerAction("時刻設定", p.data, "time", "", "", "")},
+		},
+	})
+
+	return asMessage(msg, v)
+}
+
+type ReminderDeleteConfirmation struct {
+	text string
+	data string
+}
+
+func (c *ReminderDeleteConfirmation) AsMessage(v interface{}) error {
+	var msg linebot.SendingMessage
+	msg = linebot.NewTextMessage(c.text)
+	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
+		Items: []*linebot.QuickReplyButton{
+			{Action: linebot.NewPostbackAction("YES", c.data, "", "YES")},
+			{Action: linebot.NewPostbackAction("NO", "Reminder#cancel", "", "NO")},
+		},
+	})
 
 	return asMessage(msg, v)
 }

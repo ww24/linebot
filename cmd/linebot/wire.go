@@ -12,6 +12,7 @@ import (
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/external/linebot"
 	"github.com/ww24/linebot/infra/firestore"
+	"github.com/ww24/linebot/infra/scheduler"
 	"github.com/ww24/linebot/interactor"
 	"github.com/ww24/linebot/nl"
 	"github.com/ww24/linebot/presentation/http"
@@ -24,6 +25,7 @@ func register(
 		newLogger,
 		config.Set,
 		firestore.Set,
+		scheduler.Set,
 		linebot.Set,
 		service.Set,
 		nl.Set,

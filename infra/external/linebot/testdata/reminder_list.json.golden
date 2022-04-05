@@ -1,0 +1,97 @@
+{
+   "contents": [
+      {
+         "body": {
+            "contents": [
+               {
+                  "contents": [
+                     {
+                        "color": "#8C8C8C",
+                        "size": "sm",
+                        "text": "Next: 01/03 12:30",
+                        "type": "text",
+                        "wrap": true
+                     }
+                  ],
+                  "flex": 1,
+                  "layout": "horizontal",
+                  "type": "box"
+               }
+            ],
+            "layout": "vertical",
+            "paddingAll": "12px",
+            "spacing": "md",
+            "type": "box"
+         },
+         "header": {
+            "backgroundColor": "#27ACB2",
+            "contents": [
+               {
+                  "contents": [
+                     {
+                        "action": {
+                           "data": "Reminder#delete#id1",
+                           "label": "delete",
+                           "type": "postback"
+                        },
+                        "contents": [
+                           {
+                              "align": "center",
+                              "color": "#ffffff",
+                              "position": "relative",
+                              "text": "✕",
+                              "type": "text",
+                              "weight": "bold"
+                           }
+                        ],
+                        "height": "24px",
+                        "layout": "vertical",
+                        "type": "box",
+                        "width": "24px"
+                     }
+                  ],
+                  "justifyContent": "flex-end",
+                  "layout": "horizontal",
+                  "position": "relative",
+                  "type": "box",
+                  "width": "100%"
+               },
+               {
+                  "align": "start",
+                  "color": "#ffffff",
+                  "gravity": "center",
+                  "size": "md",
+                  "text": "買い物リスト",
+                  "type": "text"
+               },
+               {
+                  "align": "start",
+                  "color": "#ffffff",
+                  "gravity": "center",
+                  "margin": "xs",
+                  "size": "xs",
+                  "text": "at 2020-01-03 12:30.",
+                  "type": "text"
+               }
+            ],
+            "layout": "vertical",
+            "paddingBottom": "10px",
+            "paddingEnd": "0px",
+            "paddingStart": "10px",
+            "paddingTop": "0px",
+            "type": "box"
+         },
+         "size": "micro",
+         "styles": {
+            "footer": {
+               "separator": false
+            },
+            "header": {
+               "separator": false
+            }
+         },
+         "type": "bubble"
+      }
+   ],
+   "type": "carousel"
+}

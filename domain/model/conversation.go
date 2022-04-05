@@ -13,6 +13,7 @@ const (
 	ConversationStatusTypeNeutral ConversationStatusType = iota
 	ConversationStatusTypeShopping
 	ConversationStatusTypeShoppingAdd
+	ConversationStatusTypeReminderAdd
 )
 
 const (

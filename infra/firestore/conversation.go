@@ -16,20 +16,20 @@ type Conversation struct {
 }
 
 type ShoppingItem struct {
-	ID             string `firestore:"-"`
-	Name           string `firestore:"name"`
-	Quantity       int    `firestore:"quantity"`
-	ConversationID string `firestore:"conversation_id"`
-	CreatedAt      int64  `firestore:"created_at"`
-	Order          int    `firestore:"order"`
+	ConversationID model.ConversationID `firestore:"-"`
+	ID             string               `firestore:"-"`
+	Name           string               `firestore:"name"`
+	Quantity       int                  `firestore:"quantity"`
+	CreatedAt      int64                `firestore:"created_at"`
+	Order          int                  `firestore:"order"`
 }
 
 func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
 	return &ShoppingItem{
+		ConversationID: src.ConversationID,
 		ID:             src.ID,
 		Name:           src.Name,
 		Quantity:       src.Quantity,
-		ConversationID: string(src.ConversationID),
 		CreatedAt:      src.CreatedAt,
 		Order:          src.Order,
 	}
@@ -37,31 +37,31 @@ func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
 
 func (c *ShoppingItem) Model() *model.ShoppingItem {
 	return &model.ShoppingItem{
+		ConversationID: c.ConversationID,
 		ID:             c.ID,
 		Name:           c.Name,
 		Quantity:       c.Quantity,
-		ConversationID: model.ConversationID(c.ConversationID),
 		CreatedAt:      c.CreatedAt,
 		Order:          c.Order,
 	}
 }
 
 type ConversationStatus struct {
-	ConversationID model.ConversationID
-	Type           int `firestore:"type"`
+	ConversationID model.ConversationID `firestore:"-"`
+	Status         int                  `firestore:"status"`
 }
 
 func (c *ConversationStatus) Model() *model.ConversationStatus {
 	return &model.ConversationStatus{
 		ConversationID: c.ConversationID,
-		Type:           model.ConversationStatusType(c.Type),
+		Type:           model.ConversationStatusType(c.Status),
 	}
 }
 
 func NewConversationStatus(src *model.ConversationStatus) *ConversationStatus {
 	return &ConversationStatus{
 		ConversationID: src.ConversationID,
-		Type:           int(src.Type),
+		Status:         int(src.Type),
 	}
 }
 
@@ -69,8 +69,12 @@ func NewConversation(cli *Client) *Conversation {
 	return &Conversation{Client: cli}
 }
 
+func (c *Conversation) conversations() *firestore.CollectionRef {
+	return c.cli.Collection("conversations")
+}
+
 func (c *Conversation) conversation(conversationID model.ConversationID) *firestore.DocumentRef {
-	return c.cli.Collection("conversations").Doc(string(conversationID))
+	return c.conversations().Doc(string(conversationID))
 }
 
 func (c *Conversation) shopping(conversationID model.ConversationID) *firestore.CollectionRef {
@@ -118,6 +122,7 @@ func (c *Conversation) FindShoppingItem(ctx context.Context, conversationID mode
 			return nil, xerrors.Errorf("failed to convert response as ShoppingItem: %w", err)
 		}
 		item.ID = doc.Ref.ID
+		item.ConversationID = conversationID
 		items = append(items, item.Model())
 	}
 
@@ -180,9 +185,9 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 		return xerrors.Errorf("conversation status validation failed: %w", err)
 	}
 
-	dr := c.conversation(status.ConversationID).Collection("status").Doc("#")
+	conv := c.conversation(status.ConversationID)
 	entity := NewConversationStatus(status)
-	if _, err := dr.Set(ctx, entity); err != nil {
+	if _, err := conv.Set(ctx, entity); err != nil {
 		return xerrors.Errorf("failed to set conversation status: %w", err)
 	}
 
@@ -193,7 +198,7 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 	ctx, span := tracer.Start(ctx, "GetStatus")
 	defer span.End()
 
-	doc, err := c.conversation(conversationID).Collection("status").Doc("#").Get(ctx)
+	doc, err := c.conversation(conversationID).Get(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get conversation status: %w", err)
 	}
@@ -202,5 +207,6 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 	if err := doc.DataTo(&ret); err != nil {
 		return nil, xerrors.Errorf("failed to convert response as ConversationStatus: %w", err)
 	}
+	ret.ConversationID = conversationID
 	return ret.Model(), nil
 }
