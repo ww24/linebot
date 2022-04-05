@@ -4,12 +4,13 @@ variable "location" {
 }
 
 variable "project" {
-  type = string
+  type        = string
+  description = "GCP Project ID"
 }
 
-// credentials json value
 variable "google_credentials" {
-  type = string
+  type        = string
+  description = "GCP Service Account (credential json value)"
 }
 
 variable "name" {
@@ -34,13 +35,26 @@ variable "image_tag" {
 
 // application environments
 variable "line_channel_secret" {
-  type = string
+  type        = string
+  description = "LINE Channel Secret"
 }
 
 variable "line_channel_access_token" {
-  type = string
+  type        = string
+  description = "LINE Channel Access Token"
 }
 
 variable "allow_conv_ids" {
-  type = string
+  type        = string
+  description = "Allowed list, conversation ids"
+}
+
+variable "cloud_tasks_queue" {
+  type    = string
+  default = "linebot"
+}
+
+variable "service_endpoint" {
+  type        = string
+  description = "Cloud Run Service Endpoint (https://*.a.run.app)"
 }

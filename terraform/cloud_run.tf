@@ -44,6 +44,21 @@ resource "google_cloud_run_service" "linebot" {
           name  = "ALLOW_CONV_IDS"
           value = var.allow_conv_ids
         }
+
+        env {
+          name  = "CLOUD_TASKS_LOCATION"
+          value = var.location
+        }
+
+        env {
+          name  = "CLOUD_TASKS_QUEUE"
+          value = var.cloud_tasks_queue
+        }
+
+        env {
+          name  = "SERVICE_ENDPOINT"
+          value = var.service_endpoint
+        }
       }
     }
 
