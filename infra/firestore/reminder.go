@@ -52,6 +52,7 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 		}
 
 		item.ID = doc.Ref.ID
+		item.ConversationID = conversationID
 		m, err := item.Model()
 		if err != nil {
 			return nil, err
@@ -74,6 +75,7 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 	}
 
 	item.ID = doc.Ref.ID
+	item.ConversationID = conversationID
 	m, err := item.Model()
 	if err != nil {
 		return nil, err
@@ -105,6 +107,7 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 			return nil, xerrors.Errorf("failed to iterate conversations: %w", err)
 		}
 
+		conversationID := model.ConversationID(ss.Ref.ID)
 		docs, err := ss.Ref.Collection("reminders").OrderBy("created_at", firestore.Asc).Documents(ctx).GetAll()
 		if err != nil {
 			return nil, xerrors.Errorf("failed to find reminder: %w", err)
@@ -117,6 +120,7 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 			}
 
 			item.ID = doc.Ref.ID
+			item.ConversationID = conversationID
 			m, err := item.Model()
 			if err != nil {
 				return nil, err
@@ -129,12 +133,12 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 }
 
 type ReminderItem struct {
-	ID             string    `firestore:"-"`
-	Name           string    `firestore:"name"`
-	ConversationID string    `firestore:"conversation_id"`
-	Scheduler      string    `firestore:"scheduler"`
-	Executor       *Executor `firestore:"executor"`
-	CreatedAt      int64     `firestore:"created_at"` // UNIX time
+	ConversationID model.ConversationID `firestore:"-"`
+	ID             string               `firestore:"-"`
+	Name           string               `firestore:"name"`
+	Scheduler      string               `firestore:"scheduler"`
+	Executor       *Executor            `firestore:"executor"`
+	CreatedAt      int64                `firestore:"created_at"` // UNIX time
 }
 
 type Executor struct {
@@ -143,8 +147,8 @@ type Executor struct {
 
 func NewReminderItem(src *model.ReminderItem) *ReminderItem {
 	return &ReminderItem{
+		ConversationID: src.ConversationID,
 		ID:             string(src.ID),
-		ConversationID: string(src.ConversationID),
 		Scheduler:      src.Scheduler.String(),
 		Executor:       NewExecutor(src.Executor),
 	}
@@ -157,8 +161,8 @@ func (r *ReminderItem) Model() (*model.ReminderItem, error) {
 	}
 
 	return &model.ReminderItem{
+		ConversationID: r.ConversationID,
 		ID:             model.ReminderItemID(r.ID),
-		ConversationID: model.ConversationID(r.ConversationID),
 		Scheduler:      sch,
 		Executor:       r.Executor.Model(),
 	}, nil
