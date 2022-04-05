@@ -4,10 +4,12 @@ import (
 	"context"
 	"time"
 
+	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -75,7 +77,16 @@ func (r *ReminderImpl) ListAll(ctx context.Context) (model.ReminderItems, error)
 
 func (r *ReminderImpl) SyncSchedule(ctx context.Context, items model.ReminderItems) error {
 	now := time.Now()
+
+	dl := logger.DefaultLogger(ctx)
+	dl.Info("start to sync schedule",
+		zap.Any("items", items),
+		zap.Int("count", len(items)),
+	)
+
 	items = items.FilterNextSchedule(now, syncInterval)
+
+	dl.Info("FilterNextSchedule", zap.Int("count", len(items)))
 
 	var conversationID model.ConversationID
 	start := 0
