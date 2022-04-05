@@ -18,10 +18,13 @@ var Set = wire.NewSet(
 
 // Config implements repository.Config.
 type Config struct {
-	lineChannelSecret string
-	lineChannelToken  string
-	conversationIDs   *ConversationIDs
-	addr              string
+	lineChannelSecret  string
+	lineChannelToken   string
+	conversationIDs    *ConversationIDs
+	addr               string
+	cloudTasksLocation string
+	cloudTasksQueue    string
+	serviceEndpoint    string
 }
 
 func NewConfig() *Config {
@@ -41,10 +44,13 @@ func NewConfig() *Config {
 	}
 
 	return &Config{
-		lineChannelSecret: os.Getenv("LINE_CHANNEL_SECRET"),
-		lineChannelToken:  os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
-		conversationIDs:   conversationIDs,
-		addr:              addr,
+		lineChannelSecret:  os.Getenv("LINE_CHANNEL_SECRET"),
+		lineChannelToken:   os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
+		conversationIDs:    conversationIDs,
+		addr:               addr,
+		cloudTasksLocation: os.Getenv("CLOUD_TASKS_LOCATION"),
+		cloudTasksQueue:    os.Getenv("CLOUD_TASKS_QUEUE"),
+		serviceEndpoint:    os.Getenv("SERVICE_ENDPOINT"),
 	}
 }
 
@@ -82,4 +88,16 @@ func (c *ConversationIDs) Available(conversationID model.ConversationID) bool {
 
 func (c *Config) Addr() string {
 	return c.addr
+}
+
+func (c *Config) CloudTasksLocation() string {
+	return c.cloudTasksLocation
+}
+
+func (c *Config) CloudTasksQueue() string {
+	return c.cloudTasksQueue
+}
+
+func (c *Config) ServiceEndpoint() string {
+	return c.serviceEndpoint
 }
