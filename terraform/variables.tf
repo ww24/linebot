@@ -44,3 +44,12 @@ variable "line_channel_access_token" {
 variable "allow_conv_ids" {
   type = string
 }
+
+variable "cloud_tasks_queue" {
+  type    = string
+  default = "linebot"
+}
+
+variable "service_endpoint" {
+  type = string
+}
