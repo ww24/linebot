@@ -63,10 +63,6 @@ resource "google_cloud_run_service" "linebot" {
     }
 
     metadata {
-      # The revision name must be prefixed by the name of the enclosing Service or Configuration with a trailing -
-      # Resource name must use only lowercase letters, numbers and '-'. Must begin with a letter and cannot end with a '-'. Maximum length is 63 characters.
-      name = local.image_tag == "latest" ? null : "${var.name}-v${replace(local.image_tag, ".", "-")}"
-
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
         "autoscaling.knative.dev/minScale" = "1"
@@ -83,7 +79,7 @@ resource "google_cloud_run_service" "linebot" {
     latest_revision = true
   }
 
-  autogenerate_revision_name = local.image_tag == "latest"
+  autogenerate_revision_name = true
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
