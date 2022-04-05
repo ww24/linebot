@@ -12,6 +12,7 @@ import (
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/external/linebot"
 	"github.com/ww24/linebot/infra/firestore"
+	"github.com/ww24/linebot/infra/scheduler"
 	"github.com/ww24/linebot/interactor"
 	"github.com/ww24/linebot/nl"
 	"github.com/ww24/linebot/presentation/http"
@@ -38,11 +39,17 @@ func register(contextContext context.Context) (*bot, error) {
 	conversation := firestore.NewConversation(client)
 	conversationImpl := service.NewConversation(conversation)
 	shoppingImpl := service.NewShopping(conversation)
+	reminder := firestore.NewReminder(conversation)
+	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
+	if err != nil {
+		return nil, err
+	}
+	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
 	parser, err := nl.NewParser()
 	if err != nil {
 		return nil, err
 	}
-	eventHandler, err := interactor.NewEventHandler(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl, configConfig, logger)
+	eventHandler, err := interactor.NewEventHandler(conversationImpl, shoppingImpl, reminderImpl, parser, messageProviderSet, botImpl, configConfig, logger)
 	if err != nil {
 		return nil, err
 	}
