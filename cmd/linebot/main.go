@@ -14,6 +14,7 @@ import (
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 
+	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 )
 
@@ -30,6 +31,12 @@ var (
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	log.SetFlags(0)
+	if err := logger.InitializeLogger(ctx, serviceName, version); err != nil {
+		log.Printf("ERROR logger.InitializeLogger: %+v", err)
+		return
+	}
 
 	bot, err := register(ctx)
 	if err != nil {
