@@ -59,10 +59,7 @@ func (b *LINEBot) EventsFromRequest(r *http.Request) ([]*model.Event, error) {
 }
 
 func (b *LINEBot) ReplyMessage(ctx context.Context, e *model.Event, p repository.MessageProvider) error {
-	var msg linebot.SendingMessage
-	if err := p.AsMessage(&msg); err != nil {
-		return xerrors.Errorf("failed to convert message: %w", err)
-	}
+	msg := p.ToMessage()
 
 	c := b.cli.ReplyMessage(e.ReplyToken, msg)
 	if _, err := c.WithContext(ctx).Do(); err != nil {
@@ -73,10 +70,7 @@ func (b *LINEBot) ReplyMessage(ctx context.Context, e *model.Event, p repository
 }
 
 func (b *LINEBot) PushMessage(ctx context.Context, to model.ConversationID, p repository.MessageProvider) error {
-	var msg linebot.SendingMessage
-	if err := p.AsMessage(&msg); err != nil {
-		return xerrors.Errorf("failed to convert message: %w", err)
-	}
+	msg := p.ToMessage()
 
 	c := b.cli.PushMessage(to.SourceID(), msg)
 	if _, err := c.WithContext(ctx).Do(); err != nil {

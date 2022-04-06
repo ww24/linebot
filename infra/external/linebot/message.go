@@ -1,18 +1,12 @@
 package linebot
 
 import (
-	"errors"
 	"time"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
-)
-
-var (
-	errInvalidMessageType = errors.New("invalid given message type")
 )
 
 // MessageProviderSet implements repository.MessageProviderSet.
@@ -77,24 +71,12 @@ func (s *MessageProviderSet) ReminderDeleteConfirmation(text, data string) repos
 	}
 }
 
-func asMessage(msg linebot.SendingMessage, v interface{}) error {
-	m, ok := v.(*linebot.SendingMessage)
-	if !ok {
-		return xerrors.Errorf("invalid message: %w", errInvalidMessageType)
-	}
-
-	*m = msg
-
-	return nil
-}
-
 type TextMessage struct {
 	text string
 }
 
-func (p *TextMessage) AsMessage(v interface{}) error {
-	msg := linebot.NewTextMessage(p.text)
-	return asMessage(msg, v)
+func (p *TextMessage) ToMessage() linebot.SendingMessage {
+	return linebot.NewTextMessage(p.text)
 }
 
 // Message implements repository.MessageProvider.
@@ -103,7 +85,7 @@ type ShoppingDeleteConfirmation struct {
 }
 
 // AsMessage assigns the message to the given *linebot.SendingMessage.
-func (p *ShoppingDeleteConfirmation) AsMessage(v interface{}) error {
+func (p *ShoppingDeleteConfirmation) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
@@ -112,8 +94,7 @@ func (p *ShoppingDeleteConfirmation) AsMessage(v interface{}) error {
 			{Action: linebot.NewPostbackAction("NO", "Shopping#deleteCancel", "", "NO")},
 		},
 	})
-
-	return asMessage(msg, v)
+	return msg
 }
 
 // ShoppingMenu implements repository.MessageProvider.
@@ -122,7 +103,7 @@ type ShoppingMenu struct {
 	replyType model.ShoppingReplyType
 }
 
-func (p *ShoppingMenu) AsMessage(v interface{}) error {
+func (p *ShoppingMenu) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 
@@ -151,7 +132,7 @@ func (p *ShoppingMenu) AsMessage(v interface{}) error {
 		})
 	}
 
-	return asMessage(msg, v)
+	return msg
 }
 
 // ShoppingMenu implements repository.MessageProvider.
@@ -161,7 +142,7 @@ type ReminderMenu struct {
 	replyType model.ReminderReplyType
 }
 
-func (r *ReminderMenu) AsMessage(v interface{}) error {
+func (r *ReminderMenu) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	if r.flex != nil {
 		msg = linebot.NewFlexMessage(r.text, *r.flex)
@@ -179,7 +160,7 @@ func (r *ReminderMenu) AsMessage(v interface{}) error {
 		})
 	}
 
-	return asMessage(msg, v)
+	return msg
 }
 
 type ReminderChoices struct {
@@ -188,7 +169,7 @@ type ReminderChoices struct {
 	types  []model.ExecutorType
 }
 
-func (r *ReminderChoices) AsMessage(v interface{}) error {
+func (r *ReminderChoices) ToMessage() linebot.SendingMessage {
 	items := make([]*linebot.QuickReplyButton, 0, len(r.labels))
 	for i := range r.labels {
 		label := r.labels[i]
@@ -201,7 +182,7 @@ func (r *ReminderChoices) AsMessage(v interface{}) error {
 	msg = linebot.NewTextMessage(r.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{Items: items})
 
-	return asMessage(msg, v)
+	return msg
 }
 
 type TimePicker struct {
@@ -209,7 +190,7 @@ type TimePicker struct {
 	data string
 }
 
-func (p *TimePicker) AsMessage(v interface{}) error {
+func (p *TimePicker) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
@@ -218,7 +199,7 @@ func (p *TimePicker) AsMessage(v interface{}) error {
 		},
 	})
 
-	return asMessage(msg, v)
+	return msg
 }
 
 type ReminderDeleteConfirmation struct {
@@ -226,7 +207,7 @@ type ReminderDeleteConfirmation struct {
 	data string
 }
 
-func (c *ReminderDeleteConfirmation) AsMessage(v interface{}) error {
+func (c *ReminderDeleteConfirmation) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(c.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
@@ -236,5 +217,5 @@ func (c *ReminderDeleteConfirmation) AsMessage(v interface{}) error {
 		},
 	})
 
-	return asMessage(msg, v)
+	return msg
 }
