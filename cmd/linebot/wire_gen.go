@@ -26,7 +26,7 @@ func register(contextContext context.Context) (*bot, error) {
 	if err != nil {
 		return nil, err
 	}
-	lineBot, err := linebot.NewLINEBot(configConfig, logger)
+	lineBot, err := linebot.NewLINEBot(configConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -51,11 +51,11 @@ func register(contextContext context.Context) (*bot, error) {
 	}
 	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
 	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, reminderImpl, messageProviderSet, botImpl, configConfig, logger)
+	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, reminderImpl, messageProviderSet, botImpl, configConfig)
 	if err != nil {
 		return nil, err
 	}
 	handler := http.NewHandler(logger, botImpl, eventHandler)
-	mainBot := newBot(configConfig, logger, handler)
+	mainBot := newBot(configConfig, handler)
 	return mainBot, nil
 }

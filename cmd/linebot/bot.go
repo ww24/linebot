@@ -12,18 +12,15 @@ import (
 
 type bot struct {
 	config  repository.Config
-	log     *logger.Logger
 	handler http.Handler
 }
 
 func newBot(
 	config repository.Config,
-	log *logger.Logger,
 	handler http.Handler,
 ) *bot {
 	return &bot{
 		config:  config,
-		log:     log,
 		handler: handler,
 	}
 }

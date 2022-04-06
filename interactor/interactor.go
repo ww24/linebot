@@ -28,7 +28,6 @@ type EventHandler struct {
 	remindHandlers   []repository.RemindHandler
 	reminder         service.Reminder
 	conf             repository.Config
-	log              *logger.Logger
 	bot              service.Bot
 	message          repository.MessageProviderSet
 }
@@ -40,7 +39,6 @@ func NewEventHandler(
 	message repository.MessageProviderSet,
 	bot service.Bot,
 	conf repository.Config,
-	log *logger.Logger,
 ) (*EventHandler, error) {
 	return &EventHandler{
 		handlers: []repository.Handler{
@@ -55,18 +53,17 @@ func NewEventHandler(
 		},
 		reminder: reminder,
 		conf:     conf,
-		log:      log,
 		bot:      bot,
 		message:  message,
 	}, nil
 }
 
 func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error {
-	cl := h.log.WithTraceFromContext(ctx)
+	dl := logger.DefaultLogger(ctx)
 
 	for _, e := range events {
 		if !h.conf.ConversationIDs().Available(e.ConversationID()) {
-			cl.Warn("not allowed conversation",
+			dl.Warn("not allowed conversation",
 				zap.String("ConversationID", e.ConversationID().String()),
 			)
 			return nil
@@ -74,7 +71,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 
 		for _, handler := range h.handlers {
 			if err := handler.Handle(ctx, e); err != nil {
-				cl.Error("failed to handle event", zap.Error(err))
+				dl.Error("failed to handle event", zap.Error(err))
 				return h.handleError(ctx, e)
 			}
 		}
@@ -93,11 +90,11 @@ func (h *EventHandler) handleError(ctx context.Context, e *model.Event) error {
 }
 
 func (h *EventHandler) HandleSchedule(ctx context.Context) error {
-	cl := h.log.WithTraceFromContext(ctx)
+	dl := logger.DefaultLogger(ctx)
 
 	for _, handler := range h.scheduleHandlers {
 		if err := handler.HandleSchedule(ctx); err != nil {
-			cl.Error("failed to handle schedule", zap.Error(err))
+			dl.Error("failed to handle schedule", zap.Error(err))
 			return xerrors.Errorf("failed to handle schedule: %w", err)
 		}
 	}
@@ -106,17 +103,17 @@ func (h *EventHandler) HandleSchedule(ctx context.Context) error {
 }
 
 func (h *EventHandler) HandleReminder(ctx context.Context, itemIDJSON *model.ReminderItemIDJSON) error {
-	cl := h.log.WithTraceFromContext(ctx)
+	dl := logger.DefaultLogger(ctx)
 
 	item, err := h.reminder.Get(ctx, model.ConversationID(itemIDJSON.ConversationID), model.ReminderItemID(itemIDJSON.ItemID))
 	if err != nil {
-		cl.Error("failed to get reminder item", zap.Error(err))
+		dl.Error("failed to get reminder item", zap.Error(err))
 		return xerrors.Errorf("failed to get reminder item: %w", err)
 	}
 
 	for _, handler := range h.remindHandlers {
 		if err := handler.HandleReminder(ctx, item); err != nil {
-			cl.Error("failed to handle reminder", zap.Error(err))
+			dl.Error("failed to handle reminder", zap.Error(err))
 			return xerrors.Errorf("failed to handle reminder: %w", err)
 		}
 	}

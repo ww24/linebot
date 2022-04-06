@@ -11,7 +11,6 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
-	"github.com/ww24/linebot/logger"
 )
 
 // Set provides a wire set.
@@ -25,11 +24,10 @@ var Set = wire.NewSet(
 // LINEBot implements repository.Bot.
 type LINEBot struct {
 	cli                    *linebot.Client
-	log                    *logger.Logger
 	allowedConversationIDs repository.ConversationIDs
 }
 
-func NewLINEBot(conf repository.Config, log *logger.Logger) (*LINEBot, error) {
+func NewLINEBot(conf repository.Config) (*LINEBot, error) {
 	hc := &http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	cli, err := linebot.New(
 		conf.LINEChannelSecret(),
@@ -42,7 +40,6 @@ func NewLINEBot(conf repository.Config, log *logger.Logger) (*LINEBot, error) {
 
 	return &LINEBot{
 		cli:                    cli,
-		log:                    log,
 		allowedConversationIDs: conf.ConversationIDs(),
 	}, nil
 }
