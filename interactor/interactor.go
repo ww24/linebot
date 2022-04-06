@@ -18,6 +18,8 @@ import (
 var Set = wire.NewSet(
 	NewEventHandler,
 	wire.Bind(new(usecase.EventHandler), new(*EventHandler)),
+	NewReminder,
+	NewShopping,
 )
 
 type EventHandler struct {
@@ -32,27 +34,24 @@ type EventHandler struct {
 }
 
 func NewEventHandler(
-	conversation service.Conversation,
-	shopping service.Shopping,
+	shoppingInteractor *Shopping,
+	reminderInteractor *Reminder,
 	reminder service.Reminder,
-	nlParser repository.NLParser,
 	message repository.MessageProviderSet,
 	bot service.Bot,
 	conf repository.Config,
 	log *logger.Logger,
 ) (*EventHandler, error) {
-	hReminder := NewReminder(conversation, reminder, message, bot)
-	hShopping := NewShopping(conversation, shopping, nlParser, message, bot)
 	return &EventHandler{
 		handlers: []repository.Handler{
-			hShopping,
-			hReminder,
+			shoppingInteractor,
+			reminderInteractor,
 		},
 		scheduleHandlers: []repository.ScheduleHandler{
-			hReminder,
+			reminderInteractor,
 		},
 		remindHandlers: []repository.RemindHandler{
-			hShopping,
+			shoppingInteractor,
 		},
 		reminder: reminder,
 		conf:     conf,

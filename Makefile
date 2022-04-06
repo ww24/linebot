@@ -5,10 +5,14 @@ GOOGLE_CLOUD_PROJECT = emulator
 GO_ENV ?= GOBIN=$(BIN)
 
 $(BIN)/testtime:
-	$(GO_ENV) $(GO) install -mod=mod github.com/tenntenn/testtime/cmd/testtime@v0.2.2
+	$(GO_ENV) $(GO) install github.com/tenntenn/testtime/cmd/testtime@v0.2.2
 
 $(BIN)/mockgen:
-	$(GO_ENV) $(GO) install -mod=mod github.com/golang/mock/mockgen@v1.6.0
+	$(GO_ENV) $(GO) install github.com/golang/mock/mockgen@v1.6.0
+
+.PHONY: clean-mock
+clean-mock:
+	$(RM) -r ./mock
 
 .PHONY: run
 run:
@@ -22,7 +26,8 @@ run-with-emulator:
 
 .PHONY: generate
 generate: $(BIN)/mockgen
-	@$(GO_ENV) PATH="${PATH}:$(BIN)" GOFLAGS=-mod=mod $(GO) generate ./...
+generate: clean-mock
+	@$(GO_ENV) PATH="${PATH}:$(BIN)" $(GO) generate ./...
 
 .PHONY: lint
 lint:
