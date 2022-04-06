@@ -6,6 +6,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/line/line-bot-sdk-go/v7/linebot"
+
 	"github.com/ww24/linebot/domain/model"
 )
 
@@ -30,5 +32,5 @@ type MessageProviderSet interface {
 }
 
 type MessageProvider interface {
-	AsMessage(interface{}) error
+	ToMessage() linebot.SendingMessage
 }
