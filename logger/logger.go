@@ -25,7 +25,6 @@ func InitializeLogger(ctx context.Context, name, version string) error {
 }
 
 func DefaultLogger(ctx context.Context) *zap.Logger {
-
 	return defaultLogger.WithTraceFromContext(ctx)
 }
 

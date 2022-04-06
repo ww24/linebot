@@ -37,15 +37,17 @@ func main() {
 		log.Printf("ERROR logger.InitializeLogger: %+v", err)
 		return
 	}
+	dl := logger.DefaultLogger(ctx)
 
 	bot, err := register(ctx)
 	if err != nil {
-		log.Fatalf("initialize failed: %+v", err)
+		dl.Error("register", zap.Error(err))
+		panic(err)
 	}
 
 	// set GOMAXPROCS
-	if _, err := maxprocs.Set(maxprocs.Logger(bot.log.Sugar().Infof)); err != nil {
-		bot.log.Warn("failed to set GOMAXPROCS", zap.Error(err))
+	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
+		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	// initialize cloud profiler and tracing if build is production
@@ -58,18 +60,18 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			bot.log.Error("failed to start cloud profiler", zap.Error(err))
+			dl.Error("failed to start cloud profiler", zap.Error(err))
 		}
 
 		tp, err := tracer.New(serviceName, version)
 		if err != nil {
-			bot.log.Error("failed to initialize tracer", zap.Error(err))
+			dl.Error("failed to initialize tracer", zap.Error(err))
 		}
 		defer func() {
 			ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 			defer cancel()
 			if err := tp.Shutdown(ctx); err != nil {
-				bot.log.Error("failed to shutdown tracer", zap.Error(err))
+				dl.Error("failed to shutdown tracer", zap.Error(err))
 			}
 		}()
 	}
@@ -78,7 +80,7 @@ func main() {
 		Handler: bot.handler,
 		Addr:    bot.config.Addr(),
 	}
-	bot.log.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
+	dl.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
 	//nolint:errcheck
 	go srv.ListenAndServe()
 
@@ -89,6 +91,6 @@ func main() {
 	c, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
-		bot.log.Error("failed to shutdown server", zap.Error(err))
+		dl.Error("failed to shutdown server", zap.Error(err))
 	}
 }
