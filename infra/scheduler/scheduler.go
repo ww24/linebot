@@ -16,6 +16,7 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/gcp"
 )
 
 // Set provides a wire set.
@@ -38,9 +39,9 @@ type Scheduler struct {
 }
 
 func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
-	cred, err := google.FindDefaultCredentials(ctx)
+	projectID, err := gcp.ProjectID(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to find default credentials: %w", err)
+		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 	}
 
 	cli, err := cloudtasks.NewClient(ctx)
@@ -50,7 +51,7 @@ func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
 
 	return &Scheduler{
 		cli:       cli,
-		projectID: cred.ProjectID,
+		projectID: projectID,
 		location:  conf.CloudTasksLocation(),
 		queue:     conf.CloudTasksQueue(),
 		endpoint:  conf.ServiceEndpoint(),

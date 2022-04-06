@@ -7,8 +7,9 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"golang.org/x/oauth2/google"
 	"golang.org/x/xerrors"
+
+	"github.com/ww24/linebot/internal/gcp"
 )
 
 //nolint: gochecknoglobals
@@ -47,7 +48,7 @@ func New(ctx context.Context, name, version string) (*Logger, error) {
 
 	logger = logger.With(newServiceContext(name, version))
 
-	projectID, err := getProjectID(ctx)
+	projectID, err := gcp.ProjectID(ctx)
 	if err != nil {
 		logger.Warn("failed to get project id", zap.Error(err))
 	}
@@ -71,17 +72,4 @@ func (l *Logger) WithTraceFromContext(ctx context.Context) *zap.Logger {
 		l.projectID,
 	)
 	return l.With(fields...)
-}
-
-func getProjectID(ctx context.Context) (string, error) {
-	cred, err := google.FindDefaultCredentials(ctx)
-	if err != nil {
-		return "", xerrors.Errorf("failed to find default credentials: %w", err)
-	}
-
-	if cred.ProjectID == "" {
-		return "", xerrors.Errorf("project ID not found")
-	}
-
-	return cred.ProjectID, nil
 }
