@@ -5,6 +5,7 @@
 package mock_repository
 
 import (
+	url "net/url"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -120,17 +121,18 @@ func (mr *MockConfigMockRecorder) LINEChannelToken() *gomock.Call {
 }
 
 // ServiceEndpoint mocks base method.
-func (m *MockConfig) ServiceEndpoint() string {
+func (m *MockConfig) ServiceEndpoint(path string) (*url.URL, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ServiceEndpoint")
-	ret0, _ := ret[0].(string)
-	return ret0
+	ret := m.ctrl.Call(m, "ServiceEndpoint", path)
+	ret0, _ := ret[0].(*url.URL)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // ServiceEndpoint indicates an expected call of ServiceEndpoint.
-func (mr *MockConfigMockRecorder) ServiceEndpoint() *gomock.Call {
+func (mr *MockConfigMockRecorder) ServiceEndpoint(path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ServiceEndpoint", reflect.TypeOf((*MockConfig)(nil).ServiceEndpoint))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ServiceEndpoint", reflect.TypeOf((*MockConfig)(nil).ServiceEndpoint), path)
 }
 
 // MockConversationIDs is a mock of ConversationIDs interface.
