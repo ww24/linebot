@@ -39,17 +39,19 @@ func register(contextContext context.Context) (*bot, error) {
 	conversation := firestore.NewConversation(client)
 	conversationImpl := service.NewConversation(conversation)
 	shoppingImpl := service.NewShopping(conversation)
+	parser, err := nl.NewParser()
+	if err != nil {
+		return nil, err
+	}
+	shopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
 	reminder := firestore.NewReminder(conversation)
 	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
 	if err != nil {
 		return nil, err
 	}
 	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
-	parser, err := nl.NewParser()
-	if err != nil {
-		return nil, err
-	}
-	eventHandler, err := interactor.NewEventHandler(conversationImpl, shoppingImpl, reminderImpl, parser, messageProviderSet, botImpl, configConfig, logger)
+	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl)
+	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, reminderImpl, messageProviderSet, botImpl, configConfig, logger)
 	if err != nil {
 		return nil, err
 	}
