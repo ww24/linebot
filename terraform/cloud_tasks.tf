@@ -13,8 +13,8 @@ resource "google_cloud_tasks_queue" "linebot" {
   }
 
   retry_config {
-    max_attempts       = 100
-    min_backoff        = "0.100s"
+    max_attempts       = 3
+    min_backoff        = "1s"
     max_backoff        = "10s"
     max_doublings      = 4
     max_retry_duration = "30s"
