@@ -10,6 +10,7 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/usecase"
 )
@@ -90,11 +91,8 @@ func (h *EventHandler) handleError(ctx context.Context, e *model.Event) error {
 }
 
 func (h *EventHandler) HandleSchedule(ctx context.Context) error {
-	dl := logger.DefaultLogger(ctx)
-
 	for _, handler := range h.scheduleHandlers {
 		if err := handler.HandleSchedule(ctx); err != nil {
-			dl.Error("failed to handle schedule", zap.Error(err))
 			return xerrors.Errorf("failed to handle schedule: %w", err)
 		}
 	}
@@ -107,13 +105,15 @@ func (h *EventHandler) HandleReminder(ctx context.Context, itemIDJSON *model.Rem
 
 	item, err := h.reminder.Get(ctx, model.ConversationID(itemIDJSON.ConversationID), model.ReminderItemID(itemIDJSON.ItemID))
 	if err != nil {
-		dl.Error("failed to get reminder item", zap.Error(err))
+		if code.From(err) == code.NotFound {
+			dl.Info("reminder item not found", zap.Error(err))
+			return nil
+		}
 		return xerrors.Errorf("failed to get reminder item: %w", err)
 	}
 
 	for _, handler := range h.remindHandlers {
 		if err := handler.HandleReminder(ctx, item); err != nil {
-			dl.Error("failed to handle reminder", zap.Error(err))
 			return xerrors.Errorf("failed to handle reminder: %w", err)
 		}
 	}

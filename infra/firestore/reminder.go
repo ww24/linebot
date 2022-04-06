@@ -8,8 +8,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/internal/code"
 )
 
 type Reminder struct {
@@ -66,6 +69,9 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) (*model.ReminderItem, error) {
 	doc, err := r.reminder(conversationID).Doc(string(itemID)).Get(ctx)
 	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			err = code.With(err, code.NotFound)
+		}
 		return nil, xerrors.Errorf("failed to get reminder: %w", err)
 	}
 
