@@ -6,6 +6,7 @@ issues:
     - linters:
         - exhaustivestruct
         - errcheck
+        - goerr113
       path: _test\.go$
     - linters:
         - gochecknoglobals
