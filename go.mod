@@ -44,6 +44,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/pprof v0.0.0-20220113144219-d25a53d42d00 // indirect
+	github.com/google/subcommands v1.0.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.2.0 // indirect
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -51,8 +52,10 @@ require (
 	go.opentelemetry.io/otel/metric v0.28.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
 	golang.org/x/sys v0.0.0-20220403205710-6acee93ad0eb // indirect
+	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220401170504-314d38edb7de // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
