@@ -1,10 +1,12 @@
 package config
 
 import (
+	"net/url"
 	"os"
 	"strings"
 
 	"github.com/google/wire"
+	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
@@ -24,7 +26,7 @@ type Config struct {
 	addr               string
 	cloudTasksLocation string
 	cloudTasksQueue    string
-	serviceEndpoint    string
+	serviceEndpoint    *url.URL
 }
 
 func NewConfig() *Config {
@@ -43,6 +45,11 @@ func NewConfig() *Config {
 		addr = ":" + port
 	}
 
+	var serviceEndpoint *url.URL
+	if u, err := url.Parse(os.Getenv("SERVICE_ENDPOINT")); err == nil {
+		serviceEndpoint = u
+	}
+
 	return &Config{
 		lineChannelSecret:  os.Getenv("LINE_CHANNEL_SECRET"),
 		lineChannelToken:   os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
@@ -50,7 +57,7 @@ func NewConfig() *Config {
 		addr:               addr,
 		cloudTasksLocation: os.Getenv("CLOUD_TASKS_LOCATION"),
 		cloudTasksQueue:    os.Getenv("CLOUD_TASKS_QUEUE"),
-		serviceEndpoint:    os.Getenv("SERVICE_ENDPOINT"),
+		serviceEndpoint:    serviceEndpoint,
 	}
 }
 
@@ -98,6 +105,13 @@ func (c *Config) CloudTasksQueue() string {
 	return c.cloudTasksQueue
 }
 
-func (c *Config) ServiceEndpoint() string {
-	return c.serviceEndpoint
+func (c *Config) ServiceEndpoint(path string) (*url.URL, error) {
+	if c.serviceEndpoint == nil {
+		return nil, xerrors.New("service endpoint is not configured")
+	}
+	r, err := url.Parse(path)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to parse path: %w", err)
+	}
+	return c.serviceEndpoint.ResolveReference(r), nil
 }

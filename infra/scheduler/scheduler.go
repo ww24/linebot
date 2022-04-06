@@ -5,17 +5,17 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"path"
+	"net/url"
 	"time"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
 	"github.com/go-oss/scheduler"
 	"github.com/google/wire"
-	"golang.org/x/oauth2/google"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/gcp"
 )
 
 // Set provides a wire set.
@@ -34,13 +34,13 @@ type Scheduler struct {
 	projectID string
 	location  string
 	queue     string
-	endpoint  string
+	endpoint  *url.URL
 }
 
 func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
-	cred, err := google.FindDefaultCredentials(ctx)
+	projectID, err := gcp.ProjectID(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to find default credentials: %w", err)
+		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 	}
 
 	cli, err := cloudtasks.NewClient(ctx)
@@ -48,12 +48,17 @@ func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
 		return nil, xerrors.Errorf("failed to initialize CloudTasks client: %w", err)
 	}
 
+	endpoint, err := conf.ServiceEndpoint(reminderEndpoint)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to get service endpoint: %w", err)
+	}
+
 	return &Scheduler{
 		cli:       cli,
-		projectID: cred.ProjectID,
+		projectID: projectID,
 		location:  conf.CloudTasksLocation(),
 		queue:     conf.CloudTasksQueue(),
-		endpoint:  conf.ServiceEndpoint(),
+		endpoint:  endpoint,
 	}, nil
 }
 
@@ -75,9 +80,9 @@ func (s *Scheduler) Sync(ctx context.Context, conversationID model.ConversationI
 		if err != nil {
 			return xerrors.Errorf("failed to marshal json: %w", err)
 		}
-		req, err := http.NewRequest(http.MethodPost, path.Join(s.endpoint, reminderEndpoint), bytes.NewReader(data))
+		req, err := http.NewRequest(http.MethodPost, s.endpoint.String(), bytes.NewReader(data))
 		if err != nil {
-			panic(err)
+			return xerrors.Errorf("failed to create http request: %w", err)
 		}
 		req.Header.Set("content-type", "application/json")
 		tasks = append(tasks, &scheduler.Task{

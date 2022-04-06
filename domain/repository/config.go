@@ -2,7 +2,11 @@
 
 package repository
 
-import "github.com/ww24/linebot/domain/model"
+import (
+	"net/url"
+
+	"github.com/ww24/linebot/domain/model"
+)
 
 type Config interface {
 	LINEChannelSecret() string
@@ -11,7 +15,7 @@ type Config interface {
 	Addr() string
 	CloudTasksLocation() string
 	CloudTasksQueue() string
-	ServiceEndpoint() string
+	ServiceEndpoint(path string) (*url.URL, error)
 }
 
 type ConversationIDs interface {
