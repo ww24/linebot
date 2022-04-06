@@ -10,6 +10,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	linebot "github.com/line/line-bot-sdk-go/v7/linebot"
 	model "github.com/ww24/linebot/domain/model"
 	repository "github.com/ww24/linebot/domain/repository"
 )
@@ -261,16 +262,16 @@ func (m *MockMessageProvider) EXPECT() *MockMessageProviderMockRecorder {
 	return m.recorder
 }
 
-// AsMessage mocks base method.
-func (m *MockMessageProvider) AsMessage(arg0 interface{}) error {
+// ToMessage mocks base method.
+func (m *MockMessageProvider) ToMessage() linebot.SendingMessage {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AsMessage", arg0)
-	ret0, _ := ret[0].(error)
+	ret := m.ctrl.Call(m, "ToMessage")
+	ret0, _ := ret[0].(linebot.SendingMessage)
 	return ret0
 }
 
-// AsMessage indicates an expected call of AsMessage.
-func (mr *MockMessageProviderMockRecorder) AsMessage(arg0 interface{}) *gomock.Call {
+// ToMessage indicates an expected call of ToMessage.
+func (mr *MockMessageProviderMockRecorder) ToMessage() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AsMessage", reflect.TypeOf((*MockMessageProvider)(nil).AsMessage), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ToMessage", reflect.TypeOf((*MockMessageProvider)(nil).ToMessage))
 }
