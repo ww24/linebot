@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
-	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/logger"
@@ -26,12 +26,10 @@ func PanicHandler(log *logger.Logger) func(http.Handler) http.Handler {
 }
 
 func XCTCOpenTelemetry() func(http.Handler) http.Handler {
-	prop := propagator.New()
 	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			ctx := prop.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
-			r = r.WithContext(ctx)
-			next.ServeHTTP(w, r)
-		})
+		return otelhttp.NewHandler(next, "server",
+			otelhttp.WithMessageEvents(otelhttp.ReadEvents, otelhttp.WriteEvents),
+			otelhttp.WithPropagators(propagator.New()),
+		)
 	}
 }

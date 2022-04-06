@@ -11,7 +11,10 @@ import (
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
 	"github.com/go-oss/scheduler"
 	"github.com/google/wire"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/xerrors"
+	"google.golang.org/api/option"
+	"google.golang.org/grpc"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
@@ -43,7 +46,16 @@ func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
 		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 	}
 
-	cli, err := cloudtasks.NewClient(ctx)
+	opts := []option.ClientOption{
+		option.WithGRPCDialOption(
+			grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+		),
+		option.WithGRPCDialOption(
+			grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
+		),
+	}
+
+	cli, err := cloudtasks.NewClient(ctx, opts...)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize CloudTasks client: %w", err)
 	}

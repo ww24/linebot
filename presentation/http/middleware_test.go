@@ -1,14 +1,13 @@
 package http
 
 import (
-	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
+	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ww24/linebot/logger"
@@ -48,12 +47,8 @@ func TestPanicHandler(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest(http.MethodGet, "/", nil)
 			PanicHandler(logger.NewNop())(tt.h).ServeHTTP(w, r)
-			if w.Code != tt.wantStatus {
-				t.Fatalf("got: %d, want: %d", w.Code, tt.wantStatus)
-			}
-			if w.Body.String() != tt.wantBody {
-				t.Fatalf("got: %s, want: %s", w.Body.String(), tt.wantBody)
-			}
+			assert.Equal(t, tt.wantStatus, w.Code)
+			assert.Equal(t, tt.wantBody, w.Body.String())
 		})
 	}
 }
@@ -64,7 +59,7 @@ func TestXCTCOpenTelemetry(t *testing.T) {
 	tests := []struct {
 		name string
 		r    *http.Request
-		want context.Context
+		want trace.SpanContext
 	}{
 		{
 			name: "request with Cloud Trace Context",
@@ -73,12 +68,12 @@ func TestXCTCOpenTelemetry(t *testing.T) {
 				r.Header.Set(propagator.TraceContextHeaderName, "105445aa7843bc8bf206b12000100000/1;o=1")
 				return r
 			}(),
-			want: trace.ContextWithRemoteSpanContext(context.Background(), trace.NewSpanContext(trace.SpanContextConfig{
+			want: trace.NewSpanContext(trace.SpanContextConfig{
 				TraceID:    mustTraceIDFromHex("105445aa7843bc8bf206b12000100000"),
 				SpanID:     mustSpanIDFromHex("0000000000000001"),
 				TraceFlags: trace.FlagsSampled,
 				Remote:     true,
-			})),
+			}),
 		},
 		{
 			name: "general request",
@@ -86,7 +81,7 @@ func TestXCTCOpenTelemetry(t *testing.T) {
 				r := httptest.NewRequest(http.MethodGet, "/", nil)
 				return r
 			}(),
-			want: context.Background(),
+			want: trace.SpanContext{},
 		},
 	}
 	for _, tt := range tests {
@@ -95,10 +90,9 @@ func TestXCTCOpenTelemetry(t *testing.T) {
 			t.Parallel()
 			XCTCOpenTelemetry()(
 				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					got := r.Context()
-					if !reflect.DeepEqual(got, tt.want) {
-						t.Fatalf("got: %+v, want: %+v", got, tt.want)
-					}
+					ctx := r.Context()
+					got := trace.SpanContextFromContext(ctx)
+					assert.Equal(t, tt.want, got)
 				}),
 			).ServeHTTP(httptest.NewRecorder(), tt.r)
 		})
