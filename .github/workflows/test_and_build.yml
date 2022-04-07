@@ -9,8 +9,6 @@ on:
       - master
 
 env:
-  IMAGE_NAME: linebot
-  IMAGE_TAG: latest
   GO_VERSION: "~1.18"
 
 jobs:
@@ -64,73 +62,16 @@ jobs:
               exit 1
           fi
 
-  docker_build:
-    name: Build docker image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-      - uses: hadolint/hadolint-action@v2.1.0
-        with:
-          dockerfile: Dockerfile
-          ignore: DL3006 DL3018 DL3026
-      - name: Setup docker buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          outputs: type=docker
-          tags: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-          exit-code: "1"
-          severity: CRITICAL,HIGH
-          ignore-unfixed: true
-          format: sarif
-          output: trivy-results.sarif
-      - name: Upload Trivy scan results to GitHub Security tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: trivy-results.sarif
-
-  docker_push:
-    if: github.event_name == 'push'
-    needs: [lint, test, docker_build]
-    name: Build and push docker image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup docker buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build and push docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+  docker:
+    needs: [lint, test, check_uncommitted]
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    uses: ww24/linebot/.github/workflows/docker.yml@master
+    with:
+      image_tag: latest
+      push: ${{ github.event_name == 'push' }}
+    secrets:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
