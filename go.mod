@@ -9,6 +9,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.3.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.3.0
 	github.com/blendle/zapdriver v1.3.1
+	github.com/chromedp/chromedp v0.8.0
 	github.com/go-oss/scheduler v0.1.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-jsonnet v0.18.0
@@ -36,10 +37,15 @@ require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.5.0 // indirect
 	cloud.google.com/go/trace v1.0.0 // indirect
+	github.com/chromedp/cdproto v0.0.0-20220321060548-7bc2623472b3 // indirect
+	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/gobwas/ws v1.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
@@ -47,6 +53,8 @@ require (
 	github.com/google/subcommands v1.0.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.2.0 // indirect
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
+	github.com/josharian/intern v1.0.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	go.opentelemetry.io/otel/metric v0.28.0 // indirect

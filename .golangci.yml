@@ -10,7 +10,7 @@ issues:
       path: _test\.go$
     - linters:
         - gochecknoglobals
-      source: "^var Set = wire.NewSet"
+      source: "Set = wire.NewSet"
     - linters:
         - gochecknoglobals
       source: "^var tracer = otel.Tracer"
