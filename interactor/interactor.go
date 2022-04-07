@@ -21,6 +21,8 @@ var Set = wire.NewSet(
 	wire.Bind(new(usecase.EventHandler), new(*EventHandler)),
 	NewReminder,
 	NewShopping,
+	NewScreenshot,
+	wire.Bind(new(usecase.ScreenshotHandler), new(*Screenshot)),
 )
 
 type EventHandler struct {
