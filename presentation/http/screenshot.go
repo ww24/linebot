@@ -107,10 +107,7 @@ func (h *ScreenshotHandler) screenshot() func(w http.ResponseWriter, r *http.Req
 		w.Header().Set("content-length", strconv.Itoa(size))
 		if _, err := io.Copy(w, img); err != nil {
 			cl.Error("failed to write image", zap.Error(err))
-			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
-		w.WriteHeader(http.StatusOK)
 	}
 }
