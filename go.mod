@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/cloudtasks v1.3.0
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/profiler v0.2.0
+	cloud.google.com/go/storage v1.18.2
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.3.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.3.0
 	github.com/blendle/zapdriver v1.3.1
@@ -36,6 +37,7 @@ require (
 require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.5.0 // indirect
+	cloud.google.com/go/iam v0.1.1 // indirect
 	cloud.google.com/go/trace v1.0.0 // indirect
 	github.com/chromedp/cdproto v0.0.0-20220321060548-7bc2623472b3 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
