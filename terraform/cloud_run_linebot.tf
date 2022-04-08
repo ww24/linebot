@@ -59,6 +59,16 @@ resource "google_cloud_run_service" "linebot" {
           name  = "SERVICE_ENDPOINT"
           value = var.service_endpoint
         }
+
+        env {
+          name  = "WEATHER_API"
+          value = var.weather_api
+        }
+
+        env {
+          name  = "IMAGE_BUCKET"
+          value = google_storage_bucket.image.name
+        }
       }
     }
 
