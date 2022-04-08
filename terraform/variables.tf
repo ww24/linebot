@@ -18,6 +18,11 @@ variable "name" {
   default = "linebot"
 }
 
+variable "name_screenshot" {
+  type    = string
+  default = "screenshot"
+}
+
 variable "gar_repository" {
   type    = string
   default = "ww24"
@@ -26,6 +31,11 @@ variable "gar_repository" {
 variable "image_name" {
   type    = string
   default = "linebot"
+}
+
+variable "image_name_screenshot" {
+  type    = string
+  default = "screenshot"
 }
 
 variable "image_tag" {

@@ -43,3 +43,20 @@ resource "google_service_account" "invoker" {
   account_id   = "${var.name}-invoker"
   display_name = "${var.name}-invoker Service Account"
 }
+
+resource "google_service_account" "screenshot" {
+  account_id   = var.name_screenshot
+  display_name = "screenshot Service Account"
+}
+
+resource "google_project_iam_member" "screenshot-cloudtrace" {
+  project = var.project
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.screenshot.email}"
+}
+
+resource "google_project_iam_member" "screenshot-cloudprofiler" {
+  project = var.project
+  role    = "roles/cloudprofiler.agent"
+  member  = "serviceAccount:${google_service_account.screenshot.email}"
+}
