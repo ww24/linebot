@@ -2,7 +2,9 @@ package http
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/google/wire"
@@ -24,6 +26,7 @@ type Handler struct {
 	log          *logger.Logger
 	bot          service.Bot
 	eventHandler usecase.EventHandler
+	imageHandler usecase.ImageHandler
 	middlewares  []func(http.Handler) http.Handler
 }
 
@@ -31,11 +34,13 @@ func NewHandler(
 	log *logger.Logger,
 	bot service.Bot,
 	eventHandler usecase.EventHandler,
+	imageHandler usecase.ImageHandler,
 ) *Handler {
 	return &Handler{
 		log:          log,
 		bot:          bot,
 		eventHandler: eventHandler,
+		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
 			XCTCOpenTelemetry(),
 			PanicHandler(log),
@@ -49,6 +54,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mux.HandleFunc("/line_callback", h.lineCallback())
 	mux.HandleFunc("/scheduler", h.executeScheduler())
 	mux.HandleFunc("/reminder", h.executeReminder())
+	mux.HandleFunc("/image", h.serveImage())
 	h.registerMiddleware(mux).ServeHTTP(w, r)
 }
 
@@ -166,5 +172,49 @@ func (h *Handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 		}
 
 		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
+func (h *Handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		cl := h.log.WithTraceFromContext(ctx)
+		cl.Info("execute reminder")
+
+		w.Header().Set("content-type", "image/png")
+		w.Header().Set("allow", "OPTIONS, HEAD, GET")
+		switch r.Method {
+		case http.MethodGet:
+			// do nothing
+
+		case http.MethodHead, http.MethodOptions:
+			w.WriteHeader(http.StatusOK)
+			return
+
+		default:
+			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+			return
+		}
+
+		const prefix = "/image/"
+		if !strings.HasPrefix(r.URL.Path, prefix+"weather/") {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		key := strings.TrimPrefix(r.URL.Path, prefix)
+		rc, size, err := h.imageHandler.Handle(ctx, key)
+		if err != nil {
+			cl.Error("failed to serve image", zap.Error(err))
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		defer rc.Close()
+
+		w.Header().Set("content-length", strconv.Itoa(size))
+		if _, err := io.Copy(w, rc); err != nil {
+			cl.Error("failed to copy image", zap.Error(err))
+			return
+		}
 	}
 }

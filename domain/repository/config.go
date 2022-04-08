@@ -4,6 +4,7 @@ package repository
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/ww24/linebot/domain/model"
 )
@@ -16,6 +17,9 @@ type Config interface {
 	CloudTasksLocation() string
 	CloudTasksQueue() string
 	ServiceEndpoint(path string) (*url.URL, error)
+	WeatherAPI() string
+	ImageBucket() string
+	DefaultLocation() *time.Location
 }
 
 type ConversationIDs interface {

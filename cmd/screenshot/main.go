@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
-	"github.com/ww24/linebot/config"
+	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 )
@@ -100,7 +100,7 @@ func newLogger(ctx context.Context) (*logger.Logger, error) {
 	return l, nil
 }
 
-func newServer(conf *config.Config, handler http.Handler) *http.Server {
+func newServer(conf repository.Config, handler http.Handler) *http.Server {
 	return &http.Server{
 		Handler: handler,
 		Addr:    conf.Addr(),

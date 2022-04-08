@@ -1,6 +1,8 @@
 package service
 
-import "github.com/google/wire"
+import (
+	"github.com/google/wire"
+)
 
 // Set provides a wire set.
 var Set = wire.NewSet(
@@ -12,4 +14,6 @@ var Set = wire.NewSet(
 	wire.Bind(new(Reminder), new(*ReminderImpl)),
 	NewBot,
 	wire.Bind(new(Bot), new(*BotImpl)),
+	NewWeather,
+	wire.Bind(new(Weather), new(*WeatherImpl)),
 )

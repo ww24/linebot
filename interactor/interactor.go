@@ -23,6 +23,9 @@ var Set = wire.NewSet(
 	NewShopping,
 	NewScreenshot,
 	wire.Bind(new(usecase.ScreenshotHandler), new(*Screenshot)),
+	NewWeather,
+	NewImage,
+	wire.Bind(new(usecase.ImageHandler), new(*Image)),
 )
 
 type EventHandler struct {
@@ -38,6 +41,7 @@ type EventHandler struct {
 func NewEventHandler(
 	shoppingInteractor *Shopping,
 	reminderInteractor *Reminder,
+	weatherInteractor *Weather,
 	reminder service.Reminder,
 	message repository.MessageProviderSet,
 	bot service.Bot,
@@ -47,6 +51,7 @@ func NewEventHandler(
 		handlers: []repository.Handler{
 			shoppingInteractor,
 			reminderInteractor,
+			weatherInteractor,
 		},
 		scheduleHandlers: []repository.ScheduleHandler{
 			reminderInteractor,
