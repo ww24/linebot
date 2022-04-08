@@ -17,3 +17,7 @@ type EventHandler interface {
 type ScreenshotHandler interface {
 	Handle(context.Context, *url.URL, string) (io.Reader, int, error)
 }
+
+type ImageHandler interface {
+	Handle(context.Context, string) (io.ReadCloser, int, error)
+}

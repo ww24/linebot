@@ -71,6 +71,13 @@ func (s *MessageProviderSet) ReminderDeleteConfirmation(text, data string) repos
 	}
 }
 
+func (s *MessageProviderSet) Image(originalURL, previewURL string) repository.MessageProvider {
+	return &Image{
+		originalURL: originalURL,
+		previewURL:  previewURL,
+	}
+}
+
 type TextMessage struct {
 	text string
 }
@@ -218,4 +225,13 @@ func (c *ReminderDeleteConfirmation) ToMessage() linebot.SendingMessage {
 	})
 
 	return msg
+}
+
+type Image struct {
+	originalURL string
+	previewURL  string
+}
+
+func (i *Image) ToMessage() linebot.SendingMessage {
+	return linebot.NewImageMessage(i.originalURL, i.previewURL)
 }

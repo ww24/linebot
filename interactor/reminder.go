@@ -19,20 +19,15 @@ const (
 
 	reminderDeletePrefix        = "Reminder#delete#"
 	reminderDeleteConfirmPrefix = "Reminder#delete#confirm#"
-
-	timeOffset = 9 * time.Hour
-)
-
-var (
-	//nolint: gochecknoglobals
-	timeLocation = time.FixedZone("Asia/Tokyo", int(timeOffset/time.Second))
 )
 
 type Reminder struct {
-	conversation service.Conversation
-	reminder     service.Reminder
-	message      repository.MessageProviderSet
-	bot          service.Bot
+	conversation   service.Conversation
+	reminder       service.Reminder
+	message        repository.MessageProviderSet
+	bot            service.Bot
+	loc            *time.Location
+	timeZoneOffset time.Duration
 }
 
 func NewReminder(
@@ -40,12 +35,18 @@ func NewReminder(
 	reminder service.Reminder,
 	message repository.MessageProviderSet,
 	bot service.Bot,
+	conf repository.Config,
 ) *Reminder {
+	loc := conf.DefaultLocation()
+	_, offset := time.Time{}.In(loc).Zone()
+
 	return &Reminder{
-		conversation: conversation,
-		reminder:     reminder,
-		message:      message,
-		bot:          bot,
+		conversation:   conversation,
+		reminder:       reminder,
+		message:        message,
+		bot:            bot,
+		loc:            conf.DefaultLocation(),
+		timeZoneOffset: time.Duration(offset) * time.Second,
 	}
 }
 
@@ -126,7 +127,7 @@ func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err != nil {
 			return xerrors.Errorf("failed to parse time: %w", err)
 		}
-		t = t.In(timeLocation).Add(-timeOffset)
+		t = t.In(r.loc).Add(-r.timeZoneOffset)
 		text := prefixReminder + "毎日" + t.Format("15:04") + "に買い物リストをリマインドします。"
 		if err := r.bot.ReplyMessage(ctx, e, r.message.Text(text)); err != nil {
 			return xerrors.Errorf("failed to reply text message: %w", err)

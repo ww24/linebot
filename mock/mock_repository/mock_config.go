@@ -7,6 +7,7 @@ package mock_repository
 import (
 	url "net/url"
 	reflect "reflect"
+	time "time"
 
 	gomock "github.com/golang/mock/gomock"
 	model "github.com/ww24/linebot/domain/model"
@@ -92,6 +93,34 @@ func (mr *MockConfigMockRecorder) ConversationIDs() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConversationIDs", reflect.TypeOf((*MockConfig)(nil).ConversationIDs))
 }
 
+// DefaultLocation mocks base method.
+func (m *MockConfig) DefaultLocation() *time.Location {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DefaultLocation")
+	ret0, _ := ret[0].(*time.Location)
+	return ret0
+}
+
+// DefaultLocation indicates an expected call of DefaultLocation.
+func (mr *MockConfigMockRecorder) DefaultLocation() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DefaultLocation", reflect.TypeOf((*MockConfig)(nil).DefaultLocation))
+}
+
+// ImageBucket mocks base method.
+func (m *MockConfig) ImageBucket() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ImageBucket")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// ImageBucket indicates an expected call of ImageBucket.
+func (mr *MockConfigMockRecorder) ImageBucket() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImageBucket", reflect.TypeOf((*MockConfig)(nil).ImageBucket))
+}
+
 // LINEChannelSecret mocks base method.
 func (m *MockConfig) LINEChannelSecret() string {
 	m.ctrl.T.Helper()
@@ -133,6 +162,20 @@ func (m *MockConfig) ServiceEndpoint(path string) (*url.URL, error) {
 func (mr *MockConfigMockRecorder) ServiceEndpoint(path interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ServiceEndpoint", reflect.TypeOf((*MockConfig)(nil).ServiceEndpoint), path)
+}
+
+// WeatherAPI mocks base method.
+func (m *MockConfig) WeatherAPI() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WeatherAPI")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// WeatherAPI indicates an expected call of WeatherAPI.
+func (mr *MockConfigMockRecorder) WeatherAPI() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WeatherAPI", reflect.TypeOf((*MockConfig)(nil).WeatherAPI))
 }
 
 // MockConversationIDs is a mock of ConversationIDs interface.

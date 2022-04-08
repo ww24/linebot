@@ -4,12 +4,22 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/google/wire"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+)
+
+const (
+	defaultTimezoneOffset = 9 * 60 * 60
+)
+
+var (
+	//nolint: gochecknoglobals
+	defaultLocation = time.FixedZone("Asia/Tokyo", defaultTimezoneOffset)
 )
 
 // Set provides a wire set.
@@ -27,6 +37,9 @@ type Config struct {
 	cloudTasksLocation string
 	cloudTasksQueue    string
 	serviceEndpoint    *url.URL
+	weatherAPI         string
+	imageBucket        string
+	defaultTimezone    string
 }
 
 func NewConfig() *Config {
@@ -58,6 +71,9 @@ func NewConfig() *Config {
 		cloudTasksLocation: os.Getenv("CLOUD_TASKS_LOCATION"),
 		cloudTasksQueue:    os.Getenv("CLOUD_TASKS_QUEUE"),
 		serviceEndpoint:    serviceEndpoint,
+		weatherAPI:         os.Getenv("WEATHER_API"),
+		imageBucket:        os.Getenv("IMAGE_BUCKET"),
+		defaultTimezone:    os.Getenv("DEFAULT_TIMEZONE"),
 	}
 }
 
@@ -114,4 +130,23 @@ func (c *Config) ServiceEndpoint(path string) (*url.URL, error) {
 		return nil, xerrors.Errorf("failed to parse path: %w", err)
 	}
 	return c.serviceEndpoint.ResolveReference(r), nil
+}
+
+func (c *Config) WeatherAPI() string {
+	return c.weatherAPI
+}
+
+func (c *Config) ImageBucket() string {
+	return c.imageBucket
+}
+
+func (c *Config) DefaultLocation() *time.Location {
+	if c.defaultTimezone == "" {
+		return defaultLocation
+	}
+	loc, err := time.LoadLocation(c.defaultTimezone)
+	if err != nil {
+		return defaultLocation
+	}
+	return loc
 }
