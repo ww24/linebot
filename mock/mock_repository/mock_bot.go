@@ -141,6 +141,20 @@ func (m *MockMessageProviderSet) EXPECT() *MockMessageProviderSetMockRecorder {
 	return m.recorder
 }
 
+// Image mocks base method.
+func (m *MockMessageProviderSet) Image(originalURL, previewURL string) repository.MessageProvider {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Image", originalURL, previewURL)
+	ret0, _ := ret[0].(repository.MessageProvider)
+	return ret0
+}
+
+// Image indicates an expected call of Image.
+func (mr *MockMessageProviderSetMockRecorder) Image(originalURL, previewURL interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Image", reflect.TypeOf((*MockMessageProviderSet)(nil).Image), originalURL, previewURL)
+}
+
 // ReminderChoices mocks base method.
 func (m *MockMessageProviderSet) ReminderChoices(arg0 string, arg1 []string, arg2 []model.ExecutorType) repository.MessageProvider {
 	m.ctrl.T.Helper()
