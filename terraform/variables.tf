@@ -43,6 +43,11 @@ variable "image_tag" {
   default = "latest"
 }
 
+variable "image_bucket" {
+  type        = string
+  description = "image bucket name"
+}
+
 // application environments
 variable "line_channel_secret" {
   type        = string
