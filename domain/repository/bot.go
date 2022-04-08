@@ -29,6 +29,7 @@ type MessageProviderSet interface {
 	ReminderChoices(string, []string, []model.ExecutorType) MessageProvider
 	TimePicker(text, data string) MessageProvider
 	ReminderDeleteConfirmation(text, data string) MessageProvider
+	Image(originalURL, previewURL string) MessageProvider
 }
 
 type MessageProvider interface {
