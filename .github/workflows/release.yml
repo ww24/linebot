@@ -46,6 +46,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
       security-events: write
     uses: ww24/linebot/.github/workflows/docker.yml@master
     with:
@@ -53,7 +54,7 @@ jobs:
       push: true
     secrets:
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      GCP_PROJECT_NUMBER: ${{ secrets.GCP_PROJECT_NUMBER }}
 
   release:
     name: Release
