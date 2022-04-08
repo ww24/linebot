@@ -73,3 +73,8 @@ variable "service_endpoint" {
   type        = string
   description = "Cloud Run Service Endpoint (https://*.a.run.app)"
 }
+
+variable "weather_api" {
+  type        = string
+  description = "Weather API URL (use screenshot service)"
+}
