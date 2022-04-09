@@ -58,5 +58,5 @@ func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
 		return xerrors.Errorf("bot.ReplyMessage: %w", err)
 	}
 
-	return nil
+	return errResponseReturned
 }
