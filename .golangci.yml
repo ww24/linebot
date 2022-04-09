@@ -15,6 +15,9 @@ issues:
     - linters:
         - gochecknoglobals
       source: "^var tracer = otel.Tracer"
+    - linters:
+        - gomnd
+      source: "time."
 
 linters-settings:
   gocyclo:
