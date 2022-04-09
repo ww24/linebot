@@ -57,7 +57,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mux.HandleFunc("/line_callback", h.lineCallback())
 	mux.HandleFunc("/scheduler", h.executeScheduler())
 	mux.HandleFunc("/reminder", h.executeReminder())
-	mux.HandleFunc("/image", h.serveImage())
+	mux.HandleFunc("/image/", h.serveImage())
 	h.registerMiddleware(mux).ServeHTTP(w, r)
 }
 
