@@ -81,7 +81,7 @@ func (r *Reminder) handleMenu(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-		return nil
+		return errResponseReturned
 	}
 
 	test := fmt.Sprintf(prefixReminder+"%d件登録されています。\n%s\n\n何をしますか？",
@@ -91,7 +91,7 @@ func (r *Reminder) handleMenu(ctx context.Context, e *model.Event) error {
 		return xerrors.Errorf("failed to reply message: %w", err)
 	}
 
-	return nil
+	return errResponseReturned
 }
 
 func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
@@ -112,7 +112,7 @@ func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-		return nil
+		return errResponseReturned
 
 	case "Reminder#add#shopping_list":
 		text := prefixReminder + "買い物リストをリマインドします。\n何時にリマインドしますか？"
@@ -120,7 +120,7 @@ func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-		return nil
+		return errResponseReturned
 
 	case "Reminder#add#shopping_list#datetime":
 		t, err := time.Parse("15:04", e.Postback.Params.Time)
@@ -152,7 +152,7 @@ func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err := r.conversation.SetStatus(ctx, status); err != nil {
 			return xerrors.Errorf("failed to set status: %w", err)
 		}
-		return nil
+		return errResponseReturned
 	}
 
 	if err := r.handleDelete(ctx, e); err != nil {
@@ -173,7 +173,7 @@ func (r *Reminder) handleDelete(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-		return nil
+		return errResponseReturned
 
 	case strings.HasPrefix(e.Postback.Data, reminderDeletePrefix):
 		id := strings.TrimPrefix(e.Postback.Data, reminderDeletePrefix)
@@ -181,7 +181,7 @@ func (r *Reminder) handleDelete(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, msg); err != nil {
 			return xerrors.Errorf("failed to reply message: %w", err)
 		}
-		return nil
+		return errResponseReturned
 	}
 
 	return nil

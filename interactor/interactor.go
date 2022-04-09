@@ -2,6 +2,7 @@ package interactor
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/wire"
 	"go.uber.org/zap"
@@ -13,6 +14,10 @@ import (
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/usecase"
+)
+
+var (
+	errResponseReturned = xerrors.New("response returned")
 )
 
 // Set provides a wire set.
@@ -79,6 +84,10 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 
 		for _, handler := range h.handlers {
 			if err := handler.Handle(ctx, e); err != nil {
+				if errors.Is(err, errResponseReturned) {
+					return nil
+				}
+
 				dl.Error("failed to handle event", zap.Error(err))
 				return h.handleError(ctx, e)
 			}
