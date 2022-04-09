@@ -51,13 +51,16 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 	key := w.key(t)
 	obj := w.cli.Bucket(w.bucket).Object(key)
 	writer := obj.NewWriter(ctx)
-	defer writer.Close()
 
 	dl := logger.DefaultLogger(ctx)
 	dl.Info("upload image", zap.String("key", key))
 
 	if _, err := io.Copy(writer, r); err != nil {
 		return "", xerrors.Errorf("io.Copy: %w", err)
+	}
+
+	if err := writer.Close(); err != nil {
+		return "", xerrors.Errorf("writer.Close: %w", err)
 	}
 
 	return w.url(key), nil
