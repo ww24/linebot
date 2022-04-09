@@ -18,12 +18,15 @@ import (
 // Injectors from wire.go:
 
 func register(ctx context.Context) (*http.Server, error) {
-	configConfig := config.NewConfig()
+	configConfig, err := config.NewConfig()
+	if err != nil {
+		return nil, err
+	}
 	logger, err := newLogger(ctx)
 	if err != nil {
 		return nil, err
 	}
-	browserBrowser := browser.NewBrowser(ctx)
+	browserBrowser := browser.NewBrowser(configConfig)
 	screenshot := interactor.NewScreenshot(browserBrowser)
 	screenshotHandler := http2.NewScreenshotHandler(logger, screenshot)
 	server := newServer(configConfig, screenshotHandler)
