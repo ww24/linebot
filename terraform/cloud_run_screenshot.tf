@@ -28,6 +28,11 @@ resource "google_cloud_run_service" "screenshot" {
             memory = "500Mi"
           }
         }
+
+        env {
+          name  = "BROWSER_TIMEOUT"
+          value = var.browser_timeout
+        }
       }
     }
 
