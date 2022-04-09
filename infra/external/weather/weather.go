@@ -17,10 +17,6 @@ import (
 	"github.com/ww24/linebot/domain/repository"
 )
 
-const (
-	timeout = 10 * time.Second
-)
-
 // Set provides a wire set.
 var Set = wire.NewSet(
 	NewWeather,
@@ -30,6 +26,7 @@ var Set = wire.NewSet(
 type Weather struct {
 	endpoint string
 	audience string
+	timeout  time.Duration
 }
 
 func NewWeather(conf repository.Config) (*Weather, error) {
@@ -42,6 +39,7 @@ func NewWeather(conf repository.Config) (*Weather, error) {
 	return &Weather{
 		endpoint: conf.WeatherAPI(),
 		audience: audience,
+		timeout:  conf.WeatherAPITimeout(),
 	}, nil
 }
 
@@ -66,7 +64,7 @@ func (w *Weather) Fetch(ctx context.Context) (io.ReadCloser, error) {
 		return nil, err
 	}
 	cli := &http.Client{
-		Timeout:   timeout,
+		Timeout:   w.timeout,
 		Transport: t,
 	}
 
