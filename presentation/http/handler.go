@@ -1,11 +1,14 @@
 package http
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/google/wire"
 	"go.uber.org/zap"
@@ -213,8 +216,26 @@ func (h *Handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("content-length", strconv.Itoa(size))
 		if _, err := io.Copy(w, rc); err != nil {
+			if isCanceledByClient(r, err) {
+				cl.Info("request canceled by client",
+					zap.Errors("errors", []error{err, r.Context().Err()}),
+				)
+				return
+			}
+
 			cl.Error("failed to copy image", zap.Error(err))
 			return
 		}
 	}
+}
+
+func isCanceledByClient(r *http.Request, err error) bool {
+	if err == nil {
+		return false
+	}
+	return (errors.Is(err, syscall.EPIPE) ||
+		errors.Is(err, syscall.ECONNRESET) ||
+		errors.Is(err, io.ErrUnexpectedEOF) ||
+		errors.Is(err, context.Canceled)) &&
+		errors.Is(r.Context().Err(), context.Canceled)
 }
