@@ -78,3 +78,15 @@ variable "weather_api" {
   type        = string
   description = "Weather API URL (use screenshot service)"
 }
+
+variable "weather_api_timeout" {
+  type        = string
+  default     = "60s"
+  description = "Weather API timeout"
+}
+
+variable "browser_timeout" {
+  type        = string
+  default     = "60s"
+  description = "Browser timeout"
+}
