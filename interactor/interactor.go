@@ -100,7 +100,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 func (h *EventHandler) handleError(ctx context.Context, e *model.Event) error {
 	msg := h.message.Text("予期せぬエラーが発生しました")
 	if err := h.bot.PushMessage(ctx, e.ConversationID(), msg); err != nil {
-		return xerrors.Errorf("failed to reply text message: %w", err)
+		return xerrors.Errorf("bot.PushMessage: %w", err)
 	}
 
 	return nil
