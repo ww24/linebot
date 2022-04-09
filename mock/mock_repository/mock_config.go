@@ -51,6 +51,20 @@ func (mr *MockConfigMockRecorder) Addr() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Addr", reflect.TypeOf((*MockConfig)(nil).Addr))
 }
 
+// BrowserTimeout mocks base method.
+func (m *MockConfig) BrowserTimeout() time.Duration {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BrowserTimeout")
+	ret0, _ := ret[0].(time.Duration)
+	return ret0
+}
+
+// BrowserTimeout indicates an expected call of BrowserTimeout.
+func (mr *MockConfigMockRecorder) BrowserTimeout() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BrowserTimeout", reflect.TypeOf((*MockConfig)(nil).BrowserTimeout))
+}
+
 // CloudTasksLocation mocks base method.
 func (m *MockConfig) CloudTasksLocation() string {
 	m.ctrl.T.Helper()
@@ -176,6 +190,20 @@ func (m *MockConfig) WeatherAPI() string {
 func (mr *MockConfigMockRecorder) WeatherAPI() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WeatherAPI", reflect.TypeOf((*MockConfig)(nil).WeatherAPI))
+}
+
+// WeatherAPITimeout mocks base method.
+func (m *MockConfig) WeatherAPITimeout() time.Duration {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WeatherAPITimeout")
+	ret0, _ := ret[0].(time.Duration)
+	return ret0
+}
+
+// WeatherAPITimeout indicates an expected call of WeatherAPITimeout.
+func (mr *MockConfigMockRecorder) WeatherAPITimeout() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WeatherAPITimeout", reflect.TypeOf((*MockConfig)(nil).WeatherAPITimeout))
 }
 
 // MockConversationIDs is a mock of ConversationIDs interface.
