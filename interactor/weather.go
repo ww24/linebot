@@ -3,11 +3,13 @@ package interactor
 import (
 	"context"
 
+	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -53,10 +55,20 @@ func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
 		return xerrors.Errorf("weather.Fetch: %w", err)
 	}
 
+	dl := logger.DefaultLogger(ctx)
+	dl.Info("send image message", zap.String("imageURL", imageURL))
+
 	msg := w.message.Image(imageURL, imageURL)
 	if err := w.bot.ReplyMessage(ctx, e, msg); err != nil {
 		return xerrors.Errorf("bot.ReplyMessage: %w", err)
 	}
 
 	return errResponseReturned
+}
+
+func (r *Weather) HandleSchedule(ctx context.Context) error {
+	if err := r.weather.SaveImage(ctx); err != nil {
+		return xerrors.Errorf("weather.SaveImage: %w", err)
+	}
+	return nil
 }
