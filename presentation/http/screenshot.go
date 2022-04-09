@@ -106,6 +106,13 @@ func (h *ScreenshotHandler) screenshot() func(w http.ResponseWriter, r *http.Req
 
 		w.Header().Set("content-length", strconv.Itoa(size))
 		if _, err := io.Copy(w, img); err != nil {
+			if isCanceledByClient(r, err) {
+				cl.Info("request canceled by client",
+					zap.Errors("errors", []error{err, r.Context().Err()}),
+				)
+				return
+			}
+
 			cl.Error("failed to write image", zap.Error(err))
 			return
 		}
