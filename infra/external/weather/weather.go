@@ -11,6 +11,8 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/idtoken"
+	"google.golang.org/api/option"
+	htransport "google.golang.org/api/transport/http"
 
 	"github.com/ww24/linebot/domain/repository"
 )
@@ -28,15 +30,9 @@ var Set = wire.NewSet(
 type Weather struct {
 	endpoint string
 	audience string
-	client   *http.Client
 }
 
 func NewWeather(conf repository.Config) (*Weather, error) {
-	client := &http.Client{
-		Timeout:   timeout,
-		Transport: otelhttp.NewTransport(http.DefaultTransport),
-	}
-
 	u, err := url.Parse(conf.WeatherAPI())
 	if err != nil {
 		return nil, xerrors.Errorf("failed to parse weather api url: %w", err)
@@ -46,15 +42,32 @@ func NewWeather(conf repository.Config) (*Weather, error) {
 	return &Weather{
 		endpoint: conf.WeatherAPI(),
 		audience: audience,
-		client:   client,
 	}, nil
+}
+
+func (w *Weather) newTransport(ctx context.Context) (http.RoundTripper, error) {
+	ts, err := idtoken.NewTokenSource(ctx, w.audience)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to create token source: %w", err)
+	}
+
+	t, err := htransport.NewTransport(ctx, otelhttp.NewTransport(http.DefaultTransport), option.WithTokenSource(ts))
+	if err != nil {
+		return nil, xerrors.Errorf("failed to create idtoken client: %w", err)
+	}
+
+	return t, nil
 }
 
 // Fetch an weather map image.
 func (w *Weather) Fetch(ctx context.Context) (io.ReadCloser, error) {
-	cli, err := idtoken.NewClient(ctx, w.audience, idtoken.WithHTTPClient(w.client))
+	t, err := w.newTransport(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to create idtoken client: %w", err)
+		return nil, err
+	}
+	cli := &http.Client{
+		Timeout:   timeout,
+		Transport: t,
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, w.endpoint, http.NoBody)
