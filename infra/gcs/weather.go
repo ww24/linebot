@@ -11,17 +11,19 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/logger"
 )
 
 const (
 	weatherPrefix   = "weather/japan-all/"
 	objectSuffix    = "-weather.png"
-	urlPathPrefix   = "/images"
-	weatherImageTTL = time.Hour
+	urlPathPrefix   = "/image"
+	weatherImageTTL = 2 * time.Hour
 )
 
 type WeatherImageStore struct {
@@ -51,6 +53,9 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 	writer := obj.NewWriter(ctx)
 	defer writer.Close()
 
+	dl := logger.DefaultLogger(ctx)
+	dl.Info("upload image", zap.String("key", key))
+
 	if _, err := io.Copy(writer, r); err != nil {
 		return "", xerrors.Errorf("io.Copy: %w", err)
 	}
@@ -61,7 +66,7 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 func (w *WeatherImageStore) Get(ctx context.Context, t time.Time) (string, error) {
 	q := &storage.Query{
 		Delimiter: "/",
-		Prefix:    weatherPrefix,
+		Prefix:    weatherPrefix + t.In(w.loc).Format("20060102") + "/",
 	}
 	iter := w.cli.Bucket(w.bucket).Objects(ctx, q)
 	for {
