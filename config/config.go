@@ -38,11 +38,13 @@ type Config struct {
 	cloudTasksQueue    string
 	serviceEndpoint    *url.URL
 	weatherAPI         string
+	weatherAPITimeout  time.Duration
+	browserTimeout     time.Duration
 	imageBucket        string
 	defaultTimezone    string
 }
 
-func NewConfig() *Config {
+func NewConfig() (*Config, error) {
 	var conversationIDs = &ConversationIDs{
 		list: make([]model.ConversationID, 0),
 		set:  make(map[model.ConversationID]struct{}),
@@ -59,8 +61,30 @@ func NewConfig() *Config {
 	}
 
 	var serviceEndpoint *url.URL
-	if u, err := url.Parse(os.Getenv("SERVICE_ENDPOINT")); err == nil {
-		serviceEndpoint = u
+	if endpoint := os.Getenv("SERVICE_ENDPOINT"); endpoint != "" {
+		if u, err := url.Parse(os.Getenv("SERVICE_ENDPOINT")); err != nil {
+			return nil, xerrors.Errorf("failed to parse SERVICE_ENDPOINT: %w", err)
+		} else {
+			serviceEndpoint = u
+		}
+	}
+
+	weatherAPITimeout := 30 * time.Second
+	if t := os.Getenv("WEATHER_API_TIMEOUT"); t != "" {
+		if timeout, err := time.ParseDuration(t); err != nil {
+			return nil, xerrors.Errorf("failed to parse WEATHER_API_TIMEOUT: %w", err)
+		} else {
+			weatherAPITimeout = timeout
+		}
+	}
+
+	browserTimeout := 30 * time.Second
+	if t := os.Getenv("BROWSER_TIMEOUT"); t != "" {
+		if timeout, err := time.ParseDuration(t); err != nil {
+			return nil, xerrors.Errorf("failed to parse BROWSER_TIMEOUT: %w", err)
+		} else {
+			browserTimeout = timeout
+		}
 	}
 
 	return &Config{
@@ -72,9 +96,11 @@ func NewConfig() *Config {
 		cloudTasksQueue:    os.Getenv("CLOUD_TASKS_QUEUE"),
 		serviceEndpoint:    serviceEndpoint,
 		weatherAPI:         os.Getenv("WEATHER_API"),
+		weatherAPITimeout:  weatherAPITimeout,
+		browserTimeout:     browserTimeout,
 		imageBucket:        os.Getenv("IMAGE_BUCKET"),
 		defaultTimezone:    os.Getenv("DEFAULT_TIMEZONE"),
-	}
+	}, nil
 }
 
 func (c *Config) LINEChannelSecret() string {
@@ -134,6 +160,14 @@ func (c *Config) ServiceEndpoint(path string) (*url.URL, error) {
 
 func (c *Config) WeatherAPI() string {
 	return c.weatherAPI
+}
+
+func (c *Config) WeatherAPITimeout() time.Duration {
+	return c.weatherAPITimeout
+}
+
+func (c *Config) BrowserTimeout() time.Duration {
+	return c.browserTimeout
 }
 
 func (c *Config) ImageBucket() string {

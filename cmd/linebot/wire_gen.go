@@ -23,7 +23,10 @@ import (
 // Injectors from wire.go:
 
 func register(contextContext context.Context) (*bot, error) {
-	configConfig := config.NewConfig()
+	configConfig, err := config.NewConfig()
+	if err != nil {
+		return nil, err
+	}
 	logger, err := newLogger(contextContext)
 	if err != nil {
 		return nil, err

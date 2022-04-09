@@ -17,10 +17,9 @@ import (
 )
 
 const (
-	screenshotTimeout = 10 * time.Second
-	windowWidth       = 1280
-	windowHeight      = 960
-	dialTimeout       = 10 * time.Second
+	windowWidth  = 1280
+	windowHeight = 960
+	dialTimeout  = 10 * time.Second
 )
 
 // Set provides a wire set.
@@ -29,14 +28,18 @@ var Set = wire.NewSet(
 	wire.Bind(new(repository.Browser), new(*Browser)),
 )
 
-type Browser struct{}
+type Browser struct {
+	timeout time.Duration
+}
 
-func NewBrowser(ctx context.Context) *Browser {
-	return &Browser{}
+func NewBrowser(conf repository.Config) *Browser {
+	return &Browser{
+		timeout: conf.BrowserTimeout(),
+	}
 }
 
 func (b *Browser) Screenshot(ctx context.Context, target *url.URL, targetSelector string) (io.Reader, int, error) {
-	ctx, cancel := context.WithTimeout(ctx, screenshotTimeout)
+	ctx, cancel := context.WithTimeout(ctx, b.timeout)
 	defer cancel()
 
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],

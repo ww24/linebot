@@ -18,6 +18,8 @@ type Config interface {
 	CloudTasksQueue() string
 	ServiceEndpoint(path string) (*url.URL, error)
 	WeatherAPI() string
+	WeatherAPITimeout() time.Duration
+	BrowserTimeout() time.Duration
 	ImageBucket() string
 	DefaultLocation() *time.Location
 }
