@@ -5,6 +5,15 @@ resource "google_storage_bucket" "image" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
 
+  lifecycle_rule {
+    condition {
+      age = 3
+    }
+    action {
+      type = "Delete"
+    }
+  }
+
   labels = {
     service = var.name
   }
