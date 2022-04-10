@@ -8,7 +8,12 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/logger"
+)
+
+const (
+	weatherImageTTL = 2 * time.Hour
 )
 
 type Weather interface {
@@ -19,12 +24,18 @@ type Weather interface {
 type WeatherImpl struct {
 	weather    repository.Weather
 	imageStore repository.WeatherImageStore
+	loc        *time.Location
 }
 
-func NewWeather(weather repository.Weather, imageStore repository.WeatherImageStore) *WeatherImpl {
+func NewWeather(
+	weather repository.Weather,
+	imageStore repository.WeatherImageStore,
+	conf repository.Config,
+) *WeatherImpl {
 	return &WeatherImpl{
 		weather:    weather,
 		imageStore: imageStore,
+		loc:        conf.DefaultLocation(),
 	}
 }
 
@@ -48,10 +59,15 @@ func (w *WeatherImpl) SaveImage(ctx context.Context) error {
 }
 
 func (w *WeatherImpl) ImageURL(ctx context.Context) (string, error) {
-	now := time.Now()
-	imageURL, err := w.imageStore.Get(ctx, now)
+	now := time.Now().In(w.loc)
+
+	imageURL, err := w.imageStore.Get(ctx, now, weatherImageTTL)
+	if code.From(err) == code.NotFound && now.Add(-weatherImageTTL).Day() != now.Day() {
+		imageURL, err = w.imageStore.Get(ctx, now.Add(-weatherImageTTL), weatherImageTTL)
+	}
 	if err != nil {
 		return "", xerrors.Errorf("imageStore.Get: %w", err)
 	}
+
 	return imageURL, nil
 }

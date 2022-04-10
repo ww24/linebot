@@ -14,7 +14,7 @@ type Weather interface {
 
 type WeatherImageStore interface {
 	Save(context.Context, io.Reader, time.Time) (string, error)
-	Get(context.Context, time.Time) (string, error)
+	Get(context.Context, time.Time, time.Duration) (string, error)
 }
 
 type ImageStore interface {

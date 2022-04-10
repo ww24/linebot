@@ -16,14 +16,14 @@ import (
 	"google.golang.org/api/iterator"
 
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/logger"
 )
 
 const (
-	weatherPrefix   = "weather/japan-all/"
-	objectSuffix    = "-weather.png"
-	urlPathPrefix   = "/image"
-	weatherImageTTL = 2 * time.Hour
+	weatherPrefix = "weather/japan-all/"
+	objectSuffix  = "-weather.png"
+	urlPathPrefix = "/image"
 )
 
 type WeatherImageStore struct {
@@ -66,7 +66,7 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 	return w.url(key), nil
 }
 
-func (w *WeatherImageStore) Get(ctx context.Context, t time.Time) (string, error) {
+func (w *WeatherImageStore) Get(ctx context.Context, t time.Time, ttl time.Duration) (string, error) {
 	q := &storage.Query{
 		Delimiter: "/",
 		Prefix:    weatherPrefix + t.In(w.loc).Format("20060102") + "/",
@@ -83,14 +83,15 @@ func (w *WeatherImageStore) Get(ctx context.Context, t time.Time) (string, error
 		if !strings.HasSuffix(attrs.Name, objectSuffix) {
 			continue
 		}
-		if attrs.Created.Add(weatherImageTTL).Before(t) {
+		if attrs.Created.Add(ttl).Before(t) {
 			return "", xerrors.Errorf("image is expired")
 		}
 
 		return w.url(attrs.Name), nil
 	}
 
-	return "", xerrors.Errorf("image is not found")
+	err := xerrors.Errorf("image is not found")
+	return "", code.With(err, code.NotFound)
 }
 
 func (w *WeatherImageStore) key(t time.Time) string {
