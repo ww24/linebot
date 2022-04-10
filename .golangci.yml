@@ -18,6 +18,9 @@ issues:
     - linters:
         - gomnd
       source: "time."
+    - linters:
+        - wrapcheck
+      source: "code.With\\("
 
 linters-settings:
   gocyclo:

@@ -6,6 +6,7 @@ type Code int
 
 const (
 	OK Code = iota
+	Unexpected
 	NotFound
 )
 
@@ -27,9 +28,12 @@ func With(err error, code Code) error {
 }
 
 func From(err error) Code {
+	if err == nil {
+		return OK
+	}
 	ie := new(internalError)
 	if errors.As(err, &ie) {
 		return ie.code
 	}
-	return OK
+	return Unexpected
 }
