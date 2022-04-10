@@ -45,6 +45,11 @@ func TestInternalError_From(t *testing.T) {
 			}),
 			want: NotFound,
 		},
+		{
+			name: "unexpected",
+			err:  errors.New("unexpected"),
+			want: Unexpected,
+		},
 	}
 	for _, tt := range tests {
 		tt := tt
