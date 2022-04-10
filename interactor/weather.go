@@ -66,8 +66,8 @@ func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
 	return errResponseReturned
 }
 
-func (r *Weather) HandleSchedule(ctx context.Context) error {
-	if err := r.weather.SaveImage(ctx); err != nil {
+func (w *Weather) HandleSchedule(ctx context.Context) error {
+	if err := w.weather.SaveImage(ctx); err != nil {
 		return xerrors.Errorf("weather.SaveImage: %w", err)
 	}
 	return nil
