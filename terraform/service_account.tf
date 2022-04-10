@@ -45,6 +45,18 @@ resource "google_storage_bucket_iam_member" "image" {
   member = "serviceAccount:${google_service_account.linebot.email}"
 }
 
+resource "google_secret_manager_secret_iam_member" "line-channel-secret" {
+  secret_id = google_secret_manager_secret.line-channel-secret.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.linebot.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "line-channel-access-token" {
+  secret_id = google_secret_manager_secret.line-channel-access-token.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.linebot.email}"
+}
+
 resource "google_service_account" "invoker" {
   account_id   = "${var.name}-invoker"
   display_name = "${var.name}-invoker Service Account"
