@@ -70,7 +70,7 @@ func register(contextContext context.Context) (*bot, error) {
 	}
 	weatherImpl := service.NewWeather(weatherWeather, weatherImageStore, configConfig)
 	interactorWeather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, interactorWeather, reminderImpl, messageProviderSet, botImpl, configConfig)
+	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
 	if err != nil {
 		return nil, err
 	}
