@@ -73,6 +73,34 @@ func (m *MockScheduleSynchronizer) EXPECT() *MockScheduleSynchronizerMockRecorde
 	return m.recorder
 }
 
+// Create mocks base method.
+func (m *MockScheduleSynchronizer) Create(arg0 context.Context, arg1 model.ConversationID, arg2 *model.ReminderItem, arg3 time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockScheduleSynchronizerMockRecorder) Create(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockScheduleSynchronizer)(nil).Create), arg0, arg1, arg2, arg3)
+}
+
+// Delete mocks base method.
+func (m *MockScheduleSynchronizer) Delete(arg0 context.Context, arg1 model.ConversationID, arg2 *model.ReminderItem, arg3 time.Time) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", arg0, arg1, arg2, arg3)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockScheduleSynchronizerMockRecorder) Delete(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockScheduleSynchronizer)(nil).Delete), arg0, arg1, arg2, arg3)
+}
+
 // Sync mocks base method.
 func (m *MockScheduleSynchronizer) Sync(arg0 context.Context, arg1 model.ConversationID, arg2 model.ReminderItems, arg3 time.Time) error {
 	m.ctrl.T.Helper()
