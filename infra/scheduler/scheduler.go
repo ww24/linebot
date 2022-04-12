@@ -84,27 +84,11 @@ func (s *Scheduler) Sync(ctx context.Context, conversationID model.ConversationI
 
 	tasks := make([]*scheduler.Task, 0, len(items))
 	for _, item := range items {
-		next, err := item.Scheduler.Next(t)
+		task, err := s.reminderItemToTask(prefix, item, t)
 		if err != nil {
-			continue
+			return err
 		}
-		data, err := json.Marshal(item.IDJSON())
-		if err != nil {
-			return xerrors.Errorf("failed to marshal json: %w", err)
-		}
-		req, err := http.NewRequest(http.MethodPost, s.endpoint.String(), bytes.NewReader(data))
-		if err != nil {
-			return xerrors.Errorf("failed to create http request: %w", err)
-		}
-		req.Header.Set("content-type", "application/json")
-		tasks = append(tasks, &scheduler.Task{
-			QueuePath:   scheduler.QueuePath(s.projectID, s.location, s.queue),
-			Prefix:      prefix,
-			ID:          string(item.ID),
-			ScheduledAt: next,
-			Request:     req,
-			Version:     1,
-		})
+		tasks = append(tasks, task)
 	}
 
 	if err := sc.Sync(ctx, tasks); err != nil {
@@ -112,4 +96,54 @@ func (s *Scheduler) Sync(ctx context.Context, conversationID model.ConversationI
 	}
 
 	return nil
+}
+
+func (s *Scheduler) Create(ctx context.Context, conversationID model.ConversationID, item *model.ReminderItem, t time.Time) error {
+	prefix := s.prefix(conversationID)
+	sc := scheduler.New(s.cli, s.projectID, s.location, s.queue, prefix)
+	task, err := s.reminderItemToTask(prefix, item, t)
+	if err != nil {
+		return err
+	}
+	if err := sc.Create(ctx, task); err != nil {
+		return xerrors.Errorf("failed to create a task: %w", err)
+	}
+	return nil
+}
+
+func (s *Scheduler) Delete(ctx context.Context, conversationID model.ConversationID, item *model.ReminderItem, t time.Time) error {
+	prefix := s.prefix(conversationID)
+	sc := scheduler.New(s.cli, s.projectID, s.location, s.queue, prefix)
+	task, err := s.reminderItemToTask(prefix, item, t)
+	if err != nil {
+		return err
+	}
+	if err := sc.Delete(ctx, task.TaskName()); err != nil {
+		return xerrors.Errorf("failed to delete a task: %w", err)
+	}
+	return nil
+}
+
+func (s *Scheduler) reminderItemToTask(prefix string, item *model.ReminderItem, t time.Time) (*scheduler.Task, error) {
+	next, err := item.Scheduler.Next(t)
+	if err != nil {
+		return nil, xerrors.New("failed to get next schedule")
+	}
+	data, err := json.Marshal(item.IDJSON())
+	if err != nil {
+		return nil, xerrors.Errorf("failed to marshal json: %w", err)
+	}
+	req, err := http.NewRequest(http.MethodPost, s.endpoint.String(), bytes.NewReader(data))
+	if err != nil {
+		return nil, xerrors.Errorf("failed to create http request: %w", err)
+	}
+	req.Header.Set("content-type", "application/json")
+	return &scheduler.Task{
+		QueuePath:   scheduler.QueuePath(s.projectID, s.location, s.queue),
+		Prefix:      prefix,
+		ID:          string(item.ID),
+		ScheduledAt: next,
+		Request:     req,
+		Version:     1,
+	}, nil
 }

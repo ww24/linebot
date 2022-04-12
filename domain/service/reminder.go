@@ -37,10 +37,19 @@ func NewReminder(reminder repository.Reminder, scheduler repository.ScheduleSync
 	}
 }
 
-func (r *ReminderImpl) Add(ctx context.Context, reminder *model.ReminderItem) error {
-	if err := r.reminder.Add(ctx, reminder); err != nil {
+func (r *ReminderImpl) Add(ctx context.Context, item *model.ReminderItem) error {
+	if err := r.reminder.Add(ctx, item); err != nil {
 		return xerrors.Errorf("failed to add a reminder item: %w", err)
 	}
+
+	now := time.Now()
+	items := model.ReminderItems{item}.FilterNextSchedule(now, syncInterval)
+	for _, item := range items {
+		if err := r.scheduler.Create(ctx, item.ConversationID, item, now); err != nil {
+			return xerrors.Errorf("failed to create a schedule: %w", err)
+		}
+	}
+
 	return nil
 }
 
@@ -60,10 +69,23 @@ func (r *ReminderImpl) Get(ctx context.Context, conversationID model.Conversatio
 	return item, nil
 }
 
-func (r *ReminderImpl) Delete(ctx context.Context, conversationID model.ConversationID, reminderItemID model.ReminderItemID) error {
-	if err := r.reminder.Delete(ctx, conversationID, reminderItemID); err != nil {
+func (r *ReminderImpl) Delete(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) error {
+	item, err := r.reminder.Get(ctx, conversationID, itemID)
+	if err != nil {
+		return xerrors.Errorf("failed to get a reminder item: %w", err)
+	}
+	if err := r.reminder.Delete(ctx, conversationID, itemID); err != nil {
 		return xerrors.Errorf("failed to delete a reminder item: %w", err)
 	}
+
+	now := time.Now()
+	items := model.ReminderItems{item}.FilterNextSchedule(now, syncInterval)
+	for _, item := range items {
+		if err := r.scheduler.Delete(ctx, item.ConversationID, item, now); err != nil {
+			return xerrors.Errorf("failed to create a schedule: %w", err)
+		}
+	}
+
 	return nil
 }
 

@@ -15,6 +15,8 @@ type ScheduleHandler interface {
 
 type ScheduleSynchronizer interface {
 	Sync(context.Context, model.ConversationID, model.ReminderItems, time.Time) error
+	Create(context.Context, model.ConversationID, *model.ReminderItem, time.Time) error
+	Delete(context.Context, model.ConversationID, *model.ReminderItem, time.Time) error
 }
 
 type RemindHandler interface {
