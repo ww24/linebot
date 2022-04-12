@@ -7,6 +7,7 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/code"
 )
 
 type Conversation interface {
@@ -26,6 +27,13 @@ func NewConversation(conversation repository.Conversation) *ConversationImpl {
 
 func (s *ConversationImpl) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
 	status, err := s.conversation.GetStatus(ctx, conversationID)
+	if code.From(err) == code.NotFound {
+		status = &model.ConversationStatus{
+			ConversationID: conversationID,
+			Type:           model.ConversationStatusTypeNeutral,
+		}
+		err = s.conversation.SetStatus(ctx, status)
+	}
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get status: %w", err)
 	}

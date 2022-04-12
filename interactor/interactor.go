@@ -37,6 +37,7 @@ type EventHandler struct {
 	handlers         []repository.Handler
 	scheduleHandlers []repository.ScheduleHandler
 	remindHandlers   []repository.RemindHandler
+	conversation     service.Conversation
 	reminder         service.Reminder
 	conf             repository.Config
 	bot              service.Bot
@@ -47,6 +48,7 @@ func NewEventHandler(
 	shoppingInteractor *Shopping,
 	reminderInteractor *Reminder,
 	weatherInteractor *Weather,
+	conversation service.Conversation,
 	reminder service.Reminder,
 	message repository.MessageProviderSet,
 	bot service.Bot,
@@ -65,10 +67,11 @@ func NewEventHandler(
 		remindHandlers: []repository.RemindHandler{
 			shoppingInteractor,
 		},
-		reminder: reminder,
-		conf:     conf,
-		bot:      bot,
-		message:  message,
+		conversation: conversation,
+		reminder:     reminder,
+		conf:         conf,
+		bot:          bot,
+		message:      message,
 	}, nil
 }
 
@@ -82,6 +85,12 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 			)
 			return nil
 		}
+
+		status, err := h.conversation.GetStatus(ctx, e.ConversationID())
+		if err != nil {
+			return xerrors.Errorf("failed to get status: %w", err)
+		}
+		e.SetStatus(status.Type)
 
 		for _, handler := range h.handlers {
 			if err := handler.Handle(ctx, e); err != nil {

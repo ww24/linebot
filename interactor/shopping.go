@@ -156,12 +156,7 @@ func (s *Shopping) handlePostBack(ctx context.Context, e *model.Event) error {
 }
 
 func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
-	status, err := s.conversation.GetStatus(ctx, e.ConversationID())
-	if err != nil {
-		return xerrors.Errorf("failed to get status: %w", err)
-	}
-
-	switch status.Type {
+	switch e.Status.Type {
 	case model.ConversationStatusTypeShopping:
 		itemText := strings.Join(e.ReadTextLines(), " ")
 		// parse message text

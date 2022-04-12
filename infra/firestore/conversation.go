@@ -7,8 +7,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
+	"google.golang.org/grpc/codes"
+	gs "google.golang.org/grpc/status"
 
 	"github.com/ww24/linebot/domain/model"
+	"github.com/ww24/linebot/internal/code"
 )
 
 type Conversation struct {
@@ -200,7 +203,11 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 
 	doc, err := c.conversation(conversationID).Get(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to get conversation status: %w", err)
+		err = xerrors.Errorf("failed to get conversation status: %w", err)
+		if gs.Code(err) == codes.NotFound {
+			return nil, code.With(err, code.NotFound)
+		}
+		return nil, err
 	}
 
 	var ret ConversationStatus
