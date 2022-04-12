@@ -7,7 +7,10 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
-type Event linebot.Event
+type Event struct {
+	*linebot.Event
+	Status *ConversationStatus
+}
 
 // ConversationID returns conversation ID.
 func (e *Event) ConversationID() ConversationID {
@@ -20,6 +23,13 @@ func (e *Event) ConversationID() ConversationID {
 		return NewConversationID("LU", e.Source.UserID)
 	default:
 		return NewConversationID("LX", e.Source.UserID)
+	}
+}
+
+func (e *Event) SetStatus(st ConversationStatusType) {
+	e.Status = &ConversationStatus{
+		ConversationID: e.ConversationID(),
+		Type:           st,
 	}
 }
 

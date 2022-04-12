@@ -52,7 +52,10 @@ func (b *LINEBot) EventsFromRequest(r *http.Request) ([]*model.Event, error) {
 
 	es := make([]*model.Event, 0, len(events))
 	for _, event := range events {
-		es = append(es, (*model.Event)(event))
+		e := new(model.Event)
+		e.Event = event
+		e.SetStatus(model.ConversationStatusTypeNeutral)
+		es = append(es, e)
 	}
 
 	return es, nil
