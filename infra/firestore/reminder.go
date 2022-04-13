@@ -28,6 +28,9 @@ func (r *Reminder) reminder(conversationID model.ConversationID) *firestore.Coll
 }
 
 func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
+	ctx, span := tracer.Start(ctx, "Reminder#Add")
+	defer span.End()
+
 	entity := NewReminderItem(item)
 	entity.CreatedAt = time.Now().Unix()
 
@@ -40,6 +43,9 @@ func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
 }
 
 func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID) ([]*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#List")
+	defer span.End()
+
 	reminder := r.reminder(conversationID)
 	iter := reminder.OrderBy("created_at", firestore.Asc).Documents(ctx)
 	docs, err := iter.GetAll()
@@ -54,9 +60,7 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 			return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 		}
 
-		item.ID = doc.Ref.ID
-		item.ConversationID = conversationID
-		m, err := item.Model()
+		m, err := item.Model(conversationID, doc.Ref.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -67,6 +71,9 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 }
 
 func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) (*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#Get")
+	defer span.End()
+
 	doc, err := r.reminder(conversationID).Doc(string(itemID)).Get(ctx)
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
@@ -80,9 +87,7 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 		return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 	}
 
-	item.ID = doc.Ref.ID
-	item.ConversationID = conversationID
-	m, err := item.Model()
+	m, err := item.Model(conversationID, doc.Ref.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -91,6 +96,9 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 }
 
 func (r *Reminder) Delete(ctx context.Context, conversationID model.ConversationID, id model.ReminderItemID) error {
+	ctx, span := tracer.Start(ctx, "Reminder#Delete")
+	defer span.End()
+
 	reminder := r.reminder(conversationID)
 	if _, err := reminder.Doc(string(id)).Delete(ctx); err != nil {
 		return xerrors.Errorf("failed to delete reminder: %w", err)
@@ -100,6 +108,9 @@ func (r *Reminder) Delete(ctx context.Context, conversationID model.Conversation
 }
 
 func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#ListAll")
+	defer span.End()
+
 	// TODO: return wrapped iterator for performance
 
 	items := make([]*model.ReminderItem, 0)
@@ -125,9 +136,7 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 				return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 			}
 
-			item.ID = doc.Ref.ID
-			item.ConversationID = conversationID
-			m, err := item.Model()
+			m, err := item.Model(conversationID, doc.Ref.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -160,15 +169,15 @@ func NewReminderItem(src *model.ReminderItem) *ReminderItem {
 	}
 }
 
-func (r *ReminderItem) Model() (*model.ReminderItem, error) {
+func (r *ReminderItem) Model(conversationID model.ConversationID, id string) (*model.ReminderItem, error) {
 	sch, err := model.ParseScheduler(r.Scheduler)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to parse scheduler: %w", err)
 	}
 
 	return &model.ReminderItem{
-		ConversationID: r.ConversationID,
-		ID:             model.ReminderItemID(r.ID),
+		ConversationID: conversationID,
+		ID:             model.ReminderItemID(id),
 		Scheduler:      sch,
 		Executor:       r.Executor.Model(),
 	}, nil
