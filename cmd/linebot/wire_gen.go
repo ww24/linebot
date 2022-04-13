@@ -43,12 +43,13 @@ func register(contextContext context.Context) (*bot, error) {
 	}
 	conversation := firestore.NewConversation(client)
 	conversationImpl := service.NewConversation(conversation)
-	shoppingImpl := service.NewShopping(conversation)
+	shopping := firestore.NewShopping(conversation)
+	shoppingImpl := service.NewShopping(conversation, shopping)
 	parser, err := nl.NewParser()
 	if err != nil {
 		return nil, err
 	}
-	shopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
+	interactorShopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
 	reminder := firestore.NewReminder(conversation)
 	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
 	if err != nil {
@@ -70,7 +71,7 @@ func register(contextContext context.Context) (*bot, error) {
 	}
 	weatherImpl := service.NewWeather(weatherWeather, weatherImageStore, configConfig)
 	interactorWeather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(shopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
 	if err != nil {
 		return nil, err
 	}
