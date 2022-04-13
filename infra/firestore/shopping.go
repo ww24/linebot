@@ -63,9 +63,7 @@ func (s *Shopping) Find(ctx context.Context, conversationID model.ConversationID
 		if err := doc.DataTo(&item); err != nil {
 			return nil, xerrors.Errorf("failed to convert response as ShoppingItem: %w", err)
 		}
-		item.ID = doc.Ref.ID
-		item.ConversationID = conversationID
-		items = append(items, item.Model())
+		items = append(items, item.Model(conversationID, doc.Ref.ID))
 	}
 
 	return items, nil
@@ -139,10 +137,10 @@ func NewShoppingItem(src *model.ShoppingItem) *ShoppingItem {
 	}
 }
 
-func (c *ShoppingItem) Model() *model.ShoppingItem {
+func (c *ShoppingItem) Model(conversationID model.ConversationID, id string) *model.ShoppingItem {
 	return &model.ShoppingItem{
-		ConversationID: c.ConversationID,
-		ID:             c.ID,
+		ConversationID: conversationID,
+		ID:             id,
 		Name:           c.Name,
 		Quantity:       c.Quantity,
 		CreatedAt:      c.CreatedAt,

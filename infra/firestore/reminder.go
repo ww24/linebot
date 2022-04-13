@@ -60,9 +60,7 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 			return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 		}
 
-		item.ID = doc.Ref.ID
-		item.ConversationID = conversationID
-		m, err := item.Model()
+		m, err := item.Model(conversationID, doc.Ref.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -89,9 +87,7 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 		return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 	}
 
-	item.ID = doc.Ref.ID
-	item.ConversationID = conversationID
-	m, err := item.Model()
+	m, err := item.Model(conversationID, doc.Ref.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -140,9 +136,7 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 				return nil, xerrors.Errorf("failed to convert data to item: %w", err)
 			}
 
-			item.ID = doc.Ref.ID
-			item.ConversationID = conversationID
-			m, err := item.Model()
+			m, err := item.Model(conversationID, doc.Ref.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -175,15 +169,15 @@ func NewReminderItem(src *model.ReminderItem) *ReminderItem {
 	}
 }
 
-func (r *ReminderItem) Model() (*model.ReminderItem, error) {
+func (r *ReminderItem) Model(conversationID model.ConversationID, id string) (*model.ReminderItem, error) {
 	sch, err := model.ParseScheduler(r.Scheduler)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to parse scheduler: %w", err)
 	}
 
 	return &model.ReminderItem{
-		ConversationID: r.ConversationID,
-		ID:             model.ReminderItemID(r.ID),
+		ConversationID: conversationID,
+		ID:             model.ReminderItemID(id),
 		Scheduler:      sch,
 		Executor:       r.Executor.Model(),
 	}, nil

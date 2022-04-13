@@ -69,8 +69,7 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 	if err := doc.DataTo(&ret); err != nil {
 		return nil, xerrors.Errorf("failed to convert response as ConversationStatus: %w", err)
 	}
-	ret.ConversationID = conversationID
-	return ret.Model(), nil
+	return ret.Model(conversationID), nil
 }
 
 type ConversationStatus struct {
@@ -78,9 +77,9 @@ type ConversationStatus struct {
 	Status         int                  `firestore:"status"`
 }
 
-func (c *ConversationStatus) Model() *model.ConversationStatus {
+func (c *ConversationStatus) Model(conversationID model.ConversationID) *model.ConversationStatus {
 	return &model.ConversationStatus{
-		ConversationID: c.ConversationID,
+		ConversationID: conversationID,
 		Type:           model.ConversationStatusType(c.Status),
 	}
 }
