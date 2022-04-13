@@ -5,7 +5,18 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/xid"
 )
+
+func NewReminderItem(conversationID ConversationID, scheduler Scheduler, executor *Executor) *ReminderItem {
+	return &ReminderItem{
+		ID:             ReminderItemID(xid.New().String()),
+		ConversationID: conversationID,
+		Scheduler:      scheduler,
+		Executor:       executor,
+	}
+}
 
 type ReminderItemID string
 
