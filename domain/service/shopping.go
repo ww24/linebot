@@ -19,11 +19,13 @@ type Shopping interface {
 
 type ShoppingImpl struct {
 	conversation repository.Conversation
+	shopping     repository.Shopping
 }
 
-func NewShopping(conversation repository.Conversation) *ShoppingImpl {
+func NewShopping(conversation repository.Conversation, shopping repository.Shopping) *ShoppingImpl {
 	return &ShoppingImpl{
 		conversation: conversation,
+		shopping:     shopping,
 	}
 }
 
@@ -32,7 +34,7 @@ func (s *ShoppingImpl) List(ctx context.Context, conversationID model.Conversati
 		return nil, err
 	}
 
-	items, err := s.conversation.FindShoppingItem(ctx, conversationID)
+	items, err := s.shopping.Find(ctx, conversationID)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to find shopping items: %w", err)
 	}
@@ -44,14 +46,14 @@ func (s *ShoppingImpl) AddItem(ctx context.Context, conversationID model.Convers
 	if err := s.SetStatus(ctx, conversationID); err != nil {
 		return err
 	}
-	if err := s.conversation.AddShoppingItem(ctx, items...); err != nil {
+	if err := s.shopping.Add(ctx, items...); err != nil {
 		return xerrors.Errorf("failed to add shopping item: %w", err)
 	}
 	return nil
 }
 
 func (s *ShoppingImpl) DeleteAllItem(ctx context.Context, conversationID model.ConversationID) error {
-	if err := s.conversation.DeleteAllShoppingItem(ctx, conversationID); err != nil {
+	if err := s.shopping.DeleteAll(ctx, conversationID); err != nil {
 		return xerrors.Errorf("failed to delete all shopping items: %w", err)
 	}
 	if err := s.SetStatus(ctx, conversationID); err != nil {
@@ -61,7 +63,7 @@ func (s *ShoppingImpl) DeleteAllItem(ctx context.Context, conversationID model.C
 }
 
 func (s *ShoppingImpl) DeleteItems(ctx context.Context, conversationID model.ConversationID, ids []string) error {
-	if err := s.conversation.DeleteShoppingItems(ctx, conversationID, ids); err != nil {
+	if err := s.shopping.BatchDelete(ctx, conversationID, ids); err != nil {
 		return xerrors.Errorf("failed to delete shopping item: %w", err)
 	}
 	return nil
