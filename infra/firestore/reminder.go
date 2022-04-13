@@ -28,6 +28,9 @@ func (r *Reminder) reminder(conversationID model.ConversationID) *firestore.Coll
 }
 
 func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
+	ctx, span := tracer.Start(ctx, "Reminder#Add")
+	defer span.End()
+
 	entity := NewReminderItem(item)
 	entity.CreatedAt = time.Now().Unix()
 
@@ -40,6 +43,9 @@ func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
 }
 
 func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID) ([]*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#List")
+	defer span.End()
+
 	reminder := r.reminder(conversationID)
 	iter := reminder.OrderBy("created_at", firestore.Asc).Documents(ctx)
 	docs, err := iter.GetAll()
@@ -67,6 +73,9 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 }
 
 func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) (*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#Get")
+	defer span.End()
+
 	doc, err := r.reminder(conversationID).Doc(string(itemID)).Get(ctx)
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
@@ -91,6 +100,9 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 }
 
 func (r *Reminder) Delete(ctx context.Context, conversationID model.ConversationID, id model.ReminderItemID) error {
+	ctx, span := tracer.Start(ctx, "Reminder#Delete")
+	defer span.End()
+
 	reminder := r.reminder(conversationID)
 	if _, err := reminder.Doc(string(id)).Delete(ctx); err != nil {
 		return xerrors.Errorf("failed to delete reminder: %w", err)
@@ -100,6 +112,9 @@ func (r *Reminder) Delete(ctx context.Context, conversationID model.Conversation
 }
 
 func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
+	ctx, span := tracer.Start(ctx, "Reminder#ListAll")
+	defer span.End()
+
 	// TODO: return wrapped iterator for performance
 
 	items := make([]*model.ReminderItem, 0)
