@@ -21,6 +21,8 @@ var Set = wire.NewSet(
 	New,
 	NewConversation,
 	wire.Bind(new(repository.Conversation), new(*Conversation)),
+	NewShopping,
+	wire.Bind(new(repository.Shopping), new(*Shopping)),
 	NewReminder,
 	wire.Bind(new(repository.Reminder), new(*Reminder)),
 )
