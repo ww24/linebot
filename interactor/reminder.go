@@ -132,16 +132,15 @@ func (r *Reminder) handlePostBack(ctx context.Context, e *model.Event) error {
 		if err := r.bot.ReplyMessage(ctx, e, r.message.Text(text)); err != nil {
 			return xerrors.Errorf("failed to reply text message: %w", err)
 		}
-		item := &model.ReminderItem{
-			ID:             "", // auto generate in repository
-			ConversationID: conversationID,
-			Scheduler: &model.DailyScheduler{
+		item := model.NewReminderItem(
+			conversationID,
+			&model.DailyScheduler{
 				Time: t,
 			},
-			Executor: &model.Executor{
+			&model.Executor{
 				Type: model.ExecutorTypeShoppingList,
 			},
-		}
+		)
 		if err := r.reminder.Add(ctx, item); err != nil {
 			return xerrors.Errorf("failed to add reminder item: %w", err)
 		}
