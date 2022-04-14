@@ -109,9 +109,10 @@ func (s *DailyScheduler) UIText() string {
 }
 
 func (s *DailyScheduler) Next(t time.Time) (time.Time, error) {
-	year, month, day := t.Date()
+	loc := s.Time.Location()
+	year, month, day := t.In(loc).Date()
 	hour, min, sec := s.Time.Clock()
-	target := time.Date(year, month, day, hour, min, sec, 0, s.Time.Location())
+	target := time.Date(year, month, day, hour, min, sec, 0, loc)
 	if t.Before(target) {
 		return target, nil
 	}
