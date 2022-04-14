@@ -46,6 +46,7 @@ func TestOneshotScheduler_Next(t *testing.T) {
 func TestDailyScheduler_Next(t *testing.T) {
 	t.Parallel()
 
+	testLoc := time.FixedZone("Asia/Tokyo", 9*60*60)
 	tests := []struct {
 		scheduler *DailyScheduler
 		now       time.Time
@@ -64,6 +65,13 @@ func TestDailyScheduler_Next(t *testing.T) {
 			},
 			now:  time.Date(2021, 4, 1, 18, 15, 30, 0, time.UTC),
 			want: time.Date(2021, 4, 2, 18, 15, 30, 0, time.UTC),
+		},
+		{
+			scheduler: &DailyScheduler{
+				Time: time.Date(2000, 1, 1, 3, 15, 30, 0, testLoc),
+			},
+			now:  time.Date(2021, 4, 1, 4, 0, 0, 0, testLoc).In(time.UTC),
+			want: time.Date(2021, 4, 2, 3, 15, 30, 0, testLoc),
 		},
 	}
 	for _, tt := range tests {
