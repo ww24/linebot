@@ -135,6 +135,20 @@ func (mr *MockConfigMockRecorder) ImageBucket() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImageBucket", reflect.TypeOf((*MockConfig)(nil).ImageBucket))
 }
 
+// InvokerServiceAccountID mocks base method.
+func (m *MockConfig) InvokerServiceAccountID() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InvokerServiceAccountID")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// InvokerServiceAccountID indicates an expected call of InvokerServiceAccountID.
+func (mr *MockConfigMockRecorder) InvokerServiceAccountID() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InvokerServiceAccountID", reflect.TypeOf((*MockConfig)(nil).InvokerServiceAccountID))
+}
+
 // LINEChannelSecret mocks base method.
 func (m *MockConfig) LINEChannelSecret() string {
 	m.ctrl.T.Helper()
