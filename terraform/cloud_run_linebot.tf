@@ -84,6 +84,11 @@ resource "google_cloud_run_service" "linebot" {
           name  = "IMAGE_BUCKET"
           value = google_storage_bucket.image.name
         }
+
+        env {
+          name  = "INVOKER_SERVICE_ACCOUNT_ID"
+          value = google_service_account.invoker.unique_id
+        }
       }
     }
 
