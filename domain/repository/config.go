@@ -22,6 +22,7 @@ type Config interface {
 	BrowserTimeout() time.Duration
 	ImageBucket() string
 	DefaultLocation() *time.Location
+	InvokerServiceAccountID() string
 }
 
 type ConversationIDs interface {

@@ -23,11 +23,13 @@ import (
 var Set = wire.NewSet(
 	NewHandler,
 	wire.Bind(new(http.Handler), new(*Handler)),
+	NewAuthorizer,
 )
 
 type Handler struct {
 	log          *logger.Logger
 	bot          service.Bot
+	auth         *Authorizer
 	eventHandler usecase.EventHandler
 	imageHandler usecase.ImageHandler
 	middlewares  []func(http.Handler) http.Handler
@@ -36,19 +38,21 @@ type Handler struct {
 func NewHandler(
 	log *logger.Logger,
 	bot service.Bot,
+	auth *Authorizer,
 	eventHandler usecase.EventHandler,
 	imageHandler usecase.ImageHandler,
-) *Handler {
+) (*Handler, error) {
 	return &Handler{
 		log:          log,
 		bot:          bot,
+		auth:         auth,
 		eventHandler: eventHandler,
 		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
 			XCTCOpenTelemetry(),
 			PanicHandler(log),
 		},
-	}
+	}, nil
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -114,6 +118,12 @@ func (h *Handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 
 		default:
 			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+			return
+		}
+
+		if err := h.auth.Authorize(ctx, r); err != nil {
+			cl.Info("failed to authorize", zap.Error(err))
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
