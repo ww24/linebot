@@ -135,6 +135,20 @@ func (mr *MockConfigMockRecorder) ImageBucket() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImageBucket", reflect.TypeOf((*MockConfig)(nil).ImageBucket))
 }
 
+// InvokerServiceAccountEmail mocks base method.
+func (m *MockConfig) InvokerServiceAccountEmail() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InvokerServiceAccountEmail")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// InvokerServiceAccountEmail indicates an expected call of InvokerServiceAccountEmail.
+func (mr *MockConfigMockRecorder) InvokerServiceAccountEmail() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InvokerServiceAccountEmail", reflect.TypeOf((*MockConfig)(nil).InvokerServiceAccountEmail))
+}
+
 // InvokerServiceAccountID mocks base method.
 func (m *MockConfig) InvokerServiceAccountID() string {
 	m.ctrl.T.Helper()

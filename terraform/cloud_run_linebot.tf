@@ -89,6 +89,11 @@ resource "google_cloud_run_service" "linebot" {
           name  = "INVOKER_SERVICE_ACCOUNT_ID"
           value = google_service_account.invoker.unique_id
         }
+
+        env {
+          name  = "INVOKER_SERVICE_ACCOUNT_EMAIL"
+          value = google_service_account.invoker.email
+        }
       }
     }
 

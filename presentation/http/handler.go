@@ -157,6 +157,12 @@ func (h *Handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 			return
 		}
 
+		if err := h.auth.Authorize(ctx, r); err != nil {
+			cl.Info("failed to authorize", zap.Error(err))
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
+
 		if !strings.HasPrefix(r.Header.Get("content-type"), "application/json") {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return

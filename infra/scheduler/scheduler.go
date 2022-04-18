@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
@@ -33,11 +34,13 @@ const (
 )
 
 type Scheduler struct {
-	cli       *cloudtasks.Client
-	projectID string
-	location  string
-	queue     string
-	endpoint  *url.URL
+	cli                        *cloudtasks.Client
+	projectID                  string
+	location                   string
+	queue                      string
+	endpoint                   *url.URL
+	invokerServiceAccountEmail string
+	audience                   string
 }
 
 func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
@@ -66,11 +69,13 @@ func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
 	}
 
 	return &Scheduler{
-		cli:       cli,
-		projectID: projectID,
-		location:  conf.CloudTasksLocation(),
-		queue:     conf.CloudTasksQueue(),
-		endpoint:  endpoint,
+		cli:                        cli,
+		projectID:                  projectID,
+		location:                   conf.CloudTasksLocation(),
+		queue:                      conf.CloudTasksQueue(),
+		endpoint:                   endpoint,
+		invokerServiceAccountEmail: conf.InvokerServiceAccountEmail(),
+		audience:                   strings.TrimSuffix(endpoint.String(), reminderEndpoint),
 	}, nil
 }
 
@@ -144,6 +149,10 @@ func (s *Scheduler) reminderItemToTask(prefix string, item *model.ReminderItem, 
 		ID:          string(item.ID),
 		ScheduledAt: next,
 		Request:     req,
-		Version:     1,
+		Authorization: &scheduler.OIDCToken{
+			ServiceAccountEmail: s.invokerServiceAccountEmail,
+			Audience:            s.audience,
+		},
+		Version: 1,
 	}, nil
 }
