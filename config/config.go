@@ -30,18 +30,19 @@ var Set = wire.NewSet(
 
 // Config implements repository.Config.
 type Config struct {
-	lineChannelSecret  string
-	lineChannelToken   string
-	conversationIDs    *ConversationIDs
-	addr               string
-	cloudTasksLocation string
-	cloudTasksQueue    string
-	serviceEndpoint    *url.URL
-	weatherAPI         string
-	weatherAPITimeout  time.Duration
-	browserTimeout     time.Duration
-	imageBucket        string
-	defaultTimezone    string
+	lineChannelSecret       string
+	lineChannelToken        string
+	conversationIDs         *ConversationIDs
+	addr                    string
+	cloudTasksLocation      string
+	cloudTasksQueue         string
+	serviceEndpoint         *url.URL
+	weatherAPI              string
+	weatherAPITimeout       time.Duration
+	browserTimeout          time.Duration
+	imageBucket             string
+	defaultTimezone         string
+	invokerServiceAccountID string
 }
 
 func NewConfig() (*Config, error) {
@@ -88,18 +89,19 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
-		lineChannelSecret:  os.Getenv("LINE_CHANNEL_SECRET"),
-		lineChannelToken:   os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
-		conversationIDs:    conversationIDs,
-		addr:               addr,
-		cloudTasksLocation: os.Getenv("CLOUD_TASKS_LOCATION"),
-		cloudTasksQueue:    os.Getenv("CLOUD_TASKS_QUEUE"),
-		serviceEndpoint:    serviceEndpoint,
-		weatherAPI:         os.Getenv("WEATHER_API"),
-		weatherAPITimeout:  weatherAPITimeout,
-		browserTimeout:     browserTimeout,
-		imageBucket:        os.Getenv("IMAGE_BUCKET"),
-		defaultTimezone:    os.Getenv("DEFAULT_TIMEZONE"),
+		lineChannelSecret:       os.Getenv("LINE_CHANNEL_SECRET"),
+		lineChannelToken:        os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
+		conversationIDs:         conversationIDs,
+		addr:                    addr,
+		cloudTasksLocation:      os.Getenv("CLOUD_TASKS_LOCATION"),
+		cloudTasksQueue:         os.Getenv("CLOUD_TASKS_QUEUE"),
+		serviceEndpoint:         serviceEndpoint,
+		weatherAPI:              os.Getenv("WEATHER_API"),
+		weatherAPITimeout:       weatherAPITimeout,
+		browserTimeout:          browserTimeout,
+		imageBucket:             os.Getenv("IMAGE_BUCKET"),
+		defaultTimezone:         os.Getenv("DEFAULT_TIMEZONE"),
+		invokerServiceAccountID: os.Getenv("INVOKER_SERVICE_ACCOUNT_ID"),
 	}, nil
 }
 
@@ -183,4 +185,8 @@ func (c *Config) DefaultLocation() *time.Location {
 		return defaultLocation
 	}
 	return loc
+}
+
+func (c *Config) InvokerServiceAccountID() string {
+	return c.invokerServiceAccountID
 }

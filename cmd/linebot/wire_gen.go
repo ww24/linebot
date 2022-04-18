@@ -37,6 +37,10 @@ func register(contextContext context.Context) (*bot, error) {
 	}
 	messageProviderSet := linebot.NewMessageProviderSet()
 	botImpl := service.NewBot(lineBot, messageProviderSet)
+	authorizer, err := http.NewAuthorizer(contextContext, configConfig)
+	if err != nil {
+		return nil, err
+	}
 	client, err := firestore.New(contextContext)
 	if err != nil {
 		return nil, err
@@ -80,7 +84,10 @@ func register(contextContext context.Context) (*bot, error) {
 		return nil, err
 	}
 	image := interactor.NewImage(imageStore)
-	handler := http.NewHandler(logger, botImpl, eventHandler, image)
+	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image)
+	if err != nil {
+		return nil, err
+	}
 	mainBot := newBot(configConfig, handler)
 	return mainBot, nil
 }
