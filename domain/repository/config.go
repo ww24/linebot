@@ -23,6 +23,7 @@ type Config interface {
 	ImageBucket() string
 	DefaultLocation() *time.Location
 	InvokerServiceAccountID() string
+	InvokerServiceAccountEmail() string
 }
 
 type ConversationIDs interface {
