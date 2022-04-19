@@ -3,6 +3,7 @@ package config
 import (
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -44,6 +45,7 @@ type Config struct {
 	defaultTimezone            string
 	invokerServiceAccountID    string
 	invokerServiceAccountEmail string
+	otelSamplingRate           float64
 }
 
 func NewConfig() (*Config, error) {
@@ -89,6 +91,15 @@ func NewConfig() (*Config, error) {
 		}
 	}
 
+	otelSamplingRate := 0.1
+	if r := os.Getenv("OTEL_SAMPLING_RATE"); r != "" {
+		if rate, err := strconv.ParseFloat(r, 64); err != nil {
+			return nil, xerrors.Errorf("failed to parse OTEL_SAMPLING_RATE: %w", err)
+		} else {
+			otelSamplingRate = rate
+		}
+	}
+
 	return &Config{
 		lineChannelSecret:          os.Getenv("LINE_CHANNEL_SECRET"),
 		lineChannelToken:           os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
@@ -104,6 +115,7 @@ func NewConfig() (*Config, error) {
 		defaultTimezone:            os.Getenv("DEFAULT_TIMEZONE"),
 		invokerServiceAccountID:    os.Getenv("INVOKER_SERVICE_ACCOUNT_ID"),
 		invokerServiceAccountEmail: os.Getenv("INVOKER_SERVICE_ACCOUNT_EMAIL"),
+		otelSamplingRate:           otelSamplingRate,
 	}, nil
 }
 
@@ -195,4 +207,8 @@ func (c *Config) InvokerServiceAccountID() string {
 
 func (c *Config) InvokerServiceAccountEmail() string {
 	return c.invokerServiceAccountEmail
+}
+
+func (c *Config) OTELSamplingRate() float64 {
+	return c.otelSamplingRate
 }

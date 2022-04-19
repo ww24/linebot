@@ -24,6 +24,7 @@ type Config interface {
 	DefaultLocation() *time.Location
 	InvokerServiceAccountID() string
 	InvokerServiceAccountEmail() string
+	OTELSamplingRate() float64
 }
 
 type ConversationIDs interface {
