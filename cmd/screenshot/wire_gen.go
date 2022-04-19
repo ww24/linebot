@@ -11,13 +11,12 @@ import (
 	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/infra/browser"
 	"github.com/ww24/linebot/interactor"
-	http2 "github.com/ww24/linebot/presentation/http"
-	"net/http"
+	"github.com/ww24/linebot/presentation/http"
 )
 
 // Injectors from wire.go:
 
-func register(ctx context.Context) (*http.Server, error) {
+func register(ctx context.Context) (*server, error) {
 	configConfig, err := config.NewConfig()
 	if err != nil {
 		return nil, err
@@ -28,7 +27,7 @@ func register(ctx context.Context) (*http.Server, error) {
 	}
 	browserBrowser := browser.NewBrowser(configConfig)
 	screenshot := interactor.NewScreenshot(browserBrowser)
-	screenshotHandler := http2.NewScreenshotHandler(logger, screenshot)
-	server := newServer(configConfig, screenshotHandler)
-	return server, nil
+	screenshotHandler := http.NewScreenshotHandler(logger, screenshot)
+	mainServer := newServer(configConfig, screenshotHandler)
+	return mainServer, nil
 }

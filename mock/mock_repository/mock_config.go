@@ -191,6 +191,20 @@ func (mr *MockConfigMockRecorder) LINEChannelToken() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LINEChannelToken", reflect.TypeOf((*MockConfig)(nil).LINEChannelToken))
 }
 
+// OTELSamplingRate mocks base method.
+func (m *MockConfig) OTELSamplingRate() float64 {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "OTELSamplingRate")
+	ret0, _ := ret[0].(float64)
+	return ret0
+}
+
+// OTELSamplingRate indicates an expected call of OTELSamplingRate.
+func (mr *MockConfigMockRecorder) OTELSamplingRate() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "OTELSamplingRate", reflect.TypeOf((*MockConfig)(nil).OTELSamplingRate))
+}
+
 // ServiceEndpoint mocks base method.
 func (m *MockConfig) ServiceEndpoint(path string) (*url.URL, error) {
 	m.ctrl.T.Helper()

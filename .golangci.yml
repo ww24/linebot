@@ -19,6 +19,9 @@ issues:
         - gomnd
       source: "time."
     - linters:
+        - gomnd
+      source: "strconv.Parse"
+    - linters:
         - wrapcheck
       source: "code.With\\("
 

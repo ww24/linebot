@@ -39,15 +39,15 @@ func main() {
 	}
 	dl := logger.DefaultLogger(ctx)
 
+	// set GOMAXPROCS
+	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
+		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
+	}
+
 	bot, err := register(ctx)
 	if err != nil {
 		dl.Error("register", zap.Error(err))
 		panic(err)
-	}
-
-	// set GOMAXPROCS
-	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
-		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	// initialize cloud profiler and tracing if build is production
@@ -63,7 +63,7 @@ func main() {
 			dl.Error("failed to start cloud profiler", zap.Error(err))
 		}
 
-		tp, err := tracer.New(serviceName, version)
+		tp, err := tracer.New(serviceName, version, bot.config.OTELSamplingRate())
 		if err != nil {
 			dl.Error("failed to initialize tracer", zap.Error(err))
 		}

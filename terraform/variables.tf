@@ -90,3 +90,9 @@ variable "browser_timeout" {
   default     = "60s"
   description = "Browser timeout"
 }
+
+variable "linebot_otel_sampling_rate" {
+  type        = string
+  default     = "1"
+  description = "OpenTelemetry sampling rate"
+}

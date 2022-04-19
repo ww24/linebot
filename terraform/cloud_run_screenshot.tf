@@ -33,6 +33,11 @@ resource "google_cloud_run_service" "screenshot" {
           name  = "BROWSER_TIMEOUT"
           value = var.browser_timeout
         }
+
+        env {
+          name  = "OTEL_SAMPLING_RATE"
+          value = "1"
+        }
       }
     }
 
