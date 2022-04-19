@@ -5,7 +5,6 @@ package main
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/google/wire"
 
@@ -17,7 +16,7 @@ import (
 
 func register(
 	ctx context.Context,
-) (*http.Server, error) {
+) (*server, error) {
 	wire.Build(
 		newLogger,
 		config.Set,

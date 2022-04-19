@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,9 +11,7 @@ import (
 	"cloud.google.com/go/profiler"
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
-	"golang.org/x/xerrors"
 
-	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 )
@@ -45,6 +42,12 @@ func main() {
 		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
+	srv, err := register(ctx)
+	if err != nil {
+		dl.Error("register", zap.Error(err))
+		panic(err)
+	}
+
 	// initialize cloud profiler and tracing if build is production
 	if version != "" {
 		profilerConfig := profiler.Config{
@@ -58,7 +61,7 @@ func main() {
 			dl.Error("failed to start cloud profiler", zap.Error(err))
 		}
 
-		tp, err := tracer.New(serviceName, version)
+		tp, err := tracer.New(serviceName, version, srv.config.OTELSamplingRate())
 		if err != nil {
 			dl.Error("failed to initialize tracer", zap.Error(err))
 		}
@@ -71,14 +74,9 @@ func main() {
 		}()
 	}
 
-	srv, err := register(ctx)
-	if err != nil {
-		dl.Error("register", zap.Error(err))
-		panic(err)
-	}
 	dl.Info("start server")
 	//nolint:errcheck
-	go srv.ListenAndServe()
+	go srv.srv.ListenAndServe()
 
 	// wait signal
 	<-ctx.Done()
@@ -86,23 +84,7 @@ func main() {
 
 	c, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
-	if err := srv.Shutdown(c); err != nil {
+	if err := srv.srv.Shutdown(c); err != nil {
 		dl.Error("failed to shutdown server", zap.Error(err))
-	}
-}
-
-func newLogger(ctx context.Context) (*logger.Logger, error) {
-	l, err := logger.New(ctx, serviceName, version)
-	if err != nil {
-		return nil, xerrors.Errorf("failed to initialize logger: %w", err)
-	}
-
-	return l, nil
-}
-
-func newServer(conf repository.Config, handler http.Handler) *http.Server {
-	return &http.Server{
-		Handler: handler,
-		Addr:    conf.Addr(),
 	}
 }
