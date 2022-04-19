@@ -94,6 +94,11 @@ resource "google_cloud_run_service" "linebot" {
           name  = "INVOKER_SERVICE_ACCOUNT_EMAIL"
           value = google_service_account.invoker.email
         }
+
+        env {
+          name  = "OTEL_SAMPLING_RATE"
+          value = var.linebot_otel_sampling_rate
+        }
       }
     }
 
