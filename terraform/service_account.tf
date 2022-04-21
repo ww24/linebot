@@ -62,6 +62,12 @@ resource "google_service_account" "invoker" {
   display_name = "${var.name}-invoker Service Account"
 }
 
+resource "google_project_iam_member" "invoker-service-account-user" {
+  project = var.project
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.invoker.email}"
+}
+
 resource "google_service_account" "screenshot" {
   account_id   = var.name_screenshot
   display_name = "screenshot Service Account"
