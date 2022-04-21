@@ -39,6 +39,12 @@ resource "google_project_iam_member" "cloudtasks-deleter" {
   member  = "serviceAccount:${google_service_account.linebot.email}"
 }
 
+resource "google_project_iam_member" "invoker-service-account-user" {
+  project = var.project
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.linebot.email}"
+}
+
 resource "google_storage_bucket_iam_member" "image" {
   bucket = google_storage_bucket.image.name
   role   = "roles/storage.objectAdmin"
@@ -60,12 +66,6 @@ resource "google_secret_manager_secret_iam_member" "line-channel-access-token" {
 resource "google_service_account" "invoker" {
   account_id   = "${var.name}-invoker"
   display_name = "${var.name}-invoker Service Account"
-}
-
-resource "google_project_iam_member" "invoker-service-account-user" {
-  project = var.project
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.invoker.email}"
 }
 
 resource "google_service_account" "screenshot" {
