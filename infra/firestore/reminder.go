@@ -35,7 +35,7 @@ func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
 	entity.CreatedAt = time.Now().Unix()
 
 	reminder := r.reminder(item.ConversationID)
-	if _, err := reminder.NewDoc().Set(ctx, entity); err != nil {
+	if _, err := reminder.Doc(entity.ID).Set(ctx, entity); err != nil {
 		return xerrors.Errorf("failed to add reminder: %w", err)
 	}
 
