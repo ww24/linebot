@@ -19,7 +19,7 @@ resource "google_cloud_run_service" "linebot" {
     spec {
       service_account_name = google_service_account.linebot.email
 
-      timeout_seconds = 60
+      timeout_seconds = 120
       containers {
         image = local.image
 
