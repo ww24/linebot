@@ -27,7 +27,7 @@ resource "google_cloud_run_service" "screenshot" {
 
         resources {
           limits = {
-            cpu    = "500m"
+            cpu    = "900m"
             memory = "500Mi"
           }
         }
