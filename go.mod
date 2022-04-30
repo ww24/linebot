@@ -17,7 +17,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.4
 	github.com/ikawaha/kagome/v2 v2.7.0
-	github.com/line/line-bot-sdk-go/v7 v7.14.0
+	github.com/line/line-bot-sdk-go/v7 v7.15.0
 	github.com/rs/xid v1.4.0
 	github.com/stretchr/testify v1.7.1
 	github.com/tenntenn/testtime v0.2.2
