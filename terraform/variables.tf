@@ -81,13 +81,13 @@ variable "weather_api" {
 
 variable "weather_api_timeout" {
   type        = string
-  default     = "60s"
+  default     = "120s"
   description = "Weather API timeout"
 }
 
 variable "browser_timeout" {
   type        = string
-  default     = "60s"
+  default     = "90s"
   description = "Browser timeout"
 }
 

@@ -18,7 +18,7 @@ resource "google_cloud_run_service" "screenshot" {
     spec {
       service_account_name = google_service_account.screenshot.email
 
-      timeout_seconds = 60
+      timeout_seconds = 120
       # set 1 because https://cloud.google.com/run/docs/configuring/cpu#setting
       container_concurrency = 1
 
