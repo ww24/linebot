@@ -19,12 +19,15 @@ resource "google_cloud_run_service" "screenshot" {
       service_account_name = google_service_account.screenshot.email
 
       timeout_seconds = 60
+      # set 1 because https://cloud.google.com/run/docs/configuring/cpu#setting
+      container_concurrency = 1
+
       containers {
         image = local.ss_image
 
         resources {
           limits = {
-            cpu    = "1000m"
+            cpu    = "500m"
             memory = "500Mi"
           }
         }
@@ -50,6 +53,13 @@ resource "google_cloud_run_service" "screenshot" {
       labels = {
         service = var.name
       }
+    }
+  }
+
+  metadata {
+    annotations = {
+      "run.googleapis.com/ingress"      = "all"
+      "run.googleapis.com/launch-stage" = "BETA"
     }
   }
 
