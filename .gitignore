@@ -56,3 +56,5 @@ terraform.rc
 .firebaserc
 *-debug.log
 bin/
+
+node_modules/
