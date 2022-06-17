@@ -51,19 +51,6 @@ jobs:
           push: false
           outputs: type=docker
           tags: "${{ matrix.target }}:${{ github.sha }}"
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "${{ matrix.target }}:${{ github.sha }}"
-          severity: CRITICAL,HIGH
-          ignore-unfixed: true
-          format: sarif
-          output: trivy-results.sarif
-      - name: Upload Trivy scan results to GitHub Security tab
-        if: always()
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: trivy-results.sarif
 
   docker_push:
     if: inputs.push
@@ -120,6 +107,19 @@ jobs:
             VERSION=${{ steps.params.outputs.version }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ matrix.target }}:${{ inputs.image_tag }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/${{ matrix.target }}:${{ inputs.image_tag }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-results.sarif
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-results.sarif
 
   docker_push_gar:
     if: inputs.image_tag != 'latest'
