@@ -25,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write
     strategy:
       matrix:
         target: [linebot, screenshot]
@@ -60,6 +59,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
     strategy:
       matrix:
         target: [linebot, screenshot]
