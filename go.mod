@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go/profiler v0.2.0
 	cloud.google.com/go/storage v1.22.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.5.1
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.2
 	github.com/blendle/zapdriver v1.3.1
 	github.com/chromedp/chromedp v0.8.1
 	github.com/go-oss/scheduler v0.1.0
@@ -40,7 +40,7 @@ require (
 	cloud.google.com/go/compute v1.6.1 // indirect
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/trace v1.2.0 // indirect
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.29.1 // indirect
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.32.2 // indirect
 	github.com/chromedp/cdproto v0.0.0-20220428002153-285dfb42699c // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -66,7 +66,7 @@ require (
 	go.opencensus.io v0.23.0 // indirect
 	go.opentelemetry.io/otel/metric v0.30.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20220607020251-c690dde0001d // indirect
 	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
