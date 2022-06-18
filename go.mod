@@ -10,7 +10,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.2
 	github.com/blendle/zapdriver v1.3.1
-	github.com/chromedp/chromedp v0.8.1
+	github.com/chromedp/chromedp v0.8.2
 	github.com/go-oss/scheduler v0.1.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-jsonnet v0.18.0
@@ -41,7 +41,7 @@ require (
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/trace v1.2.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.32.2 // indirect
-	github.com/chromedp/cdproto v0.0.0-20220428002153-285dfb42699c // indirect
+	github.com/chromedp/cdproto v0.0.0-20220515234810-83d799542a04 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/httpsnoop v1.0.2 // indirect
