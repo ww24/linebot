@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/cloudtasks v1.3.0
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/profiler v0.2.0
-	cloud.google.com/go/storage v1.22.0
+	cloud.google.com/go/storage v1.22.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.5.1
 	github.com/blendle/zapdriver v1.3.1
@@ -55,6 +55,7 @@ require (
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/pprof v0.0.0-20220113144219-d25a53d42d00 // indirect
 	github.com/google/subcommands v1.0.1 // indirect
+	github.com/google/uuid v1.1.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.3.0 // indirect
 	github.com/googleapis/go-type-adapters v1.0.0 // indirect
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
@@ -70,7 +71,7 @@ require (
 	golang.org/x/sys v0.0.0-20220502124256-b6088ccd6cba // indirect
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220429170224-98d788798c3e // indirect
+	google.golang.org/genproto v0.0.0-20220518221133-4f43b3371335 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
