@@ -32,7 +32,7 @@ require (
 	golang.org/x/text v0.3.7
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f
 	google.golang.org/api v0.78.0
-	google.golang.org/grpc v1.46.0
+	google.golang.org/grpc v1.47.0
 )
 
 require (
