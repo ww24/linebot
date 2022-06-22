@@ -5,7 +5,7 @@ go 1.18
 require (
 	cloud.google.com/go/cloudtasks v1.3.0
 	cloud.google.com/go/firestore v1.6.1
-	cloud.google.com/go/profiler v0.2.0
+	cloud.google.com/go/profiler v0.3.0
 	cloud.google.com/go/storage v1.22.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.8.2
@@ -53,7 +53,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
-	github.com/google/pprof v0.0.0-20220113144219-d25a53d42d00 // indirect
+	github.com/google/pprof v0.0.0-20220412212628-83db2b799d1f // indirect
 	github.com/google/subcommands v1.0.1 // indirect
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
