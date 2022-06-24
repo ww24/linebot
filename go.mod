@@ -19,7 +19,7 @@ require (
 	github.com/ikawaha/kagome/v2 v2.8.0
 	github.com/line/line-bot-sdk-go/v7 v7.15.0
 	github.com/rs/xid v1.4.0
-	github.com/stretchr/testify v1.7.4
+	github.com/stretchr/testify v1.7.5
 	github.com/tenntenn/testtime v0.2.2
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.32.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.32.0
