@@ -19,8 +19,9 @@ import (
 )
 
 const (
-	serviceName     = "linebot"
-	shutdownTimeout = 10 * time.Second
+	serviceName       = "linebot"
+	shutdownTimeout   = 10 * time.Second
+	readHeaderTimeout = 10 * time.Second
 )
 
 var (
@@ -77,8 +78,9 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Handler: bot.handler,
-		Addr:    bot.config.Addr(),
+		Handler:           bot.handler,
+		Addr:              bot.config.Addr(),
+		ReadHeaderTimeout: readHeaderTimeout,
 	}
 	dl.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
 	//nolint:errcheck
