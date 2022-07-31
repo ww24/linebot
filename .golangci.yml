@@ -8,6 +8,8 @@ issues:
         - errcheck
         - goerr113
         - wrapcheck
+        - gochecknoglobals
+        - exhaustruct
       path: _test\.go$
     - linters:
         - gochecknoglobals
@@ -91,9 +93,9 @@ linters-settings:
       - standard
       - default
       - prefix(github.com/ww24/linebot)
-  exhaustivestruct:
-    struct-patterns:
-      - "github.com/ww24/linebot/domain/*"
+  exhaustruct:
+    include:
+      - "github.com/ww24/linebot/domain"
 
 linters:
   disable-all: true
@@ -129,7 +131,7 @@ linters:
     - stylecheck
     - prealloc
     - exhaustive
-    - exhaustivestruct
+    - exhaustruct
     - dogsled
     - dupl
     - gocognit
