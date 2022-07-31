@@ -1,6 +1,6 @@
 GO = go
 BIN := $(abspath ./bin)
-FIRESTORE_EMULATOR_HOST = localhost:8833
+FIRESTORE_EMULATOR_HOST ?= localhost:8833
 GOOGLE_CLOUD_PROJECT = emulator
 GO_ENV ?= GOBIN=$(BIN)
 
@@ -34,8 +34,10 @@ lint:
 	golangci-lint run
 
 .PHONY: test
+test: FLAGS ?=
 test: $(BIN)/testtime
-	$(GO_ENV) $(GO) test -race -overlay="$(shell $(BIN)/testtime)" ./...
+	FIRESTORE_EMULATOR_HOST="$(FIRESTORE_EMULATOR_HOST)" \
+	$(GO_ENV) $(GO) test $(FLAGS) -race -overlay="$(shell $(BIN)/testtime -u)" ./...
 
 .PHONY: emulator
 emulator:
