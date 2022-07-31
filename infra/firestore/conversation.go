@@ -58,11 +58,10 @@ func (c *Conversation) GetStatus(ctx context.Context, conversationID model.Conve
 
 	doc, err := c.conversation(conversationID).Get(ctx)
 	if err != nil {
-		err = xerrors.Errorf("failed to get conversation status: %w", err)
 		if gs.Code(err) == codes.NotFound {
 			return nil, code.With(err, code.NotFound)
 		}
-		return nil, err
+		return nil, xerrors.Errorf("failed to get conversation status: %w", err)
 	}
 
 	var ret ConversationStatus
