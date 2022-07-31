@@ -3,7 +3,7 @@ module github.com/ww24/linebot
 go 1.18
 
 require (
-	cloud.google.com/go/cloudtasks v1.3.0
+	cloud.google.com/go/cloudtasks v1.4.0
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/profiler v0.3.0
 	cloud.google.com/go/storage v1.23.0
