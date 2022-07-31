@@ -16,12 +16,25 @@ const (
 	ConversationStatusTypeReminderAdd
 )
 
+func (t ConversationStatusType) valid() bool {
+	switch t {
+	case ConversationStatusTypeNeutral,
+		ConversationStatusTypeShopping,
+		ConversationStatusTypeShoppingAdd,
+		ConversationStatusTypeReminderAdd:
+		return true
+
+	default:
+		return false
+	}
+}
+
 const (
 	conversationIDSep        = "_"
 	conversationSeparateSize = 2
 )
 
-var errConversationStatusValidationFailed = errors.New("conversation status validation failed")
+var ErrConversationStatusValidationFailed = errors.New("conversation status validation failed")
 
 type ConversationID string
 
@@ -48,7 +61,10 @@ type ConversationStatus struct {
 
 func (m *ConversationStatus) Validate() error {
 	if m.ConversationID == "" {
-		return xerrors.Errorf("invalid empty conversation id: %w", errConversationStatusValidationFailed)
+		return xerrors.Errorf("invalid empty conversation id: %w", ErrConversationStatusValidationFailed)
+	}
+	if !m.Type.valid() {
+		return xerrors.Errorf("invalid conversation type: %w", ErrConversationStatusValidationFailed)
 	}
 	return nil
 }
