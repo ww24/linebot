@@ -34,15 +34,15 @@ type Client struct {
 }
 
 func New(ctx context.Context) (*Client, error) {
-	projectID, err := gcp.ProjectID(ctx)
-	if err != nil {
-		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
-	}
-
+	var projectID string
 	isEmulator := os.Getenv("FIRESTORE_EMULATOR_HOST") != ""
 	if isEmulator {
-		if projectID == "" {
-			projectID = "emulator"
+		projectID = "emulator"
+	} else {
+		var err error
+		projectID, err = gcp.ProjectID(ctx)
+		if err != nil {
+			return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 		}
 	}
 
