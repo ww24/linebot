@@ -21,7 +21,7 @@ require (
 	github.com/rs/xid v1.4.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tenntenn/testtime v0.2.2
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.33.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.34.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
 	go.opentelemetry.io/otel v1.9.0
 	go.opentelemetry.io/otel/sdk v1.8.0
