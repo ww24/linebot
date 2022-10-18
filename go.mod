@@ -21,7 +21,7 @@ require (
 	github.com/rs/xid v1.4.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tenntenn/testtime v0.2.2
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.34.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.3
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
 	go.opentelemetry.io/otel v1.11.0
 	go.opentelemetry.io/otel/sdk v1.11.0
@@ -72,7 +72,7 @@ require (
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220624142145-8cd45d7dbd1f // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	sigs.k8s.io/yaml v1.1.0 // indirect
