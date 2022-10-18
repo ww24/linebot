@@ -3,10 +3,10 @@ module github.com/ww24/linebot
 go 1.18
 
 require (
-	cloud.google.com/go/cloudtasks v1.4.0
+	cloud.google.com/go/cloudtasks v1.5.0
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/profiler v0.3.0
-	cloud.google.com/go/storage v1.24.0
+	cloud.google.com/go/storage v1.27.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.10.1
 	github.com/blendle/zapdriver v1.3.1
@@ -28,15 +28,15 @@ require (
 	go.opentelemetry.io/otel/trace v1.11.0
 	go.uber.org/automaxprocs v1.5.1
 	go.uber.org/zap v1.23.0
-	golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2
+	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 	golang.org/x/text v0.3.7
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f
-	google.golang.org/api v0.91.0
+	google.golang.org/api v0.97.0
 	google.golang.org/grpc v1.50.1
 )
 
 require (
-	cloud.google.com/go v0.102.1 // indirect
+	cloud.google.com/go v0.104.0 // indirect
 	cloud.google.com/go/compute v1.7.0 // indirect
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/trace v1.2.0 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/google/subcommands v1.0.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
-	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
+	github.com/googleapis/gax-go/v2 v2.5.1 // indirect
 	github.com/ikawaha/kagome-dict v1.0.4 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
@@ -67,11 +67,11 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/mod v0.4.2 // indirect
-	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
 	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220829175752-36a9c930ecbf // indirect
+	google.golang.org/genproto v0.0.0-20220920201722-2b89144ce006 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
