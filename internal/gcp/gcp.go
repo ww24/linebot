@@ -10,8 +10,8 @@ import (
 
 // ProjectID tries to detect the project ID from the environment.
 // It looks in the following order:
-//   1. GOOGLE_CLOUD_PROJECT envvar
-//   2. ADC creds.ProjectID
+//  1. GOOGLE_CLOUD_PROJECT envvar
+//  2. ADC creds.ProjectID
 func ProjectID(ctx context.Context) (string, error) {
 	if projectID := os.Getenv("GOOGLE_CLOUD_PROJECT"); projectID != "" {
 		return projectID, nil

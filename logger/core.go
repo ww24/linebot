@@ -21,7 +21,7 @@ func (c *core) With(fields []zap.Field) zapcore.Core {
 	return newCore(c.Core.With(fields))
 }
 
-//nolint: gocritic
+//nolint:gocritic
 func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 	if zapcore.ErrorLevel.Enabled(e.Level) {
 		field := zapdriver.ErrorReport(e.Caller.PC, e.Caller.File, e.Caller.Line, true)

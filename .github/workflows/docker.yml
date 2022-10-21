@@ -22,7 +22,7 @@ env:
 jobs:
   docker_build:
     name: Build docker image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
     strategy:
@@ -55,7 +55,7 @@ jobs:
     if: inputs.push
     needs: [docker_build]
     name: Build and push docker image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -92,8 +92,8 @@ jobs:
             version="latest"
           fi
 
-          echo "::set-output name=platforms::$platforms"
-          echo "::set-output name=version::$version"
+          echo "platforms=$platforms" | tee -a "${GITHUB_OUTPUT}"
+          echo "version=$version" | tee -a "${GITHUB_OUTPUT}"
       - name: Build and push docker image
         uses: docker/build-push-action@v3
         with:
@@ -125,7 +125,7 @@ jobs:
     if: inputs.image_tag != 'latest'
     needs: [docker_build]
     name: Build and push docker image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
