@@ -60,7 +60,7 @@ jobs:
     permissions:
       contents: read
       packages: read
-    uses: ww24/linebot/.github/workflows/test.yaml@65dd9bedd73eba3a289f51dcb2be56696ee66a89
+    uses: ww24/linebot/.github/workflows/test.yaml@master
 
   docker:
     needs: [test]
