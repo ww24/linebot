@@ -60,7 +60,9 @@ require (
 	github.com/googleapis/gax-go/v2 v2.5.1 // indirect
 	github.com/ikawaha/kagome-dict v1.0.7 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
+	github.com/kr/pretty v0.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	go.opentelemetry.io/otel/metric v0.32.3 // indirect
@@ -73,7 +75,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220920201722-2b89144ce006 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	sigs.k8s.io/yaml v1.1.0 // indirect
 )
