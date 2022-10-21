@@ -3,8 +3,8 @@ module github.com/ww24/linebot
 go 1.18
 
 require (
-	cloud.google.com/go/cloudtasks v1.5.0
-	cloud.google.com/go/firestore v1.6.1
+	cloud.google.com/go/cloudtasks v1.6.0
+	cloud.google.com/go/firestore v1.8.0
 	cloud.google.com/go/profiler v0.3.0
 	cloud.google.com/go/storage v1.27.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1
@@ -31,7 +31,7 @@ require (
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 	golang.org/x/text v0.4.0
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f
-	google.golang.org/api v0.97.0
+	google.golang.org/api v0.98.0
 	google.golang.org/grpc v1.50.1
 )
 
@@ -70,10 +70,12 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
+	golang.org/x/time v0.0.0-20220609170525-579cf78fd858 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220920201722-2b89144ce006 // indirect
+	google.golang.org/genproto v0.0.0-20221010155953-15ba04fc1c0e // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
