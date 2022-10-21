@@ -5,32 +5,18 @@ on:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 
-env:
-  GO_VERSION: "~1.18"
-
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: Test
-        run: make test
+    permissions:
+      contents: read
+      packages: read
+    uses: ww24/linebot/.github/workflows/test.yml@master
 
   image_tag:
     name: Image tag
     outputs:
       image_tag: ${{ steps.tag.outputs.image_tag }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Output image tag
         id: tag
@@ -39,7 +25,7 @@ jobs:
           if [ -z "$tag" ]; then
             exit 1
           fi
-          echo "::set-output name=image_tag::$tag"
+          echo "image_tag=$tag" | tee -a "${GITHUB_OUTPUT}"
 
   docker:
     needs: [test, image_tag]
@@ -62,7 +48,7 @@ jobs:
     defaults:
       run:
         working-directory: terraform
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2

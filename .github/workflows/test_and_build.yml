@@ -12,26 +12,11 @@ env:
   GO_VERSION: "~1.18"
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.47.2
-
   # workaround
   # create emulator image because service container does not support docker command arguments
   prepare_emulator_image:
     name: Prepare emulator image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -72,62 +57,13 @@ jobs:
 
   test:
     needs: [prepare_emulator_image]
-    name: Test
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: read
-    env:
-      FIRESTORE_EMULATOR_HOST: localhost:8833
-    services:
-      firestore:
-        image: ghcr.io/${{ github.repository_owner }}/firestore-emulator:latest
-        credentials:
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-        ports:
-          - 8833:8833
-        env:
-          HOST_PORT: 0.0.0.0:8833
-        options: >-
-          --health-cmd "curl http://localhost:8833"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: Test
-        run: make test
-
-  check_uncommitted:
-    name: Check uncommitted changes
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: Check generated files
-        run: |
-          make generate
-          if [ -n "$(git status --porcelain)" ]; then
-              echo "uncommitted changes"
-              git status
-              git --no-pager diff
-              exit 1
-          fi
+    uses: ww24/linebot/.github/workflows/test.yaml@65dd9bedd73eba3a289f51dcb2be56696ee66a89
 
   docker:
-    needs: [lint, test, check_uncommitted]
+    needs: [test]
     permissions:
       contents: read
       packages: write
