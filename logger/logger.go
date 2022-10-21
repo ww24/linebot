@@ -12,7 +12,7 @@ import (
 	"github.com/ww24/linebot/internal/gcp"
 )
 
-//nolint: gochecknoglobals
+//nolint:gochecknoglobals
 var defaultLogger = NewNop()
 
 func InitializeLogger(ctx context.Context, name, version string) error {

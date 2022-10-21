@@ -17,6 +17,8 @@ jobs:
     outputs:
       image_tag: ${{ steps.tag.outputs.image_tag }}
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     steps:
       - name: Output image tag
         id: tag
@@ -49,6 +51,8 @@ jobs:
       run:
         working-directory: terraform
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2

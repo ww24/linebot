@@ -101,7 +101,6 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
     - errcheck
     - errorlint
     - exportloopref
@@ -119,12 +118,10 @@ linters:
     - misspell
     - noctx
     - staticcheck
-    - structcheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - nolintlint
     - wrapcheck
     - tparallel
