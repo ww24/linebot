@@ -1,0 +1,84 @@
+name: test
+
+on:
+  workflow_call:
+    inputs:
+      go_version:
+        type: string
+        required: false
+        default: "~1.18"
+      golangci_lint_version:
+        type: string
+        required: false
+        default: "v1.50.0"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go_version }}
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: ${{ inputs.golangci_lint_version }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: read
+    env:
+      FIRESTORE_EMULATOR_HOST: localhost:8833
+    services:
+      firestore:
+        image: ghcr.io/${{ github.repository_owner }}/firestore-emulator:latest
+        credentials:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        ports:
+          - 8833:8833
+        env:
+          HOST_PORT: 0.0.0.0:8833
+        options: >-
+          --health-cmd "curl http://localhost:8833"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go_version }}
+      - name: Test
+        run: make test
+
+  check_uncommitted:
+    name: Check uncommitted changes
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go_version }}
+      - name: Check generated files
+        run: |
+          make generate
+          if [ -n "$(git status --porcelain)" ]; then
+              echo "uncommitted changes"
+              git status
+              git --no-pager diff
+              exit 1
+          fi
