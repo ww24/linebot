@@ -2,6 +2,7 @@ package tracer
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
@@ -41,11 +42,13 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 		semconv.ServiceVersionKey.String(c.version),
 	)
 
-	sampler := sdktrace.ParentBased(sdktrace.TraceIDRatioBased(conf.OTELSamplingRate()),
-		sdktrace.WithLocalParentSampled(sdktrace.AlwaysSample()),
-		sdktrace.WithLocalParentNotSampled(sdktrace.NeverSample()),
-		sdktrace.WithRemoteParentSampled(sdktrace.AlwaysSample()),
-		sdktrace.WithRemoteParentNotSampled(sdktrace.NeverSample()),
+	sampler := newCustomSampler(
+		sdktrace.ParentBased(sdktrace.TraceIDRatioBased(conf.OTELSamplingRate()),
+			sdktrace.WithLocalParentSampled(sdktrace.AlwaysSample()),
+			sdktrace.WithLocalParentNotSampled(sdktrace.NeverSample()),
+			sdktrace.WithRemoteParentSampled(sdktrace.AlwaysSample()),
+			sdktrace.WithRemoteParentNotSampled(sdktrace.NeverSample()),
+		),
 	)
 
 	tp := sdktrace.NewTracerProvider(
@@ -83,4 +86,31 @@ func NewCloudTraceExporter() (sdktrace.SpanExporter, error) {
 		return nil, xerrors.Errorf("unable to set up tracing: %w", err)
 	}
 	return exporter, nil
+}
+
+// customSampler implements sdktrace.Sampler.
+var _ sdktrace.Sampler = (*customSampler)(nil)
+
+type customSampler struct {
+	parent sdktrace.Sampler
+}
+
+func newCustomSampler(parent sdktrace.Sampler) *customSampler {
+	return &customSampler{parent: parent}
+}
+
+//nolint:gocritic
+func (s *customSampler) ShouldSample(p sdktrace.SamplingParameters) sdktrace.SamplingResult {
+	if strings.HasPrefix(p.Name, "google.devtools.cloudtrace.") ||
+		strings.HasPrefix(p.Name, "google.devtools.cloudprofiler.") {
+		return sdktrace.SamplingResult{
+			Decision:   sdktrace.Drop,
+			Tracestate: trace.SpanContextFromContext(p.ParentContext).TraceState(),
+		}
+	}
+	return s.parent.ShouldSample(p)
+}
+
+func (s *customSampler) Description() string {
+	return "CustomSampler"
 }
