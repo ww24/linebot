@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
+	"go.opentelemetry.io/otel"
 	"google.golang.org/api/iterator"
 
 	"github.com/ww24/linebot/domain/model"
@@ -49,7 +50,7 @@ func TestMain(m *testing.M) {
 func setupTestCli(ctx context.Context) error {
 	ctx, cancel := context.WithTimeout(ctx, firestoreDialTimeout)
 	defer cancel()
-	cli, err := New(ctx)
+	cli, err := New(ctx, otel.GetTracerProvider())
 	if err != nil {
 		return err
 	}
@@ -76,8 +77,6 @@ func removeAllDocuments(bw *firestore.BulkWriter, refItr *firestore.DocumentRefI
 }
 
 func (c *Client) clone() *Client {
-	return &Client{
-		cli: c.cli,
-		now: c.now,
-	}
+	cli := *c
+	return &cli
 }

@@ -24,7 +24,7 @@ func (s *Shopping) shopping(conversationID model.ConversationID) *firestore.Coll
 }
 
 func (s *Shopping) Add(ctx context.Context, items ...*model.ShoppingItem) error {
-	ctx, span := tracer.Start(ctx, "Shopping#Add")
+	ctx, span := s.tracer.Start(ctx, "Shopping#Add")
 	defer span.End()
 
 	txf := func(ctx context.Context, tx *firestore.Transaction) error {
@@ -49,7 +49,7 @@ func (s *Shopping) Add(ctx context.Context, items ...*model.ShoppingItem) error 
 }
 
 func (s *Shopping) Find(ctx context.Context, conversationID model.ConversationID) ([]*model.ShoppingItem, error) {
-	ctx, span := tracer.Start(ctx, "Shopping#Find")
+	ctx, span := s.tracer.Start(ctx, "Shopping#Find")
 	defer span.End()
 
 	iter := s.shopping(conversationID).
@@ -74,7 +74,7 @@ func (s *Shopping) Find(ctx context.Context, conversationID model.ConversationID
 }
 
 func (s *Shopping) BatchDelete(ctx context.Context, conversationID model.ConversationID, ids []string) error {
-	ctx, span := tracer.Start(ctx, "Shopping#BatchDelete")
+	ctx, span := s.tracer.Start(ctx, "Shopping#BatchDelete")
 	defer span.End()
 
 	txf := func(ctx context.Context, tx *firestore.Transaction) error {
@@ -96,7 +96,7 @@ func (s *Shopping) BatchDelete(ctx context.Context, conversationID model.Convers
 }
 
 func (s *Shopping) DeleteAll(ctx context.Context, conversationID model.ConversationID) error {
-	ctx, span := tracer.Start(ctx, "Shopping#DeleteAll")
+	ctx, span := s.tracer.Start(ctx, "Shopping#DeleteAll")
 	defer span.End()
 
 	refs, err := s.shopping(conversationID).DocumentRefs(ctx).GetAll()

@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
@@ -33,7 +34,7 @@ func NewConfig(name, version string) *Config {
 	}
 }
 
-func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (*sdktrace.TracerProvider, func()) {
+func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (trace.TracerProvider, func()) {
 	resources := resource.NewWithAttributes(
 		semconv.SchemaURL,
 		semconv.ServiceNameKey.String(c.name),

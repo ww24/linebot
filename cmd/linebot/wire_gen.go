@@ -42,59 +42,68 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	client, err := firestore.New(contextContext)
-	if err != nil {
-		return nil, nil, err
-	}
-	conversation := firestore.NewConversation(client)
-	conversationImpl := service.NewConversation(conversation)
-	shopping := firestore.NewShopping(conversation)
-	shoppingImpl := service.NewShopping(conversation, shopping)
-	parser, err := nl.NewParser()
-	if err != nil {
-		return nil, nil, err
-	}
-	interactorShopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
-	reminder := firestore.NewReminder(conversation)
-	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
-	if err != nil {
-		return nil, nil, err
-	}
-	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
-	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
-	weatherWeather, err := weather.NewWeather(configConfig)
-	if err != nil {
-		return nil, nil, err
-	}
-	gcsClient, err := gcs.New(contextContext)
-	if err != nil {
-		return nil, nil, err
-	}
-	weatherImageStore, err := gcs.NewWeatherImageStore(gcsClient, configConfig)
-	if err != nil {
-		return nil, nil, err
-	}
-	weatherImpl := service.NewWeather(weatherWeather, weatherImageStore, configConfig)
-	interactorWeather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
-	if err != nil {
-		return nil, nil, err
-	}
-	imageStore, err := gcs.NewImageStore(gcsClient, configConfig)
-	if err != nil {
-		return nil, nil, err
-	}
-	image := interactor.NewImage(imageStore)
-	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image)
-	if err != nil {
-		return nil, nil, err
-	}
 	tracerConfig := _wireConfigValue
 	spanExporter, err := tracer.NewCloudTraceExporter()
 	if err != nil {
 		return nil, nil, err
 	}
 	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
+	client, err := firestore.New(contextContext, tracerProvider)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	conversation := firestore.NewConversation(client)
+	conversationImpl := service.NewConversation(conversation, tracerProvider)
+	shopping := firestore.NewShopping(conversation)
+	shoppingImpl := service.NewShopping(conversation, shopping, tracerProvider)
+	parser, err := nl.NewParser()
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	interactorShopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
+	reminder := firestore.NewReminder(conversation)
+	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	reminderImpl := service.NewReminder(reminder, schedulerScheduler, tracerProvider)
+	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	weatherWeather, err := weather.NewWeather(configConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	gcsClient, err := gcs.New(contextContext)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	weatherImageStore, err := gcs.NewWeatherImageStore(gcsClient, configConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	weatherImpl := service.NewWeather(weatherWeather, weatherImageStore, configConfig, tracerProvider)
+	interactorWeather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
+	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	imageStore, err := gcs.NewImageStore(gcsClient, configConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	image := interactor.NewImage(imageStore)
+	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	mainBot := newBot(configConfig, handler, tracerProvider)
 	return mainBot, func() {
 		cleanup()

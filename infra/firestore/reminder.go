@@ -27,7 +27,7 @@ func (r *Reminder) reminder(conversationID model.ConversationID) *firestore.Coll
 }
 
 func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
-	ctx, span := tracer.Start(ctx, "Reminder#Add")
+	ctx, span := r.tracer.Start(ctx, "Reminder#Add")
 	defer span.End()
 
 	entity := NewReminderItem(item)
@@ -42,7 +42,7 @@ func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
 }
 
 func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID) ([]*model.ReminderItem, error) {
-	ctx, span := tracer.Start(ctx, "Reminder#List")
+	ctx, span := r.tracer.Start(ctx, "Reminder#List")
 	defer span.End()
 
 	reminder := r.reminder(conversationID)
@@ -70,7 +70,7 @@ func (r *Reminder) List(ctx context.Context, conversationID model.ConversationID
 }
 
 func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) (*model.ReminderItem, error) {
-	ctx, span := tracer.Start(ctx, "Reminder#Get")
+	ctx, span := r.tracer.Start(ctx, "Reminder#Get")
 	defer span.End()
 
 	doc, err := r.reminder(conversationID).Doc(string(itemID)).Get(ctx)
@@ -95,7 +95,7 @@ func (r *Reminder) Get(ctx context.Context, conversationID model.ConversationID,
 }
 
 func (r *Reminder) Delete(ctx context.Context, conversationID model.ConversationID, id model.ReminderItemID) error {
-	ctx, span := tracer.Start(ctx, "Reminder#Delete")
+	ctx, span := r.tracer.Start(ctx, "Reminder#Delete")
 	defer span.End()
 
 	reminder := r.reminder(conversationID)
@@ -107,7 +107,7 @@ func (r *Reminder) Delete(ctx context.Context, conversationID model.Conversation
 }
 
 func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
-	ctx, span := tracer.Start(ctx, "Reminder#ListAll")
+	ctx, span := r.tracer.Start(ctx, "Reminder#ListAll")
 	defer span.End()
 
 	// TODO: return wrapped iterator for performance

@@ -7,7 +7,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
-	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
@@ -25,14 +25,13 @@ var Set = wire.NewSet(
 	wire.Bind(new(repository.Reminder), new(*Reminder)),
 )
 
-var tracer = otel.Tracer("github.com/ww24/linebot/infra/firestore")
-
 type Client struct {
-	cli *firestore.Client
-	now func() time.Time
+	cli    *firestore.Client
+	now    func() time.Time
+	tracer trace.Tracer
 }
 
-func New(ctx context.Context) (*Client, error) {
+func New(ctx context.Context, tracerProvider trace.TracerProvider) (*Client, error) {
 	var projectID string
 	isEmulator := os.Getenv("FIRESTORE_EMULATOR_HOST") != ""
 	if isEmulator {
@@ -51,8 +50,9 @@ func New(ctx context.Context) (*Client, error) {
 	}
 
 	c := &Client{
-		cli: cli,
-		now: time.Now,
+		cli:    cli,
+		now:    time.Now,
+		tracer: tracerProvider.Tracer("github.com/ww24/linebot/infra/firestore"),
 	}
 	return c, nil
 }

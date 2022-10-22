@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tenntenn/testtime"
+	"go.opentelemetry.io/otel"
 
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/mock/mock_repository"
@@ -30,7 +31,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			name: "success",
 			setup: func(m *mock_repository.MockWeatherImageStore, t time.Time) {
 				m.EXPECT().Get(
-					ctx, t,
+					gomock.Any(), t,
 					weatherImageTTL,
 				).Return("https://example.com/20220101/image.png", nil)
 			},
@@ -43,11 +44,11 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			setup: func(m *mock_repository.MockWeatherImageStore, t time.Time) {
 				gomock.InOrder(
 					m.EXPECT().Get(
-						ctx, t,
+						gomock.Any(), t,
 						weatherImageTTL,
 					).Return("", code.With(errors.New("not found"), code.NotFound)),
 					m.EXPECT().Get(
-						ctx, t.Add(-weatherImageTTL),
+						gomock.Any(), t.Add(-weatherImageTTL),
 						weatherImageTTL,
 					).Return("https://example.com/20211231/image.png", nil),
 				)
@@ -61,11 +62,11 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			setup: func(m *mock_repository.MockWeatherImageStore, t time.Time) {
 				gomock.InOrder(
 					m.EXPECT().Get(
-						ctx, t,
+						gomock.Any(), t,
 						weatherImageTTL,
 					).Return("", code.With(errors.New("not found"), code.NotFound)),
 					m.EXPECT().Get(
-						ctx, t.Add(-weatherImageTTL),
+						gomock.Any(), t.Add(-weatherImageTTL),
 						weatherImageTTL,
 					).Return("", code.With(errors.New("not found"), code.NotFound)),
 				)
@@ -78,7 +79,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			name: "unexpected error",
 			setup: func(m *mock_repository.MockWeatherImageStore, t time.Time) {
 				m.EXPECT().Get(
-					ctx, t,
+					gomock.Any(), t,
 					weatherImageTTL,
 				).Return("", errors.New("unexpected"))
 			},
@@ -100,6 +101,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				weather:    nil,
 				imageStore: m,
 				loc:        loc,
+				tracer:     otel.Tracer("test"),
 			}
 
 			got, err := service.ImageURL(ctx)

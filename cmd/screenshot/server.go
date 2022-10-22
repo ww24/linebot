@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
@@ -21,13 +21,13 @@ var tc = tracer.NewConfig(serviceName, version)
 type server struct {
 	config         repository.Config
 	srv            *http.Server
-	tracerProvider *sdktrace.TracerProvider
+	tracerProvider trace.TracerProvider
 }
 
 func newServer(
 	conf repository.Config,
 	handler http.Handler,
-	tracerProvider *sdktrace.TracerProvider,
+	tracerProvider trace.TracerProvider,
 ) *server {
 	return &server{
 		config: conf,

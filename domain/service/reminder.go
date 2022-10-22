@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
@@ -28,16 +29,25 @@ type Reminder interface {
 type ReminderImpl struct {
 	reminder  repository.Reminder
 	scheduler repository.ScheduleSynchronizer
+	tracer    trace.Tracer
 }
 
-func NewReminder(reminder repository.Reminder, scheduler repository.ScheduleSynchronizer) *ReminderImpl {
+func NewReminder(
+	reminder repository.Reminder,
+	scheduler repository.ScheduleSynchronizer,
+	tracerProvider trace.TracerProvider,
+) *ReminderImpl {
 	return &ReminderImpl{
 		reminder:  reminder,
 		scheduler: scheduler,
+		tracer:    tracerProvider.Tracer("github.com/ww24/linebot/domain/service"),
 	}
 }
 
 func (r *ReminderImpl) Add(ctx context.Context, item *model.ReminderItem) error {
+	ctx, span := r.tracer.Start(ctx, "Reminder#Add")
+	defer span.End()
+
 	if err := r.reminder.Add(ctx, item); err != nil {
 		return xerrors.Errorf("failed to add a reminder item: %w", err)
 	}
@@ -54,6 +64,9 @@ func (r *ReminderImpl) Add(ctx context.Context, item *model.ReminderItem) error 
 }
 
 func (r *ReminderImpl) List(ctx context.Context, conversationID model.ConversationID) (model.ReminderItems, error) {
+	ctx, span := r.tracer.Start(ctx, "Reminder#List")
+	defer span.End()
+
 	items, err := r.reminder.List(ctx, conversationID)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list reminder items: %w", err)
@@ -62,6 +75,9 @@ func (r *ReminderImpl) List(ctx context.Context, conversationID model.Conversati
 }
 
 func (r *ReminderImpl) Get(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) (*model.ReminderItem, error) {
+	ctx, span := r.tracer.Start(ctx, "Reminder#Get")
+	defer span.End()
+
 	item, err := r.reminder.Get(ctx, conversationID, itemID)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get a reminder item: %w", err)
@@ -70,6 +86,9 @@ func (r *ReminderImpl) Get(ctx context.Context, conversationID model.Conversatio
 }
 
 func (r *ReminderImpl) Delete(ctx context.Context, conversationID model.ConversationID, itemID model.ReminderItemID) error {
+	ctx, span := r.tracer.Start(ctx, "Reminder#Delete")
+	defer span.End()
+
 	item, err := r.reminder.Get(ctx, conversationID, itemID)
 	if err != nil {
 		return xerrors.Errorf("failed to get a reminder item: %w", err)
@@ -90,6 +109,9 @@ func (r *ReminderImpl) Delete(ctx context.Context, conversationID model.Conversa
 }
 
 func (r *ReminderImpl) ListAll(ctx context.Context) (model.ReminderItems, error) {
+	ctx, span := r.tracer.Start(ctx, "Reminder#ListAll")
+	defer span.End()
+
 	items, err := r.reminder.ListAll(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list all reminder items: %w", err)
@@ -98,6 +120,9 @@ func (r *ReminderImpl) ListAll(ctx context.Context) (model.ReminderItems, error)
 }
 
 func (r *ReminderImpl) SyncSchedule(ctx context.Context, items model.ReminderItems) error {
+	ctx, span := r.tracer.Start(ctx, "Reminder#SyncSchedule")
+	defer span.End()
+
 	now := time.Now()
 
 	dl := logger.DefaultLogger(ctx)
