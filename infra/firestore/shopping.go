@@ -5,6 +5,8 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"golang.org/x/xerrors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/ww24/linebot/domain/model"
 )
@@ -25,7 +27,7 @@ func (s *Shopping) Add(ctx context.Context, items ...*model.ShoppingItem) error 
 	ctx, span := tracer.Start(ctx, "Shopping#Add")
 	defer span.End()
 
-	err := s.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+	txf := func(ctx context.Context, tx *firestore.Transaction) error {
 		for _, item := range items {
 			if err := item.Validate(); err != nil {
 				return xerrors.Errorf("shopping item validation failed: %w", err)
@@ -33,13 +35,13 @@ func (s *Shopping) Add(ctx context.Context, items ...*model.ShoppingItem) error 
 
 			entity := NewShoppingItem(item)
 			shopping := s.shopping(item.ConversationID)
-			if err := tx.Create(shopping.NewDoc(), entity); err != nil {
+			if err := tx.Create(shopping.Doc(entity.ID), entity); err != nil {
 				return xerrors.Errorf("failed to create: %w", err)
 			}
 		}
 		return nil
-	})
-	if err != nil {
+	}
+	if err := s.cli.RunTransaction(ctx, txf); err != nil {
 		return xerrors.Errorf("transaction failed: %w", err)
 	}
 
@@ -75,7 +77,7 @@ func (s *Shopping) BatchDelete(ctx context.Context, conversationID model.Convers
 	ctx, span := tracer.Start(ctx, "Shopping#BatchDelete")
 	defer span.End()
 
-	err := s.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+	txf := func(ctx context.Context, tx *firestore.Transaction) error {
 		for _, id := range ids {
 			item := s.shopping(conversationID).Doc(id)
 			if err := tx.Delete(item, firestore.Exists); err != nil {
@@ -83,9 +85,11 @@ func (s *Shopping) BatchDelete(ctx context.Context, conversationID model.Convers
 			}
 		}
 		return nil
-	})
-	if err != nil {
-		return xerrors.Errorf("transaction failed: %w", err)
+	}
+	if err := s.cli.RunTransaction(ctx, txf); err != nil {
+		if status.Code(err) != codes.NotFound {
+			return xerrors.Errorf("transaction failed: %w", err)
+		}
 	}
 
 	return nil
@@ -95,24 +99,23 @@ func (s *Shopping) DeleteAll(ctx context.Context, conversationID model.Conversat
 	ctx, span := tracer.Start(ctx, "Shopping#DeleteAll")
 	defer span.End()
 
-	err := s.cli.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		refs, err := tx.DocumentRefs(s.shopping(conversationID)).GetAll()
-		if err != nil {
-			return xerrors.Errorf("failed to get document refs: %w", err)
-		}
-		if len(refs) == 0 {
-			return nil
-		}
+	refs, err := s.shopping(conversationID).DocumentRefs(ctx).GetAll()
+	if err != nil {
+		return xerrors.Errorf("failed to get document refs: %w", err)
+	}
+	if len(refs) == 0 {
+		return nil
+	}
 
+	txf := func(ctx context.Context, tx *firestore.Transaction) error {
 		for _, ref := range refs {
 			if err := tx.Delete(ref, firestore.Exists); err != nil {
 				return xerrors.Errorf("failed to delete document: %w", err)
 			}
 		}
-
 		return nil
-	})
-	if err != nil {
+	}
+	if err := s.cli.RunTransaction(ctx, txf); err != nil {
 		return xerrors.Errorf("transaction failed: %w", err)
 	}
 

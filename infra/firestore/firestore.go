@@ -3,6 +3,7 @@ package firestore
 import (
 	"context"
 	"os"
+	"time"
 
 	"cloud.google.com/go/firestore"
 	"github.com/google/wire"
@@ -31,6 +32,7 @@ var tracer = otel.Tracer("github.com/ww24/linebot/infra/firestore")
 
 type Client struct {
 	cli *firestore.Client
+	now func() time.Time
 }
 
 func New(ctx context.Context) (*Client, error) {
@@ -60,6 +62,9 @@ func New(ctx context.Context) (*Client, error) {
 		return nil, xerrors.Errorf("failed to initialize firestore client: %w", err)
 	}
 
-	c := &Client{cli: cli}
+	c := &Client{
+		cli: cli,
+		now: time.Now,
+	}
 	return c, nil
 }

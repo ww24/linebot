@@ -4,13 +4,26 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
+	"github.com/rs/xid"
 	"golang.org/x/xerrors"
 )
 
 var (
 	errShoppingItemValidationFailed = errors.New("shopping item validation failed")
 )
+
+func NewShoppingItem(conversationID ConversationID, name string, quantity, order int, createdAt time.Time) *ShoppingItem {
+	return &ShoppingItem{
+		ID:             xid.New().String(),
+		Name:           name,
+		Quantity:       quantity,
+		ConversationID: conversationID,
+		CreatedAt:      createdAt.Unix(),
+		Order:          order,
+	}
+}
 
 type ShoppingItem struct {
 	ID             string
