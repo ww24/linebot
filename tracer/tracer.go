@@ -2,7 +2,10 @@ package tracer
 
 import (
 	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
+	octrace "go.opencensus.io/trace"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/bridge/opencensus"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
@@ -34,6 +37,17 @@ func New(name, version string, samplingRate float64) (*sdktrace.TracerProvider, 
 		sdktrace.WithResource(resources),
 	)
 	otel.SetTracerProvider(tp)
+
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(
+			propagation.TraceContext{},
+			propagation.Baggage{},
+		),
+	)
+
+	// OpenCensus Bridge
+	tracer := otel.Tracer("OpenCensus")
+	octrace.DefaultTracer = opencensus.NewTracer(tracer)
 
 	return tp, nil
 }
