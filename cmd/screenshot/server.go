@@ -5,20 +5,30 @@ import (
 	"net/http"
 	"time"
 
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/tracer"
 )
 
 const readHeaderTimeout = 10 * time.Second
 
+//nolint:gochecknoglobals
+var tc = tracer.NewConfig(serviceName, version)
+
 type server struct {
-	config repository.Config
-	srv    *http.Server
+	config         repository.Config
+	srv            *http.Server
+	tracerProvider trace.TracerProvider
 }
 
-func newServer(conf repository.Config, handler http.Handler) *server {
+func newServer(
+	conf repository.Config,
+	handler http.Handler,
+	tracerProvider trace.TracerProvider,
+) *server {
 	return &server{
 		config: conf,
 		srv: &http.Server{
@@ -26,6 +36,7 @@ func newServer(conf repository.Config, handler http.Handler) *server {
 			Addr:              conf.Addr(),
 			ReadHeaderTimeout: readHeaderTimeout,
 		},
+		tracerProvider: tracerProvider,
 	}
 }
 

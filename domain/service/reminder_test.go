@@ -8,6 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"github.com/tenntenn/testtime"
+	"go.opentelemetry.io/otel"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/mock/mock_repository"
@@ -62,16 +63,16 @@ func TestReminderImpl_SyncSchedule(t *testing.T) {
 		{
 			name: "one item",
 			setup: func(m *mock_repository.MockScheduleSynchronizer) {
-				m.EXPECT().Sync(ctx, model.ConversationID("c1"), items[0:1], testTime).Return(nil)
+				m.EXPECT().Sync(gomock.Any(), model.ConversationID("c1"), items[0:1], testTime).Return(nil)
 			},
 			items: items[0:1],
 		},
 		{
 			name: "some items",
 			setup: func(m *mock_repository.MockScheduleSynchronizer) {
-				m.EXPECT().Sync(ctx, model.ConversationID("c1"), items[0:2], testTime).Return(nil)
-				m.EXPECT().Sync(ctx, model.ConversationID("c2"), items[2:4], testTime).Return(nil)
-				m.EXPECT().Sync(ctx, model.ConversationID("c3"), items[4:5], testTime).Return(nil)
+				m.EXPECT().Sync(gomock.Any(), model.ConversationID("c1"), items[0:2], testTime).Return(nil)
+				m.EXPECT().Sync(gomock.Any(), model.ConversationID("c2"), items[2:4], testTime).Return(nil)
+				m.EXPECT().Sync(gomock.Any(), model.ConversationID("c3"), items[4:5], testTime).Return(nil)
 			},
 			items: items[0:5],
 		},
@@ -85,7 +86,10 @@ func TestReminderImpl_SyncSchedule(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			m := mock_repository.NewMockScheduleSynchronizer(ctrl)
 			tt.setup(m)
-			service := &ReminderImpl{scheduler: m}
+			service := &ReminderImpl{
+				scheduler: m,
+				tracer:    otel.Tracer("test"),
+			}
 
 			err := service.SyncSchedule(ctx, tt.items)
 			require.NoError(t, err)

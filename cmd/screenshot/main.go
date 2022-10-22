@@ -13,7 +13,6 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/logger"
-	"github.com/ww24/linebot/tracer"
 )
 
 const (
@@ -42,11 +41,12 @@ func main() {
 		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
-	srv, err := register(ctx)
+	srv, cleanup, err := register(ctx)
 	if err != nil {
 		dl.Error("register", zap.Error(err))
 		panic(err)
 	}
+	defer cleanup()
 
 	// initialize cloud profiler and tracing if build is production
 	if version != "" {
@@ -60,18 +60,6 @@ func main() {
 			// just log the error if failed to initialize profiler
 			dl.Error("failed to start cloud profiler", zap.Error(err))
 		}
-
-		tp, err := tracer.New(serviceName, version, srv.config.OTELSamplingRate())
-		if err != nil {
-			dl.Error("failed to initialize tracer", zap.Error(err))
-		}
-		defer func() {
-			ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
-			defer cancel()
-			if err := tp.Shutdown(ctx); err != nil {
-				dl.Error("failed to shutdown tracer", zap.Error(err))
-			}
-		}()
 	}
 
 	dl.Info("start server")

@@ -31,7 +31,11 @@ func XCTCOpenTelemetry() func(http.Handler) http.Handler {
 		return otelhttp.NewHandler(next, "server",
 			otelhttp.WithMessageEvents(otelhttp.ReadEvents, otelhttp.WriteEvents),
 			otelhttp.WithPropagators(
-				propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagator.New()),
+				propagation.NewCompositeTextMapPropagator(
+					propagator.CloudTraceOneWayPropagator{},
+					propagation.TraceContext{},
+					propagation.Baggage{},
+				),
 			),
 		)
 	}

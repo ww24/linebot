@@ -4,24 +4,32 @@ import (
 	"context"
 	"net/http"
 
+	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/tracer"
 )
 
+//nolint:gochecknoglobals
+var tc = tracer.NewConfig(serviceName, version)
+
 type bot struct {
-	config  repository.Config
-	handler http.Handler
+	config         repository.Config
+	handler        http.Handler
+	tracerProvider trace.TracerProvider
 }
 
 func newBot(
 	config repository.Config,
 	handler http.Handler,
+	tracerProvider trace.TracerProvider,
 ) *bot {
 	return &bot{
-		config:  config,
-		handler: handler,
+		config:         config,
+		handler:        handler,
+		tracerProvider: tracerProvider,
 	}
 }
 

@@ -36,7 +36,7 @@ func (c *Conversation) conversation(conversationID model.ConversationID) *firest
 }
 
 func (c *Conversation) SetStatus(ctx context.Context, status *model.ConversationStatus) error {
-	ctx, span := tracer.Start(ctx, "Conversation#SetStatus")
+	ctx, span := c.tracer.Start(ctx, "Conversation#SetStatus")
 	defer span.End()
 
 	if err := status.Validate(); err != nil {
@@ -53,7 +53,7 @@ func (c *Conversation) SetStatus(ctx context.Context, status *model.Conversation
 }
 
 func (c *Conversation) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
-	ctx, span := tracer.Start(ctx, "Conversation#GetStatus")
+	ctx, span := c.tracer.Start(ctx, "Conversation#GetStatus")
 	defer span.End()
 
 	doc, err := c.conversation(conversationID).Get(ctx)

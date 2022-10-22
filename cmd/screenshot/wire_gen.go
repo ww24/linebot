@@ -12,22 +12,35 @@ import (
 	"github.com/ww24/linebot/infra/browser"
 	"github.com/ww24/linebot/interactor"
 	"github.com/ww24/linebot/presentation/http"
+	"github.com/ww24/linebot/tracer"
 )
 
 // Injectors from wire.go:
 
-func register(ctx context.Context) (*server, error) {
+func register(ctx context.Context) (*server, func(), error) {
 	configConfig, err := config.NewConfig()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	logger, err := newLogger(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	browserBrowser := browser.NewBrowser(configConfig)
 	screenshot := interactor.NewScreenshot(browserBrowser)
 	screenshotHandler := http.NewScreenshotHandler(logger, screenshot)
-	mainServer := newServer(configConfig, screenshotHandler)
-	return mainServer, nil
+	tracerConfig := _wireConfigValue
+	spanExporter, err := tracer.NewCloudTraceExporter()
+	if err != nil {
+		return nil, nil, err
+	}
+	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
+	mainServer := newServer(configConfig, screenshotHandler, tracerProvider)
+	return mainServer, func() {
+		cleanup()
+	}, nil
 }
+
+var (
+	_wireConfigValue = tc
+)
