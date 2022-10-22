@@ -170,14 +170,13 @@ func (s *Shopping) handleStatus(ctx context.Context, e *model.Event) error {
 		lines := e.ReadTextLines()
 		items := make([]*model.ShoppingItem, 0, len(lines))
 		for i, line := range lines {
-			item := &model.ShoppingItem{
-				ID:             "", // it will generate in datastore dto
-				Name:           line,
-				Quantity:       1,
-				ConversationID: e.ConversationID(),
-				CreatedAt:      time.Now().Unix(),
-				Order:          i,
-			}
+			item := model.NewShoppingItem(
+				e.ConversationID(),
+				line,
+				1,
+				i,
+				time.Now(),
+			)
 			items = append(items, item)
 		}
 		if err := s.shopping.AddItem(ctx, e.ConversationID(), items...); err != nil {

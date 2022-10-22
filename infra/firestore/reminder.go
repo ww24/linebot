@@ -3,7 +3,6 @@ package firestore
 import (
 	"context"
 	"errors"
-	"time"
 
 	"cloud.google.com/go/firestore"
 	"golang.org/x/xerrors"
@@ -32,7 +31,7 @@ func (r *Reminder) Add(ctx context.Context, item *model.ReminderItem) error {
 	defer span.End()
 
 	entity := NewReminderItem(item)
-	entity.CreatedAt = time.Now().Unix()
+	entity.CreatedAt = r.now().Unix()
 
 	reminder := r.reminder(item.ConversationID)
 	if _, err := reminder.Doc(entity.ID).Set(ctx, entity); err != nil {
@@ -150,7 +149,6 @@ func (r *Reminder) ListAll(ctx context.Context) ([]*model.ReminderItem, error) {
 type ReminderItem struct {
 	ConversationID model.ConversationID `firestore:"-"`
 	ID             string               `firestore:"-"`
-	Name           string               `firestore:"name"`
 	Scheduler      string               `firestore:"scheduler"`
 	Executor       *Executor            `firestore:"executor"`
 	CreatedAt      int64                `firestore:"created_at"` // UNIX time
