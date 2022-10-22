@@ -6,7 +6,7 @@ on:
       go_version:
         type: string
         required: false
-        default: "~1.18"
+        default: "~1.19"
       golangci_lint_version:
         type: string
         required: false
