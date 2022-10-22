@@ -18,11 +18,12 @@ import (
 	"github.com/ww24/linebot/interactor"
 	"github.com/ww24/linebot/nl"
 	"github.com/ww24/linebot/presentation/http"
+	"github.com/ww24/linebot/tracer"
 )
 
 func register(
 	context.Context,
-) (*bot, error) {
+) (*bot, func(), error) {
 	wire.Build(
 		newLogger,
 		config.Set,
@@ -35,7 +36,10 @@ func register(
 		nl.Set,
 		interactor.Set,
 		http.Set,
+		wire.Value(tc),
+		tracer.NewCloudTraceExporter,
+		tracer.New,
 		newBot,
 	)
-	return nil, nil
+	return nil, nil, nil
 }
