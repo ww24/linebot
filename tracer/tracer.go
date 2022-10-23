@@ -15,7 +15,6 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
-	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/logger"
@@ -49,6 +48,10 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 			sdktrace.WithRemoteParentSampled(sdktrace.AlwaysSample()),
 			sdktrace.WithRemoteParentNotSampled(sdktrace.NeverSample()),
 		),
+		[]string{
+			"google.devtools.cloudtrace.",
+			"google.devtools.cloudprofiler.",
+		},
 	)
 
 	tp := sdktrace.NewTracerProvider(
@@ -80,32 +83,44 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 	return tp, cleanup
 }
 
-func NewCloudTraceExporter() (sdktrace.SpanExporter, error) {
+func NewCloudTraceExporter() sdktrace.SpanExporter {
 	exporter, err := cloudtrace.New()
 	if err != nil {
-		return nil, xerrors.Errorf("unable to set up tracing: %w", err)
+		dl := logger.DefaultLogger(context.Background())
+		dl.Error("unable to set up cloud trace exporter", zap.Error(err))
+		return new(noopExporter)
 	}
-	return exporter, nil
+	return exporter
 }
+
+// noopExporter implements sdktrace.SpanExporter
+var _ sdktrace.SpanExporter = (*noopExporter)(nil)
+
+type noopExporter struct{}
+
+func (*noopExporter) ExportSpans(context.Context, []sdktrace.ReadOnlySpan) error { return nil }
+func (*noopExporter) Shutdown(context.Context) error                             { return nil }
 
 // customSampler implements sdktrace.Sampler.
 var _ sdktrace.Sampler = (*customSampler)(nil)
 
 type customSampler struct {
-	parent sdktrace.Sampler
+	parent                 sdktrace.Sampler
+	ignoreSpanNamePrefixes []string
 }
 
-func newCustomSampler(parent sdktrace.Sampler) *customSampler {
-	return &customSampler{parent: parent}
+func newCustomSampler(parent sdktrace.Sampler, ignores []string) *customSampler {
+	return &customSampler{parent: parent, ignoreSpanNamePrefixes: ignores}
 }
 
 //nolint:gocritic
 func (s *customSampler) ShouldSample(p sdktrace.SamplingParameters) sdktrace.SamplingResult {
-	if strings.HasPrefix(p.Name, "google.devtools.cloudtrace.") ||
-		strings.HasPrefix(p.Name, "google.devtools.cloudprofiler.") {
-		return sdktrace.SamplingResult{
-			Decision:   sdktrace.Drop,
-			Tracestate: trace.SpanContextFromContext(p.ParentContext).TraceState(),
+	for _, ignorePrefix := range s.ignoreSpanNamePrefixes {
+		if strings.HasPrefix(p.Name, ignorePrefix) {
+			return sdktrace.SamplingResult{
+				Decision:   sdktrace.Drop,
+				Tracestate: trace.SpanContextFromContext(p.ParentContext).TraceState(),
+			}
 		}
 	}
 	return s.parent.ShouldSample(p)

@@ -43,10 +43,7 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		return nil, nil, err
 	}
 	tracerConfig := _wireConfigValue
-	spanExporter, err := tracer.NewCloudTraceExporter()
-	if err != nil {
-		return nil, nil, err
-	}
+	spanExporter := tracer.NewCloudTraceExporter()
 	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
 	client, err := firestore.New(contextContext, tracerProvider)
 	if err != nil {
