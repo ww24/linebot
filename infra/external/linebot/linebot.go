@@ -28,7 +28,11 @@ type LINEBot struct {
 }
 
 func NewLINEBot(conf repository.Config) (*LINEBot, error) {
-	hc := &http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
+	transport := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithFilter(func(r *http.Request) bool {
+		// ignore health check request
+		return r.URL.Path != "/"
+	}))
+	hc := &http.Client{Transport: transport}
 	cli, err := linebot.New(
 		conf.LINEChannelSecret(),
 		conf.LINEChannelToken(),

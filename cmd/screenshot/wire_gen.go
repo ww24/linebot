@@ -30,10 +30,7 @@ func register(ctx context.Context) (*server, func(), error) {
 	screenshot := interactor.NewScreenshot(browserBrowser)
 	screenshotHandler := http.NewScreenshotHandler(logger, screenshot)
 	tracerConfig := _wireConfigValue
-	spanExporter, err := tracer.NewCloudTraceExporter()
-	if err != nil {
-		return nil, nil, err
-	}
+	spanExporter := tracer.NewCloudTraceExporter()
 	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
 	mainServer := newServer(configConfig, screenshotHandler, tracerProvider)
 	return mainServer, func() {
