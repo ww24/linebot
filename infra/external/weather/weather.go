@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/wire"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/filters"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/idtoken"
 	"google.golang.org/api/option"
@@ -49,10 +50,10 @@ func (w *Weather) newTransport(ctx context.Context) (http.RoundTripper, error) {
 		return nil, xerrors.Errorf("failed to create token source: %w", err)
 	}
 
-	transport := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithFilter(func(r *http.Request) bool {
+	transport := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithFilter(
 		// ignore health check request
-		return r.URL.Path != "/"
-	}))
+		filters.Not(filters.Path("/")),
+	))
 	t, err := htransport.NewTransport(ctx, transport, option.WithTokenSource(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create idtoken client: %w", err)
