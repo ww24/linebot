@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
+	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	octrace "go.opencensus.io/trace"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/bridge/opencensus"
@@ -63,6 +63,7 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
+			propagator.CloudTraceOneWayPropagator{},
 			propagation.TraceContext{},
 			propagation.Baggage{},
 		),
@@ -82,24 +83,6 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 	}
 	return tp, cleanup
 }
-
-func NewCloudTraceExporter() sdktrace.SpanExporter {
-	exporter, err := cloudtrace.New()
-	if err != nil {
-		dl := logger.DefaultLogger(context.Background())
-		dl.Error("unable to set up cloud trace exporter", zap.Error(err))
-		return new(noopExporter)
-	}
-	return exporter
-}
-
-// noopExporter implements sdktrace.SpanExporter
-var _ sdktrace.SpanExporter = (*noopExporter)(nil)
-
-type noopExporter struct{}
-
-func (*noopExporter) ExportSpans(context.Context, []sdktrace.ReadOnlySpan) error { return nil }
-func (*noopExporter) Shutdown(context.Context) error                             { return nil }
 
 // customSampler implements sdktrace.Sampler.
 var _ sdktrace.Sampler = (*customSampler)(nil)

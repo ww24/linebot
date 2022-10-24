@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
@@ -18,21 +17,18 @@ type Conversation interface {
 
 type ConversationImpl struct {
 	conversation repository.Conversation
-	tracer       trace.Tracer
 }
 
 func NewConversation(
 	conversation repository.Conversation,
-	tracerProvider trace.TracerProvider,
 ) *ConversationImpl {
 	return &ConversationImpl{
 		conversation: conversation,
-		tracer:       tracerProvider.Tracer("github.com/ww24/linebot/domain/service"),
 	}
 }
 
 func (s *ConversationImpl) GetStatus(ctx context.Context, conversationID model.ConversationID) (*model.ConversationStatus, error) {
-	ctx, span := s.tracer.Start(ctx, "Conversation#GetStatus")
+	ctx, span := tracer.Start(ctx, "Conversation#GetStatus")
 	defer span.End()
 
 	status, err := s.conversation.GetStatus(ctx, conversationID)
@@ -50,7 +46,7 @@ func (s *ConversationImpl) GetStatus(ctx context.Context, conversationID model.C
 }
 
 func (s *ConversationImpl) SetStatus(ctx context.Context, status *model.ConversationStatus) error {
-	ctx, span := s.tracer.Start(ctx, "Conversation#SetStatus")
+	ctx, span := tracer.Start(ctx, "Conversation#SetStatus")
 	defer span.End()
 
 	if err := s.conversation.SetStatus(ctx, status); err != nil {

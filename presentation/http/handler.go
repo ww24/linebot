@@ -16,6 +16,7 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
 )
 
@@ -49,7 +50,7 @@ func NewHandler(
 		eventHandler: eventHandler,
 		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
-			XCTCOpenTelemetry(),
+			tracer.HTTPMiddleware(),
 			PanicHandler(log),
 		},
 	}, nil

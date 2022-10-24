@@ -8,14 +8,13 @@ import (
 	"time"
 
 	"github.com/google/wire"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/filters"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/idtoken"
 	"google.golang.org/api/option"
 	htransport "google.golang.org/api/transport/http"
 
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/tracer"
 )
 
 // Set provides a wire set.
@@ -50,10 +49,7 @@ func (w *Weather) newTransport(ctx context.Context) (http.RoundTripper, error) {
 		return nil, xerrors.Errorf("failed to create token source: %w", err)
 	}
 
-	transport := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithFilter(
-		// ignore health check request
-		filters.Not(filters.Path("/")),
-	))
+	transport := tracer.HTTPTransport(http.DefaultTransport)
 	t, err := htransport.NewTransport(ctx, transport, option.WithTokenSource(ts))
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create idtoken client: %w", err)

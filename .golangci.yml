@@ -15,6 +15,9 @@ issues:
         - gochecknoglobals
       source: "Set = wire.NewSet"
     - linters:
+        - gochecknoglobals
+      source: "var tracer = otel.Tracer"
+    - linters:
         - gomnd
       source: "time."
     - linters:

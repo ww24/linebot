@@ -8,7 +8,6 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"github.com/tenntenn/testtime"
-	"go.opentelemetry.io/otel"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/mock/mock_repository"
@@ -88,7 +87,6 @@ func TestReminderImpl_SyncSchedule(t *testing.T) {
 			tt.setup(m)
 			service := &ReminderImpl{
 				scheduler: m,
-				tracer:    otel.Tracer("test"),
 			}
 
 			err := service.SyncSchedule(ctx, tt.items)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
@@ -26,25 +25,22 @@ type WeatherImpl struct {
 	weather    repository.Weather
 	imageStore repository.WeatherImageStore
 	loc        *time.Location
-	tracer     trace.Tracer
 }
 
 func NewWeather(
 	weather repository.Weather,
 	imageStore repository.WeatherImageStore,
 	conf repository.Config,
-	tracerProvider trace.TracerProvider,
 ) *WeatherImpl {
 	return &WeatherImpl{
 		weather:    weather,
 		imageStore: imageStore,
 		loc:        conf.DefaultLocation(),
-		tracer:     tracerProvider.Tracer("github.com/ww24/linebot/domain/service"),
 	}
 }
 
 func (w *WeatherImpl) SaveImage(ctx context.Context) error {
-	ctx, span := w.tracer.Start(ctx, "Weather#SaveImage")
+	ctx, span := tracer.Start(ctx, "Weather#SaveImage")
 	defer span.End()
 
 	rc, err := w.weather.Fetch(ctx)
@@ -66,7 +62,7 @@ func (w *WeatherImpl) SaveImage(ctx context.Context) error {
 }
 
 func (w *WeatherImpl) ImageURL(ctx context.Context) (string, error) {
-	ctx, span := w.tracer.Start(ctx, "Weather#ImageURL")
+	ctx, span := tracer.Start(ctx, "Weather#ImageURL")
 	defer span.End()
 
 	now := time.Now().In(w.loc)
