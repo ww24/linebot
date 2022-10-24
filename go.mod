@@ -22,7 +22,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/tenntenn/testtime v0.2.2
 	go.opencensus.io v0.23.0
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.36.3
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.36.4
 	go.opentelemetry.io/otel v1.11.1
 	go.opentelemetry.io/otel/bridge/opencensus v0.33.0
 	go.opentelemetry.io/otel/sdk v1.11.1
