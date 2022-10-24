@@ -11,6 +11,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
 )
 
@@ -34,7 +35,7 @@ func NewScreenshotHandler(
 		log:               log,
 		screenshotHandler: screenshotHandler,
 		middlewares: []func(http.Handler) http.Handler{
-			XCTCOpenTelemetry(),
+			tracer.HTTPMiddleware(),
 			PanicHandler(log),
 		},
 	}

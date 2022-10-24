@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
@@ -21,23 +20,20 @@ type Shopping interface {
 type ShoppingImpl struct {
 	conversation repository.Conversation
 	shopping     repository.Shopping
-	tracer       trace.Tracer
 }
 
 func NewShopping(
 	conversation repository.Conversation,
 	shopping repository.Shopping,
-	tracerProvider trace.TracerProvider,
 ) *ShoppingImpl {
 	return &ShoppingImpl{
 		conversation: conversation,
 		shopping:     shopping,
-		tracer:       tracerProvider.Tracer("github.com/ww24/linebot/domain/service"),
 	}
 }
 
 func (s *ShoppingImpl) List(ctx context.Context, conversationID model.ConversationID) (model.ShoppingItems, error) {
-	ctx, span := s.tracer.Start(ctx, "Shopping#List")
+	ctx, span := tracer.Start(ctx, "Shopping#List")
 	defer span.End()
 
 	if err := s.SetStatus(ctx, conversationID); err != nil {
@@ -53,7 +49,7 @@ func (s *ShoppingImpl) List(ctx context.Context, conversationID model.Conversati
 }
 
 func (s *ShoppingImpl) AddItem(ctx context.Context, conversationID model.ConversationID, items ...*model.ShoppingItem) error {
-	ctx, span := s.tracer.Start(ctx, "Shopping#AddItem")
+	ctx, span := tracer.Start(ctx, "Shopping#AddItem")
 	defer span.End()
 
 	if err := s.SetStatus(ctx, conversationID); err != nil {
@@ -66,7 +62,7 @@ func (s *ShoppingImpl) AddItem(ctx context.Context, conversationID model.Convers
 }
 
 func (s *ShoppingImpl) DeleteAllItem(ctx context.Context, conversationID model.ConversationID) error {
-	ctx, span := s.tracer.Start(ctx, "Shopping#DeleteAllItem")
+	ctx, span := tracer.Start(ctx, "Shopping#DeleteAllItem")
 	defer span.End()
 
 	if err := s.shopping.DeleteAll(ctx, conversationID); err != nil {
@@ -79,7 +75,7 @@ func (s *ShoppingImpl) DeleteAllItem(ctx context.Context, conversationID model.C
 }
 
 func (s *ShoppingImpl) DeleteItems(ctx context.Context, conversationID model.ConversationID, ids []string) error {
-	ctx, span := s.tracer.Start(ctx, "Shopping#DeleteItems")
+	ctx, span := tracer.Start(ctx, "Shopping#DeleteItems")
 	defer span.End()
 
 	if err := s.shopping.BatchDelete(ctx, conversationID, ids); err != nil {
@@ -89,7 +85,7 @@ func (s *ShoppingImpl) DeleteItems(ctx context.Context, conversationID model.Con
 }
 
 func (s *ShoppingImpl) SetStatus(ctx context.Context, conversationID model.ConversationID) error {
-	ctx, span := s.tracer.Start(ctx, "Shopping#SetStatus")
+	ctx, span := tracer.Start(ctx, "Shopping#SetStatus")
 	defer span.End()
 
 	status := &model.ConversationStatus{

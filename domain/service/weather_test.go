@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tenntenn/testtime"
-	"go.opentelemetry.io/otel"
 
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/mock/mock_repository"
@@ -101,7 +100,6 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				weather:    nil,
 				imageStore: m,
 				loc:        loc,
-				tracer:     otel.Tracer("test"),
 			}
 
 			got, err := service.ImageURL(ctx)

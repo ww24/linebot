@@ -16,20 +16,18 @@ import (
 var tc = tracer.NewConfig(serviceName, version)
 
 type bot struct {
-	config         repository.Config
-	handler        http.Handler
-	tracerProvider trace.TracerProvider
+	config  repository.Config
+	handler http.Handler
 }
 
 func newBot(
 	config repository.Config,
 	handler http.Handler,
-	tracerProvider trace.TracerProvider,
+	_ trace.TracerProvider,
 ) *bot {
 	return &bot{
-		config:         config,
-		handler:        handler,
-		tracerProvider: tracerProvider,
+		config:  config,
+		handler: handler,
 	}
 }
 

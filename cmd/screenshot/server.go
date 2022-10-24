@@ -19,15 +19,14 @@ const readHeaderTimeout = 10 * time.Second
 var tc = tracer.NewConfig(serviceName, version)
 
 type server struct {
-	config         repository.Config
-	srv            *http.Server
-	tracerProvider trace.TracerProvider
+	config repository.Config
+	srv    *http.Server
 }
 
 func newServer(
 	conf repository.Config,
 	handler http.Handler,
-	tracerProvider trace.TracerProvider,
+	_ trace.TracerProvider,
 ) *server {
 	return &server{
 		config: conf,
@@ -36,7 +35,6 @@ func newServer(
 			Addr:              conf.Addr(),
 			ReadHeaderTimeout: readHeaderTimeout,
 		},
-		tracerProvider: tracerProvider,
 	}
 }
 

@@ -6,12 +6,11 @@ import (
 
 	"github.com/google/wire"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/filters"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/tracer"
 )
 
 // Set provides a wire set.
@@ -29,10 +28,7 @@ type LINEBot struct {
 }
 
 func NewLINEBot(conf repository.Config) (*LINEBot, error) {
-	transport := otelhttp.NewTransport(http.DefaultTransport, otelhttp.WithFilter(
-		// ignore health check request
-		filters.Not(filters.Path("/")),
-	))
+	transport := tracer.HTTPTransport(http.DefaultTransport)
 	hc := &http.Client{Transport: transport}
 	cli, err := linebot.New(
 		conf.LINEChannelSecret(),

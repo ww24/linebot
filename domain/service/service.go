@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/google/wire"
+	"go.opentelemetry.io/otel"
 )
 
 // Set provides a wire set.
@@ -17,3 +18,5 @@ var Set = wire.NewSet(
 	NewWeather,
 	wire.Bind(new(Weather), new(*WeatherImpl)),
 )
+
+var tracer = otel.Tracer("github.com/ww24/linebot/domain/service")
