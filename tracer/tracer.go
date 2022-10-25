@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	octrace "go.opencensus.io/trace"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
@@ -29,7 +28,6 @@ func init() {
 			// propagation.Baggage{},
 			b3.New(),
 			propagation.TraceContext{},
-			propagator.CloudTraceOneWayPropagator{},
 		),
 	)
 
