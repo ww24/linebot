@@ -7,6 +7,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	octrace "go.opencensus.io/trace"
+	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/bridge/opencensus"
 	"go.opentelemetry.io/otel/propagation"
@@ -63,9 +64,10 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
+			// propagation.TraceContext{},
+			// propagation.Baggage{},
 			propagator.CloudTraceOneWayPropagator{},
-			propagation.TraceContext{},
-			propagation.Baggage{},
+			b3.New(),
 		),
 	)
 
