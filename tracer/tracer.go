@@ -23,6 +23,21 @@ import (
 
 const shutdownTimeout = 5 * time.Second
 
+func init() {
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(
+			// propagation.Baggage{},
+			b3.New(),
+			propagation.TraceContext{},
+			propagator.CloudTraceOneWayPropagator{},
+		),
+	)
+
+	// OpenCensus Bridge
+	tracer := otel.Tracer("go.opentelemetry.io/otel/bridge/opencensus")
+	octrace.DefaultTracer = opencensus.NewTracer(tracer)
+}
+
 type Config struct {
 	name    string
 	version string
@@ -61,19 +76,6 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 		sdktrace.WithResource(resources),
 	)
 	otel.SetTracerProvider(tp)
-
-	otel.SetTextMapPropagator(
-		propagation.NewCompositeTextMapPropagator(
-			// propagation.TraceContext{},
-			// propagation.Baggage{},
-			propagator.CloudTraceOneWayPropagator{},
-			b3.New(),
-		),
-	)
-
-	// OpenCensus Bridge
-	tracer := otel.Tracer("OpenCensus")
-	octrace.DefaultTracer = opencensus.NewTracer(tracer)
 
 	cleanup := func() {
 		ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
