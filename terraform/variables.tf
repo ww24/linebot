@@ -33,11 +33,6 @@ variable "image_name" {
   default = "linebot"
 }
 
-variable "image_name_screenshot" {
-  type    = string
-  default = "screenshot"
-}
-
 variable "image_tag" {
   type    = string
   default = "latest"
@@ -72,23 +67,6 @@ variable "cloud_tasks_queue" {
 variable "service_endpoint" {
   type        = string
   description = "Cloud Run Service Endpoint (https://*.a.run.app)"
-}
-
-variable "weather_api" {
-  type        = string
-  description = "Weather API URL (use screenshot service)"
-}
-
-variable "weather_api_timeout" {
-  type        = string
-  default     = "120s"
-  description = "Weather API timeout"
-}
-
-variable "browser_timeout" {
-  type        = string
-  default     = "90s"
-  description = "Browser timeout"
 }
 
 variable "linebot_otel_sampling_rate" {

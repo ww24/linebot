@@ -71,16 +71,6 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
-          name  = "WEATHER_API"
-          value = var.weather_api
-        }
-
-        env {
-          name  = "WEATHER_API_TIMEOUT"
-          value = var.weather_api_timeout
-        }
-
-        env {
           name  = "IMAGE_BUCKET"
           value = google_storage_bucket.image.name
         }
