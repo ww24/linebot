@@ -97,7 +97,6 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			m := mock_repository.NewMockWeatherImageStore(ctrl)
 			tt.setup(m, tt.time)
 			service := &WeatherImpl{
-				weather:    nil,
 				imageStore: m,
 				loc:        loc,
 			}
