@@ -11,7 +11,6 @@ import (
 	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/external/linebot"
-	"github.com/ww24/linebot/infra/external/weather"
 	"github.com/ww24/linebot/infra/firestore"
 	"github.com/ww24/linebot/infra/gcs"
 	"github.com/ww24/linebot/infra/scheduler"
@@ -68,11 +67,6 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	}
 	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
 	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
-	weatherWeather, err := weather.NewWeather(configConfig)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
 	gcsClient, err := gcs.New(contextContext)
 	if err != nil {
 		cleanup()
@@ -83,9 +77,9 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	weatherImpl := service.NewWeather(weatherWeather, weatherImageStore, configConfig)
-	interactorWeather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, interactorWeather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	weatherImpl := service.NewWeather(weatherImageStore, configConfig)
+	weather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
+	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, weather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

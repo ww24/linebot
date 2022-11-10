@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"cloud.google.com/go/profiler"
 	"go.uber.org/automaxprocs/maxprocs"
@@ -16,8 +15,7 @@ import (
 )
 
 const (
-	serviceName     = "screenshot"
-	shutdownTimeout = 10 * time.Second
+	serviceName = "screenshot"
 )
 
 var (
@@ -41,7 +39,7 @@ func main() {
 		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
 	}
 
-	srv, cleanup, err := register(ctx)
+	job, cleanup, err := register(ctx)
 	if err != nil {
 		dl.Error("register", zap.Error(err))
 		panic(err)
@@ -62,17 +60,9 @@ func main() {
 		}
 	}
 
-	dl.Info("start server")
-	//nolint:errcheck
-	go srv.srv.ListenAndServe()
-
-	// wait signal
-	<-ctx.Done()
-	stop()
-
-	c, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
-	defer cancel()
-	if err := srv.srv.Shutdown(c); err != nil {
-		dl.Error("failed to shutdown server", zap.Error(err))
+	dl.Info("start job")
+	if err := job.run(ctx); err != nil {
+		stop()
+		dl.Error("failed to exec job", zap.Error(err))
 	}
 }

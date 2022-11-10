@@ -27,6 +27,7 @@ var (
 var Set = wire.NewSet(
 	NewConfig,
 	wire.Bind(new(repository.Config), new(*Config)),
+	NewScreenshot,
 )
 
 // Config implements repository.Config.

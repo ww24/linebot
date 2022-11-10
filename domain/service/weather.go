@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"io"
 	"time"
 
 	"go.uber.org/zap"
@@ -17,40 +18,31 @@ const (
 )
 
 type Weather interface {
-	SaveImage(context.Context) error
+	SaveImage(context.Context, io.Reader) error
 	ImageURL(context.Context) (string, error)
 }
 
 type WeatherImpl struct {
-	weather    repository.Weather
 	imageStore repository.WeatherImageStore
 	loc        *time.Location
 }
 
 func NewWeather(
-	weather repository.Weather,
 	imageStore repository.WeatherImageStore,
 	conf repository.Config,
 ) *WeatherImpl {
 	return &WeatherImpl{
-		weather:    weather,
 		imageStore: imageStore,
 		loc:        conf.DefaultLocation(),
 	}
 }
 
-func (w *WeatherImpl) SaveImage(ctx context.Context) error {
+func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
 	ctx, span := tracer.Start(ctx, "Weather#SaveImage")
 	defer span.End()
 
-	rc, err := w.weather.Fetch(ctx)
-	if err != nil {
-		return xerrors.Errorf("weather.Fetch: %w", err)
-	}
-	defer rc.Close()
-
 	now := time.Now()
-	imageURL, err := w.imageStore.Save(ctx, rc, now)
+	imageURL, err := w.imageStore.Save(ctx, r, now)
 	if err != nil {
 		return xerrors.Errorf("imageStore.Save: %w", err)
 	}

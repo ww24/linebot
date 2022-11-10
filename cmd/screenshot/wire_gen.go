@@ -9,31 +9,45 @@ package main
 import (
 	"context"
 	"github.com/ww24/linebot/config"
+	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/browser"
+	"github.com/ww24/linebot/infra/gcs"
 	"github.com/ww24/linebot/interactor"
-	"github.com/ww24/linebot/presentation/http"
 	"github.com/ww24/linebot/tracer"
 )
 
 // Injectors from wire.go:
 
-func register(ctx context.Context) (*server, func(), error) {
+func register(ctx context.Context) (*job, func(), error) {
+	screenshot, err := config.NewScreenshot()
+	if err != nil {
+		return nil, nil, err
+	}
 	configConfig, err := config.NewConfig()
 	if err != nil {
 		return nil, nil, err
 	}
-	logger, err := newLogger(ctx)
+	browserBrowser := browser.NewBrowser(configConfig)
+	client, err := gcs.New(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	browserBrowser := browser.NewBrowser(configConfig)
-	screenshot := interactor.NewScreenshot(browserBrowser)
-	screenshotHandler := http.NewScreenshotHandler(logger, screenshot)
+	weatherImageStore, err := gcs.NewWeatherImageStore(client, configConfig)
+	if err != nil {
+		return nil, nil, err
+	}
+	weatherImpl := service.NewWeather(weatherImageStore, configConfig)
+	interactorScreenshot := interactor.NewScreenshot(browserBrowser, weatherImpl)
 	tracerConfig := _wireConfigValue
 	spanExporter := tracer.NewCloudTraceExporter()
 	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
-	mainServer := newServer(configConfig, screenshotHandler, tracerProvider)
-	return mainServer, func() {
+	logger, err := newLogger(ctx)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	mainJob := newJob(screenshot, interactorScreenshot, tracerProvider, logger)
+	return mainJob, func() {
 		cleanup()
 	}, nil
 }

@@ -62,7 +62,6 @@ func NewEventHandler(
 		},
 		scheduleHandlers: []repository.ScheduleHandler{
 			reminderInteractor,
-			weatherInteractor,
 		},
 		remindHandlers: []repository.RemindHandler{
 			shoppingInteractor,
