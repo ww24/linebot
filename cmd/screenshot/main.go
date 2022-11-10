@@ -29,8 +29,9 @@ func main() {
 
 	log.SetFlags(0)
 	if err := logger.InitializeLogger(ctx, serviceName, version); err != nil {
+		stop()
 		log.Printf("ERROR logger.InitializeLogger: %+v", err)
-		return
+		os.Exit(1)
 	}
 	dl := logger.DefaultLogger(ctx)
 
@@ -41,8 +42,9 @@ func main() {
 
 	job, cleanup, err := register(ctx)
 	if err != nil {
+		stop()
 		dl.Error("register", zap.Error(err))
-		panic(err)
+		os.Exit(1)
 	}
 	defer cleanup()
 
@@ -63,6 +65,10 @@ func main() {
 	dl.Info("start job")
 	if err := job.run(ctx); err != nil {
 		stop()
+		cleanup()
 		dl.Error("failed to exec job", zap.Error(err))
+		os.Exit(1)
 	}
+
+	dl.Info("done")
 }
