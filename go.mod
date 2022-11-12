@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/cloudtasks v1.7.0
 	cloud.google.com/go/firestore v1.8.0
 	cloud.google.com/go/profiler v0.3.0
-	cloud.google.com/go/storage v1.27.0
+	cloud.google.com/go/storage v1.28.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.10.1
 	github.com/blendle/zapdriver v1.3.1
 	github.com/chromedp/chromedp v0.8.6
