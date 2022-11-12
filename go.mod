@@ -12,7 +12,7 @@ require (
 	github.com/chromedp/chromedp v0.8.6
 	github.com/go-oss/scheduler v0.1.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-jsonnet v0.18.0
+	github.com/google/go-jsonnet v0.19.1
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.9
 	github.com/ikawaha/kagome/v2 v2.9.0
@@ -75,7 +75,7 @@ require (
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
