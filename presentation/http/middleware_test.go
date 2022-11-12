@@ -44,7 +44,7 @@ func TestPanicHandler(t *testing.T) {
 			t.Parallel()
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest(http.MethodGet, "/", nil)
-			PanicHandler(logger.NewNop())(tt.h).ServeHTTP(w, r)
+			panicHandler(logger.NewNop())(tt.h).ServeHTTP(w, r)
 			assert.Equal(t, tt.wantStatus, w.Code)
 			assert.Equal(t, tt.wantBody, w.Body.String())
 		})

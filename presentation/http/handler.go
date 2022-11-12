@@ -23,11 +23,10 @@ import (
 // Set provides a wire set.
 var Set = wire.NewSet(
 	NewHandler,
-	wire.Bind(new(http.Handler), new(*Handler)),
 	NewAuthorizer,
 )
 
-type Handler struct {
+type handler struct {
 	log          *logger.Logger
 	bot          service.Bot
 	auth         *Authorizer
@@ -42,8 +41,8 @@ func NewHandler(
 	auth *Authorizer,
 	eventHandler usecase.EventHandler,
 	imageHandler usecase.ImageHandler,
-) (*Handler, error) {
-	return &Handler{
+) (http.Handler, error) {
+	h := &handler{
 		log:          log,
 		bot:          bot,
 		auth:         auth,
@@ -51,35 +50,33 @@ func NewHandler(
 		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
 			tracer.HTTPMiddleware(),
-			PanicHandler(log),
+			panicHandler(log),
 		},
-	}, nil
-}
+	}
 
-func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", h.healthCheck())
 	mux.HandleFunc("/line_callback", h.lineCallback())
 	mux.HandleFunc("/scheduler", h.executeScheduler())
 	mux.HandleFunc("/reminder", h.executeReminder())
 	mux.HandleFunc("/image/", h.serveImage())
-	h.registerMiddleware(mux).ServeHTTP(w, r)
+	return h.registerMiddleware(mux), nil
 }
 
-func (h *Handler) registerMiddleware(handler http.Handler) http.Handler {
+func (h *handler) registerMiddleware(handler http.Handler) http.Handler {
 	for _, middleware := range h.middlewares {
 		handler = middleware(handler)
 	}
 	return handler
 }
 
-func (h *Handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
+func (h *handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	}
 }
 
-func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
+func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
@@ -102,7 +99,7 @@ func (h *Handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) executeScheduler() func(w http.ResponseWriter, r *http.Request) {
+func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
@@ -138,7 +135,7 @@ func (h *Handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (h *Handler) executeReminder() func(w http.ResponseWriter, r *http.Request) {
+func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
@@ -195,7 +192,7 @@ func (h *Handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func (h *Handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
+func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
