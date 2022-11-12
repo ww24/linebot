@@ -1,3 +1,4 @@
+# linebot GSA
 resource "google_service_account" "linebot" {
   account_id   = var.name
   display_name = "${var.name} Service Account"
@@ -63,11 +64,19 @@ resource "google_secret_manager_secret_iam_member" "line-channel-access-token" {
   member    = "serviceAccount:${google_service_account.linebot.email}"
 }
 
+# invoker GSA
 resource "google_service_account" "invoker" {
   account_id   = "${var.name}-invoker"
   display_name = "${var.name}-invoker Service Account"
 }
 
+resource "google_project_iam_member" "invoker" {
+  project = var.project
+  role    = "roles/run.invoker"
+  member  = "serviceAccount:${google_service_account.invoker.email}"
+}
+
+# screenshot GSA
 resource "google_service_account" "screenshot" {
   account_id   = var.name_screenshot
   display_name = "screenshot Service Account"
