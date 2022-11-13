@@ -32,10 +32,10 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				m.EXPECT().Get(
 					gomock.Any(), t,
 					weatherImageTTL,
-				).Return("https://example.com/20220101/image.png", nil)
+				).Return("20220101/image.png", nil)
 			},
 			time:     time.Date(2022, 1, 1, 12, 0, 0, 0, loc),
-			want:     "https://example.com/20220101/image.png",
+			want:     "20220101/image.png",
 			wantCode: code.OK,
 		},
 		{
@@ -49,11 +49,11 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 					m.EXPECT().Get(
 						gomock.Any(), t.Add(-weatherImageTTL),
 						weatherImageTTL,
-					).Return("https://example.com/20211231/image.png", nil),
+					).Return("20211231/image.png", nil),
 				)
 			},
 			time:     time.Date(2022, 1, 1, 1, 0, 0, 0, loc),
-			want:     "https://example.com/20211231/image.png",
+			want:     "20211231/image.png",
 			wantCode: code.OK,
 		},
 		{
@@ -101,7 +101,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				loc:        loc,
 			}
 
-			got, err := service.ImageURL(ctx)
+			got, err := service.LatestImage(ctx)
 			assert.Equal(t, tt.wantCode, code.From(err))
 			assert.Equal(t, tt.want, got)
 		})

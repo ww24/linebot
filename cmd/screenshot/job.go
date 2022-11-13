@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/ww24/linebot/config"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"

@@ -15,35 +15,27 @@ import (
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 
-	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/internal/code"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
 const (
 	weatherPrefix = "weather/japan-all/"
 	objectSuffix  = "-weather.png"
-	urlPathPrefix = "/image"
 )
 
 type WeatherImageStore struct {
 	*Client
-	bucket    string
-	loc       *time.Location
-	urlPrefix string
+	bucket string
+	loc    *time.Location
 }
 
-func NewWeatherImageStore(cli *Client, conf repository.Config) (*WeatherImageStore, error) {
-	endpoint, err := conf.ServiceEndpoint(urlPathPrefix)
-	if err != nil {
-		return nil, xerrors.Errorf("failed to get endpoint: %w", err)
-	}
-
+func NewWeatherImageStore(cli *Client, cs *config.Storage, ct *config.Time) (*WeatherImageStore, error) {
 	return &WeatherImageStore{
-		Client:    cli,
-		bucket:    conf.ImageBucket(),
-		loc:       conf.DefaultLocation(),
-		urlPrefix: endpoint.String(),
+		Client: cli,
+		bucket: cs.ImageBucket,
+		loc:    ct.DefaultLocation(),
 	}, nil
 }
 
@@ -63,7 +55,7 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 		return "", xerrors.Errorf("writer.Close: %w", err)
 	}
 
-	return w.url(key), nil
+	return key, nil
 }
 
 func (w *WeatherImageStore) Get(ctx context.Context, t time.Time, ttl time.Duration) (string, error) {
@@ -87,7 +79,7 @@ func (w *WeatherImageStore) Get(ctx context.Context, t time.Time, ttl time.Durat
 			return "", xerrors.Errorf("image is expired")
 		}
 
-		return w.url(attrs.Name), nil
+		return attrs.Name, nil
 	}
 
 	err := xerrors.Errorf("image is not found")
@@ -102,8 +94,4 @@ func (w *WeatherImageStore) key(t time.Time) string {
 		t.In(w.loc).Format("20060102"),
 		strconv.FormatInt(reverseUnixtime, base)+objectSuffix,
 	)
-}
-
-func (w *WeatherImageStore) url(key string) string {
-	return w.urlPrefix + "/" + key
 }

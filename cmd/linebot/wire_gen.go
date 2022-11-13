@@ -8,13 +8,13 @@ package main
 
 import (
 	"context"
-	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/external/linebot"
 	"github.com/ww24/linebot/infra/firestore"
 	"github.com/ww24/linebot/infra/gcs"
 	"github.com/ww24/linebot/infra/scheduler"
 	"github.com/ww24/linebot/interactor"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/nl"
 	"github.com/ww24/linebot/presentation/http"
 	"github.com/ww24/linebot/tracer"
@@ -23,7 +23,7 @@ import (
 // Injectors from wire.go:
 
 func register(contextContext context.Context) (*bot, func(), error) {
-	configConfig, err := config.NewConfig()
+	lineBot, err := config.NewLINEBot()
 	if err != nil {
 		return nil, nil, err
 	}
@@ -31,19 +31,23 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	lineBot, err := linebot.NewLINEBot(configConfig)
+	linebotLINEBot, err := linebot.NewLINEBot(lineBot)
 	if err != nil {
 		return nil, nil, err
 	}
 	messageProviderSet := linebot.NewMessageProviderSet()
-	botImpl := service.NewBot(lineBot, messageProviderSet)
-	authorizer, err := http.NewAuthorizer(contextContext, configConfig)
+	botImpl := service.NewBot(linebotLINEBot, messageProviderSet)
+	authorizer, err := http.NewAuthorizer(contextContext, lineBot)
 	if err != nil {
 		return nil, nil, err
 	}
 	tracerConfig := _wireConfigValue
+	otel, err := config.NewOtel()
+	if err != nil {
+		return nil, nil, err
+	}
 	spanExporter := tracer.NewCloudTraceExporter()
-	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
+	tracerProvider, cleanup := tracer.New(tracerConfig, otel, spanExporter)
 	client, err := firestore.New(contextContext, tracerProvider)
 	if err != nil {
 		cleanup()
@@ -60,31 +64,45 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	}
 	interactorShopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
 	reminder := firestore.NewReminder(conversation)
-	schedulerScheduler, err := scheduler.New(contextContext, configConfig)
+	schedulerScheduler, err := scheduler.New(contextContext, lineBot)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
 	reminderImpl := service.NewReminder(reminder, schedulerScheduler)
-	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	time, err := config.NewTime()
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	interactorReminder := interactor.NewReminder(conversationImpl, reminderImpl, messageProviderSet, botImpl, time)
 	gcsClient, err := gcs.New(contextContext)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	weatherImageStore, err := gcs.NewWeatherImageStore(gcsClient, configConfig)
+	storage, err := config.NewStorage()
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	weatherImpl := service.NewWeather(weatherImageStore, configConfig)
-	weather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
-	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, weather, conversationImpl, reminderImpl, messageProviderSet, botImpl, configConfig)
+	weatherImageStore, err := gcs.NewWeatherImageStore(gcsClient, storage, time)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	imageStore, err := gcs.NewImageStore(gcsClient, configConfig)
+	weatherImpl := service.NewWeather(weatherImageStore, time)
+	weather, err := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl, lineBot)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, weather, conversationImpl, reminderImpl, messageProviderSet, botImpl, lineBot)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	imageStore, err := gcs.NewImageStore(gcsClient, storage)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -95,7 +113,7 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	mainBot := newBot(configConfig, handler, tracerProvider)
+	mainBot := newBot(lineBot, handler, tracerProvider)
 	return mainBot, func() {
 		cleanup()
 	}, nil

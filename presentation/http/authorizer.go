@@ -9,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 	"google.golang.org/api/idtoken"
 
-	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
@@ -18,7 +18,7 @@ type Authorizer struct {
 	invokerServiceAccountID string
 }
 
-func NewAuthorizer(ctx context.Context, conf repository.Config) (*Authorizer, error) {
+func NewAuthorizer(ctx context.Context, conf *config.LINEBot) (*Authorizer, error) {
 	serviceEndpoint, err := conf.ServiceEndpoint("")
 	if err != nil {
 		return nil, xerrors.New("failed to get service endpoint")
@@ -26,7 +26,7 @@ func NewAuthorizer(ctx context.Context, conf repository.Config) (*Authorizer, er
 
 	return &Authorizer{
 		audience:                serviceEndpoint.String(),
-		invokerServiceAccountID: conf.InvokerServiceAccountID(),
+		invokerServiceAccountID: conf.InvokerServiceAccountID,
 	}, nil
 }
 

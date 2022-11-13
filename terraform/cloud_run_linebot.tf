@@ -31,7 +31,7 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
-          name = "LINE_CHANNEL_SECRET"
+          name = "LINEBOT_LINE_CHANNEL_SECRET"
           value_from {
             secret_key_ref {
               name = google_secret_manager_secret.line-channel-secret.secret_id
@@ -41,7 +41,7 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
-          name = "LINE_CHANNEL_ACCESS_TOKEN"
+          name = "LINEBOT_LINE_CHANNEL_ACCESS_TOKEN"
           value_from {
             secret_key_ref {
               name = google_secret_manager_secret.line-channel-access-token.secret_id
@@ -51,17 +51,17 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
-          name  = "ALLOW_CONV_IDS"
+          name  = "LINEBOT_ALLOW_CONV_IDS"
           value = var.allow_conv_ids
         }
 
         env {
-          name  = "CLOUD_TASKS_LOCATION"
+          name  = "LINEBOT_CLOUD_TASKS_LOCATION"
           value = var.location
         }
 
         env {
-          name  = "CLOUD_TASKS_QUEUE"
+          name  = "LINEBOT_CLOUD_TASKS_QUEUE"
           value = var.cloud_tasks_queue
         }
 
@@ -71,17 +71,17 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
-          name  = "IMAGE_BUCKET"
+          name  = "STORAGE_IMAGE_BUCKET"
           value = google_storage_bucket.image.name
         }
 
         env {
-          name  = "INVOKER_SERVICE_ACCOUNT_ID"
+          name  = "LINEBOT_INVOKER_SERVICE_ACCOUNT_ID"
           value = google_service_account.invoker.unique_id
         }
 
         env {
-          name  = "INVOKER_SERVICE_ACCOUNT_EMAIL"
+          name  = "LINEBOT_INVOKER_SERVICE_ACCOUNT_EMAIL"
           value = google_service_account.invoker.email
         }
 

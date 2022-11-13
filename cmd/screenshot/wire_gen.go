@@ -8,11 +8,11 @@ package main
 
 import (
 	"context"
-	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/browser"
 	"github.com/ww24/linebot/infra/gcs"
 	"github.com/ww24/linebot/interactor"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/tracer"
 )
 
@@ -23,24 +23,32 @@ func register(ctx context.Context) (*job, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	configConfig, err := config.NewConfig()
-	if err != nil {
-		return nil, nil, err
-	}
-	browserBrowser := browser.NewBrowser(configConfig)
+	browserBrowser := browser.NewBrowser(screenshot)
 	client, err := gcs.New(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	weatherImageStore, err := gcs.NewWeatherImageStore(client, configConfig)
+	storage, err := config.NewStorage()
 	if err != nil {
 		return nil, nil, err
 	}
-	weatherImpl := service.NewWeather(weatherImageStore, configConfig)
+	time, err := config.NewTime()
+	if err != nil {
+		return nil, nil, err
+	}
+	weatherImageStore, err := gcs.NewWeatherImageStore(client, storage, time)
+	if err != nil {
+		return nil, nil, err
+	}
+	weatherImpl := service.NewWeather(weatherImageStore, time)
 	interactorScreenshot := interactor.NewScreenshot(browserBrowser, weatherImpl)
 	tracerConfig := _wireConfigValue
+	otel, err := config.NewOtel()
+	if err != nil {
+		return nil, nil, err
+	}
 	spanExporter := tracer.NewCloudTraceExporter()
-	tracerProvider, cleanup := tracer.New(tracerConfig, configConfig, spanExporter)
+	tracerProvider, cleanup := tracer.New(tracerConfig, otel, spanExporter)
 	logger, err := newLogger(ctx)
 	if err != nil {
 		cleanup()

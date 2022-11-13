@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
-	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 )
@@ -16,17 +16,17 @@ import (
 var tc = tracer.NewConfig(serviceName, version)
 
 type bot struct {
-	config  repository.Config
+	conf    *config.LINEBot
 	handler http.Handler
 }
 
 func newBot(
-	config repository.Config,
+	conf *config.LINEBot,
 	handler http.Handler,
 	_ trace.TracerProvider,
 ) *bot {
 	return &bot{
-		config:  config,
+		conf:    conf,
 		handler: handler,
 	}
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/tracer"
 )
 
@@ -24,15 +25,15 @@ var Set = wire.NewSet(
 // LINEBot implements repository.Bot.
 type LINEBot struct {
 	cli                    *linebot.Client
-	allowedConversationIDs repository.ConversationIDs
+	allowedConversationIDs *config.ConversationIDs
 }
 
-func NewLINEBot(conf repository.Config) (*LINEBot, error) {
+func NewLINEBot(conf *config.LINEBot) (*LINEBot, error) {
 	transport := tracer.HTTPTransport(http.DefaultTransport)
 	hc := &http.Client{Transport: transport}
 	cli, err := linebot.New(
-		conf.LINEChannelSecret(),
-		conf.LINEChannelToken(),
+		conf.LINEChannelSecret,
+		conf.LINEChannelAccessToken,
 		linebot.WithHTTPClient(hc),
 	)
 	if err != nil {

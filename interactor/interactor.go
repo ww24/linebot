@@ -12,6 +12,7 @@ import (
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/internal/code"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/usecase"
 )
@@ -39,7 +40,7 @@ type EventHandler struct {
 	remindHandlers   []repository.RemindHandler
 	conversation     service.Conversation
 	reminder         service.Reminder
-	conf             repository.Config
+	conversationIDs  *config.ConversationIDs
 	bot              service.Bot
 	message          repository.MessageProviderSet
 }
@@ -52,7 +53,7 @@ func NewEventHandler(
 	reminder service.Reminder,
 	message repository.MessageProviderSet,
 	bot service.Bot,
-	conf repository.Config,
+	conf *config.LINEBot,
 ) (*EventHandler, error) {
 	return &EventHandler{
 		handlers: []repository.Handler{
@@ -66,11 +67,11 @@ func NewEventHandler(
 		remindHandlers: []repository.RemindHandler{
 			shoppingInteractor,
 		},
-		conversation: conversation,
-		reminder:     reminder,
-		conf:         conf,
-		bot:          bot,
-		message:      message,
+		conversation:    conversation,
+		reminder:        reminder,
+		conversationIDs: conf.ConversationIDs(),
+		bot:             bot,
+		message:         message,
 	}, nil
 }
 
@@ -78,7 +79,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 	dl := logger.DefaultLogger(ctx)
 
 	for _, e := range events {
-		if !h.conf.ConversationIDs().Available(e.ConversationID()) {
+		if !h.conversationIDs.Available(e.ConversationID()) {
 			dl.Warn("not allowed conversation",
 				zap.String("ConversationID", e.ConversationID().String()),
 			)
