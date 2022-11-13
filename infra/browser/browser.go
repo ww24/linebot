@@ -13,6 +13,7 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
@@ -32,9 +33,9 @@ type Browser struct {
 	timeout time.Duration
 }
 
-func NewBrowser(conf repository.Config) *Browser {
+func NewBrowser(conf *config.Screenshot) *Browser {
 	return &Browser{
-		timeout: conf.BrowserTimeout(),
+		timeout: conf.BrowserTimeout,
 	}
 }
 

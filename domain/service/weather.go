@@ -10,6 +10,7 @@ import (
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/internal/code"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
@@ -19,7 +20,7 @@ const (
 
 type Weather interface {
 	SaveImage(context.Context, io.Reader) error
-	ImageURL(context.Context) (string, error)
+	LatestImage(context.Context) (string, error)
 }
 
 type WeatherImpl struct {
@@ -29,11 +30,11 @@ type WeatherImpl struct {
 
 func NewWeather(
 	imageStore repository.WeatherImageStore,
-	conf repository.Config,
+	ct *config.Time,
 ) *WeatherImpl {
 	return &WeatherImpl{
 		imageStore: imageStore,
-		loc:        conf.DefaultLocation(),
+		loc:        ct.DefaultLocation(),
 	}
 }
 
@@ -42,30 +43,30 @@ func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
 	defer span.End()
 
 	now := time.Now()
-	imageURL, err := w.imageStore.Save(ctx, r, now)
+	name, err := w.imageStore.Save(ctx, r, now)
 	if err != nil {
 		return xerrors.Errorf("imageStore.Save: %w", err)
 	}
 
 	dl := logger.DefaultLogger(ctx)
-	dl.Info("weather image saved", zap.String("url", imageURL))
+	dl.Info("weather image saved", zap.String("name", name))
 
 	return nil
 }
 
-func (w *WeatherImpl) ImageURL(ctx context.Context) (string, error) {
-	ctx, span := tracer.Start(ctx, "Weather#ImageURL")
+func (w *WeatherImpl) LatestImage(ctx context.Context) (string, error) {
+	ctx, span := tracer.Start(ctx, "Weather#LatestImage")
 	defer span.End()
 
 	now := time.Now().In(w.loc)
 
-	imageURL, err := w.imageStore.Get(ctx, now, weatherImageTTL)
+	name, err := w.imageStore.Get(ctx, now, weatherImageTTL)
 	if code.From(err) == code.NotFound && now.Add(-weatherImageTTL).Day() != now.Day() {
-		imageURL, err = w.imageStore.Get(ctx, now.Add(-weatherImageTTL), weatherImageTTL)
+		name, err = w.imageStore.Get(ctx, now.Add(-weatherImageTTL), weatherImageTTL)
 	}
 	if err != nil {
 		return "", xerrors.Errorf("imageStore.Get: %w", err)
 	}
 
-	return imageURL, nil
+	return name, nil
 }

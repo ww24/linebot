@@ -67,7 +67,7 @@ func main() {
 
 	srv := &http.Server{
 		Handler:           bot.handler,
-		Addr:              bot.config.Addr(),
+		Addr:              bot.conf.Addr(),
 		ReadHeaderTimeout: readHeaderTimeout,
 	}
 	dl.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))

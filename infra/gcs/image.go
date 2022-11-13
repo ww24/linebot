@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 )
 
 type ImageStore struct {
@@ -14,10 +14,10 @@ type ImageStore struct {
 	bucket string
 }
 
-func NewImageStore(cli *Client, conf repository.Config) (*ImageStore, error) {
+func NewImageStore(cli *Client, conf *config.Storage) (*ImageStore, error) {
 	return &ImageStore{
 		Client: cli,
-		bucket: conf.ImageBucket(),
+		bucket: conf.ImageBucket,
 	}, nil
 }
 

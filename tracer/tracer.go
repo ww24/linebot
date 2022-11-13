@@ -16,7 +16,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 
-	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
@@ -48,7 +48,7 @@ func NewConfig(name, version string) *Config {
 	}
 }
 
-func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (trace.TracerProvider, func()) {
+func New(c *Config, conf *config.Otel, exporter sdktrace.SpanExporter) (trace.TracerProvider, func()) {
 	resources := resource.NewWithAttributes(
 		semconv.SchemaURL,
 		semconv.ServiceNameKey.String(c.name),
@@ -56,7 +56,7 @@ func New(c *Config, conf repository.Config, exporter sdktrace.SpanExporter) (tra
 	)
 
 	sampler := newCustomSampler(
-		sdktrace.ParentBased(sdktrace.TraceIDRatioBased(conf.OTELSamplingRate()),
+		sdktrace.ParentBased(sdktrace.TraceIDRatioBased(conf.SamplingRate),
 			sdktrace.WithLocalParentSampled(sdktrace.AlwaysSample()),
 			sdktrace.WithLocalParentNotSampled(sdktrace.NeverSample()),
 			sdktrace.WithRemoteParentSampled(sdktrace.AlwaysSample()),

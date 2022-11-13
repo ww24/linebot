@@ -8,11 +8,11 @@ import (
 
 	"github.com/google/wire"
 
-	"github.com/ww24/linebot/config"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/infra/browser"
 	"github.com/ww24/linebot/infra/gcs"
 	"github.com/ww24/linebot/interactor"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/tracer"
 )
 

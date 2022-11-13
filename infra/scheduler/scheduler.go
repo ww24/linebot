@@ -16,6 +16,7 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/internal/gcp"
 )
 
@@ -40,7 +41,7 @@ type Scheduler struct {
 	audience                   string
 }
 
-func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
+func New(ctx context.Context, conf *config.LINEBot) (*Scheduler, error) {
 	projectID, err := gcp.ProjectID(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
@@ -59,10 +60,10 @@ func New(ctx context.Context, conf repository.Config) (*Scheduler, error) {
 	return &Scheduler{
 		cli:                        cli,
 		projectID:                  projectID,
-		location:                   conf.CloudTasksLocation(),
-		queue:                      conf.CloudTasksQueue(),
+		location:                   conf.CloudTasksLocation,
+		queue:                      conf.CloudTasksQueue,
 		endpoint:                   endpoint,
-		invokerServiceAccountEmail: conf.InvokerServiceAccountEmail(),
+		invokerServiceAccountEmail: conf.InvokerServiceAccountEmail,
 		audience:                   strings.TrimSuffix(endpoint.String(), reminderEndpoint),
 	}, nil
 }

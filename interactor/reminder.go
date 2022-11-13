@@ -11,6 +11,7 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/internal/config"
 )
 
 const (
@@ -35,7 +36,7 @@ func NewReminder(
 	reminder service.Reminder,
 	message repository.MessageProviderSet,
 	bot service.Bot,
-	conf repository.Config,
+	conf *config.Time,
 ) *Reminder {
 	loc := conf.DefaultLocation()
 	_, offset := time.Time{}.In(loc).Zone()

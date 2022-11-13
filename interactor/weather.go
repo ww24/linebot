@@ -9,29 +9,38 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
 
 const (
 	triggerWeather = "天気"
+	urlPathPrefix  = "/image"
 )
 
 type Weather struct {
-	weather service.Weather
-	message repository.MessageProviderSet
-	bot     service.Bot
+	weather   service.Weather
+	message   repository.MessageProviderSet
+	bot       service.Bot
+	urlPrefix string
 }
 
 func NewWeather(
 	weather service.Weather,
 	message repository.MessageProviderSet,
 	bot service.Bot,
-) *Weather {
-	return &Weather{
-		weather: weather,
-		message: message,
-		bot:     bot,
+	conf *config.LINEBot,
+) (*Weather, error) {
+	endpoint, err := conf.ServiceEndpoint(urlPathPrefix)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to get endpoint: %w", err)
 	}
+	return &Weather{
+		weather:   weather,
+		message:   message,
+		bot:       bot,
+		urlPrefix: endpoint.String(),
+	}, nil
 }
 
 func (w *Weather) Handle(ctx context.Context, e *model.Event) error {
@@ -50,10 +59,11 @@ func (w *Weather) Handle(ctx context.Context, e *model.Event) error {
 }
 
 func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
-	imageURL, err := w.weather.ImageURL(ctx)
+	imageName, err := w.weather.LatestImage(ctx)
 	if err != nil {
 		return xerrors.Errorf("weather.Fetch: %w", err)
 	}
+	imageURL := w.urlPrefix + "/" + imageName
 
 	dl := logger.DefaultLogger(ctx)
 	dl.Info("send image message", zap.String("imageURL", imageURL))
