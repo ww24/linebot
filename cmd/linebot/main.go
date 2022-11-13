@@ -70,7 +70,10 @@ func main() {
 		Addr:              bot.conf.Addr(),
 		ReadHeaderTimeout: readHeaderTimeout,
 	}
-	dl.Info("start server", zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)))
+	dl.Info("start server",
+		zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)),
+		zap.String("addr", bot.conf.Addr()),
+	)
 	//nolint:errcheck
 	go srv.ListenAndServe()
 

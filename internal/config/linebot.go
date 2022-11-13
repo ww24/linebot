@@ -25,7 +25,7 @@ type LINEBot struct {
 
 func NewLINEBot() (*LINEBot, error) {
 	var conf LINEBot
-	if err := envconfig.Process("LINEBOT", &conf); err != nil {
+	if err := envconfig.Process("", &conf); err != nil {
 		return nil, xerrors.Errorf("failed to parse linebot config: %w", err)
 	}
 
