@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"cloud.google.com/go/profiler"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 
@@ -21,11 +22,16 @@ const (
 var (
 	// version is set during build
 	version string
+	//nolint:gochecknoglobals
+	tr = otel.Tracer("github.com/ww24/linebot/cmd/screenshot")
 )
 
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	ctx, span := tr.Start(ctx, "start job")
+	defer span.End()
 
 	log.SetFlags(0)
 	if err := logger.InitializeLogger(ctx, serviceName, version); err != nil {
