@@ -56,7 +56,7 @@ resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
 }
 
 resource "google_bigquery_dataset" "access_log" {
-  dataset_id    = "${var.name}-access-log"
+  dataset_id    = "${var.name}_access_log"
   friendly_name = "${var.name} access log"
   description   = "${var.name} access log dataset"
   location      = "US"
@@ -64,7 +64,7 @@ resource "google_bigquery_dataset" "access_log" {
 
 resource "google_bigquery_table" "access_log" {
   dataset_id = google_bigquery_dataset.access_log.dataset_id
-  table_id   = "${var.name}-access-log"
+  table_id   = "${var.name}_access_log"
 
   time_partitioning {
     expiration_ms            = 31536000000 # 1 year
