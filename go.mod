@@ -6,8 +6,10 @@ require (
 	cloud.google.com/go/cloudtasks v1.8.0
 	cloud.google.com/go/firestore v1.9.0
 	cloud.google.com/go/profiler v0.3.1
+	cloud.google.com/go/pubsub v1.3.1
 	cloud.google.com/go/storage v1.28.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.10.2
+	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/blendle/zapdriver v1.3.1
 	github.com/chromedp/chromedp v0.8.6
 	github.com/go-oss/scheduler v0.1.0
@@ -56,6 +58,7 @@ require (
 	github.com/gobwas/ws v1.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/pprof v0.0.0-20221103000818-d260c55eee4c // indirect
 	github.com/google/subcommands v1.0.1 // indirect
