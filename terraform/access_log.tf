@@ -1,16 +1,3 @@
-resource "google_storage_bucket" "access_log_schema" {
-  name                        = "${var.name}-access-log-schema"
-  storage_class               = "STANDARD"
-  location                    = "US-CENTRAL1"
-  uniform_bucket_level_access = true
-}
-
-resource "google_storage_bucket_object" "access_log_schema_v1" {
-  name   = "access_log_schema/v1.avsc"
-  source = "access_log_schema/v1.avsc"
-  bucket = google_storage_bucket.access_log_schema.name
-}
-
 resource "google_pubsub_schema" "access_log_schema_v1" {
   name       = "${var.name}-access-log-v1"
   type       = "AVRO"
@@ -56,7 +43,7 @@ resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
 }
 
 resource "google_bigquery_dataset" "access_log" {
-  dataset_id    = "${var.name}-access-log"
+  dataset_id    = "${var.name}_access_log"
   friendly_name = "${var.name} access log"
   description   = "${var.name} access log dataset"
   location      = "US"
@@ -64,22 +51,14 @@ resource "google_bigquery_dataset" "access_log" {
 
 resource "google_bigquery_table" "access_log" {
   dataset_id = google_bigquery_dataset.access_log.dataset_id
-  table_id   = "${var.name}-access-log"
+  table_id   = "${var.name}_access_log"
+  clustering = ["timestamp"]
+  schema     = file("access_log_schema/v1.json")
 
   time_partitioning {
     expiration_ms            = 31536000000 # 1 year
     type                     = "DAY"
     field                    = "timestamp"
     require_partition_filter = true
-  }
-
-  external_data_configuration {
-    autodetect            = false
-    source_format         = "AVRO"
-    ignore_unknown_values = true
-    avro_options {
-      use_avro_logical_types = true
-    }
-    source_uris = [google_storage_bucket_object.access_log_schema_v1.self_link]
   }
 }
