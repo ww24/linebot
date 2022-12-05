@@ -5,7 +5,7 @@ go 1.19
 require (
 	cloud.google.com/go/cloudtasks v1.8.0
 	cloud.google.com/go/firestore v1.9.0
-	cloud.google.com/go/profiler v0.3.0
+	cloud.google.com/go/profiler v0.3.1
 	cloud.google.com/go/storage v1.28.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.10.2
 	github.com/blendle/zapdriver v1.3.1
@@ -57,7 +57,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/google/pprof v0.0.0-20220412212628-83db2b799d1f // indirect
+	github.com/google/pprof v0.0.0-20221103000818-d260c55eee4c // indirect
 	github.com/google/subcommands v1.0.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.0 // indirect
