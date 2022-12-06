@@ -89,6 +89,11 @@ resource "google_cloud_run_service" "linebot" {
           name  = "OTEL_SAMPLING_RATE"
           value = var.linebot_otel_sampling_rate
         }
+
+        env {
+          name  = "ACCESS_LOG_TOPIC"
+          value = local.access_log_topic
+        }
       }
     }
 

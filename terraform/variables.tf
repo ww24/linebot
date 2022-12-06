@@ -74,3 +74,7 @@ variable "linebot_otel_sampling_rate" {
   default     = "1"
   description = "OpenTelemetry sampling rate"
 }
+
+locals {
+  access_log_topic = "linebot-access-log"
+}
