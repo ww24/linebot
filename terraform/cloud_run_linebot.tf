@@ -57,12 +57,12 @@ resource "google_cloud_run_service" "linebot" {
 
         env {
           name  = "CLOUD_TASKS_LOCATION"
-          value = var.location
+          value = google_cloud_tasks_queue.linebot.location
         }
 
         env {
           name  = "CLOUD_TASKS_QUEUE"
-          value = var.cloud_tasks_queue
+          value = google_cloud_tasks_queue.linebot.name
         }
 
         env {
@@ -87,7 +87,12 @@ resource "google_cloud_run_service" "linebot" {
 
         env {
           name  = "OTEL_SAMPLING_RATE"
-          value = var.linebot_otel_sampling_rate
+          value = local.linebot_otel_sampling_rate
+        }
+
+        env {
+          name  = "ACCESS_LOG_TOPIC"
+          value = local.access_log_topic
         }
       }
     }
