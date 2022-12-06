@@ -12,8 +12,10 @@ import (
 	"github.com/ww24/linebot/infra/external/linebot"
 	"github.com/ww24/linebot/infra/firestore"
 	"github.com/ww24/linebot/infra/gcs"
+	"github.com/ww24/linebot/infra/pubsub"
 	"github.com/ww24/linebot/infra/scheduler"
 	"github.com/ww24/linebot/interactor"
+	"github.com/ww24/linebot/internal/accesslog"
 	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/nl"
 	"github.com/ww24/linebot/presentation/http"
@@ -108,7 +110,18 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		return nil, nil, err
 	}
 	image := interactor.NewImage(imageStore)
-	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image)
+	pubsubClient, err := pubsub.New(contextContext)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	accessLog, err := config.NewAccessLog()
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	publisher := accesslog.NewPublisher(pubsubClient, accessLog)
+	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image, publisher)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

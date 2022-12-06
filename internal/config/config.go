@@ -9,4 +9,5 @@ var Set = wire.NewSet(
 	NewStorage,
 	NewTime,
 	NewOtel,
+	NewAccessLog,
 )

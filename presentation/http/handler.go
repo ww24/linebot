@@ -15,6 +15,7 @@ import (
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/service"
+	"github.com/ww24/linebot/internal/accesslog"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
@@ -41,6 +42,7 @@ func NewHandler(
 	auth *Authorizer,
 	eventHandler usecase.EventHandler,
 	imageHandler usecase.ImageHandler,
+	publisher accesslog.Publisher,
 ) (http.Handler, error) {
 	h := &handler{
 		log:          log,
@@ -49,8 +51,9 @@ func NewHandler(
 		eventHandler: eventHandler,
 		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
-			tracer.HTTPMiddleware(),
 			panicHandler(log),
+			tracer.HTTPMiddleware(),
+			accessLogHandler(publisher),
 		},
 	}
 
@@ -64,8 +67,8 @@ func NewHandler(
 }
 
 func (h *handler) registerMiddleware(handler http.Handler) http.Handler {
-	for _, middleware := range h.middlewares {
-		handler = middleware(handler)
+	for i := len(h.middlewares) - 1; i >= 0; i-- {
+		handler = h.middlewares[i](handler)
 	}
 	return handler
 }
