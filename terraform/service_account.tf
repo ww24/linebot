@@ -45,6 +45,12 @@ resource "google_storage_bucket_iam_member" "linebot-storage" {
   member = "serviceAccount:${google_service_account.linebot.email}"
 }
 
+resource "google_pubsub_topic_iam_member" "linebot-access-log-publisher" {
+  topic  = google_pubsub_topic.access_log.name
+  role   = "roles/pubsub.publisher"
+  member = "serviceAccount:${google_service_account.linebot.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "linebot-secret" {
   for_each = toset([
     google_secret_manager_secret.line-channel-secret.id,
