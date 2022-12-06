@@ -59,22 +59,15 @@ variable "allow_conv_ids" {
   description = "Allowed list, conversation ids"
 }
 
-variable "cloud_tasks_queue" {
-  type    = string
-  default = "linebot"
-}
-
 variable "service_endpoint" {
   type        = string
   description = "Cloud Run Service Endpoint (https://*.a.run.app)"
 }
 
-variable "linebot_otel_sampling_rate" {
-  type        = string
-  default     = "1"
-  description = "OpenTelemetry sampling rate"
-}
-
 locals {
+  # OpenTelemetry sampling rate
+  linebot_otel_sampling_rate = "1"
+
+  # access log Pub/Sub Topic
   access_log_topic = "linebot-access-log"
 }
