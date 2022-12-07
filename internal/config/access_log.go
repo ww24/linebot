@@ -6,7 +6,8 @@ import (
 )
 
 type AccessLog struct {
-	Topic string `split_words:"true"`
+	Topic          string `split_words:"true"`
+	TrustedProxies int    `split_words:"true" default:"0"`
 }
 
 func NewAccessLog() (*AccessLog, error) {

@@ -121,7 +121,7 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		return nil, nil, err
 	}
 	publisher := accesslog.NewPublisher(pubsubClient, accessLog)
-	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image, publisher)
+	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image, publisher, accessLog)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
