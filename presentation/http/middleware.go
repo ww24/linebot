@@ -57,11 +57,13 @@ func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func
 				accessLog.TraceId = &avro.UnionNullString{String: t.String(), UnionType: avro.UnionNullStringTypeEnumString}
 			}
 
-			ips := strings.Split(r.Header.Get("X-Forwarded-For"), ",")
-			trustedProxies := cfg.TrustedProxies
-			if len(ips) > trustedProxies {
-				clientIP := textproto.TrimString(ips[len(ips)-trustedProxies-1])
-				accessLog.Ip = &avro.UnionNullString{String: clientIP, UnionType: avro.UnionNullStringTypeEnumString}
+			if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
+				ips := strings.Split(xff, ",")
+				trustedProxies := cfg.TrustedProxies
+				if len(ips) > trustedProxies {
+					clientIP := textproto.TrimString(ips[len(ips)-trustedProxies-1])
+					accessLog.Ip = &avro.UnionNullString{String: clientIP, UnionType: avro.UnionNullStringTypeEnumString}
+				}
 			}
 
 			rw := newResponseWriter(w)
