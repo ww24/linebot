@@ -42,6 +42,7 @@ func (p *PubSubPublisher) Publish(ctx context.Context, al *avro.AccessLog) {
 	if err := al.Serialize(buf); err != nil {
 		dl := logger.DefaultLogger(ctx)
 		dl.Error("failed to serialize access log", zap.Error(err))
+		return
 	}
 	p.topic.Publish(ctx, &pubsub.Message{
 		Data: buf.Bytes(),

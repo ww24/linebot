@@ -14,10 +14,9 @@ import (
 
 	"github.com/ww24/linebot/internal/accesslog"
 	"github.com/ww24/linebot/internal/accesslog/avro"
+	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 )
-
-const trustedProxies = 1
 
 func panicHandler(log *logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -34,7 +33,7 @@ func panicHandler(log *logger.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-func accessLogHandler(publisher accesslog.Publisher) func(http.Handler) http.Handler {
+func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
@@ -59,6 +58,7 @@ func accessLogHandler(publisher accesslog.Publisher) func(http.Handler) http.Han
 			}
 
 			ips := strings.Split(r.Header.Get("X-Forwarded-For"), ",")
+			trustedProxies := cfg.TrustedProxies
 			if len(ips) > trustedProxies {
 				clientIP := textproto.TrimString(ips[len(ips)-trustedProxies-1])
 				accessLog.Ip = &avro.UnionNullString{String: clientIP, UnionType: avro.UnionNullStringTypeEnumString}
@@ -83,7 +83,11 @@ type responseWriter struct {
 }
 
 func newResponseWriter(parent http.ResponseWriter) *responseWriter {
-	return &responseWriter{ResponseWriter: parent}
+	return &responseWriter{
+		ResponseWriter: parent,
+		status:         http.StatusOK,
+		size:           0,
+	}
 }
 
 func (w *responseWriter) Write(d []byte) (int, error) {
