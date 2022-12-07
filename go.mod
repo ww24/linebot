@@ -24,7 +24,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tenntenn/testtime v0.2.2
 	go.opencensus.io v0.24.0
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.36.4
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.37.0
 	go.opentelemetry.io/contrib/propagators/b3 v1.12.0
 	go.opentelemetry.io/otel v1.11.2
 	go.opentelemetry.io/otel/bridge/opencensus v0.33.0
@@ -71,7 +71,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	go.opentelemetry.io/otel/metric v0.33.0 // indirect
+	go.opentelemetry.io/otel/metric v0.34.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.33.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
