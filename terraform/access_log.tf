@@ -74,3 +74,10 @@ resource "google_storage_bucket" "geolite2" {
     service = var.name
   }
 }
+
+resource "google_bigquery_dataset" "geolite2" {
+  dataset_id    = "${var.name}_geolite2"
+  friendly_name = "${var.name} geolite2"
+  description   = "${var.name} geolite2 dataset"
+  location      = "US"
+}
