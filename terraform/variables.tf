@@ -43,6 +43,11 @@ variable "image_bucket" {
   description = "image bucket name"
 }
 
+variable "geolite2_bucket" {
+  type        = string
+  description = "MaxMind GeoLite2 bucket name"
+}
+
 // application environments
 variable "line_channel_secret" {
   type        = string
