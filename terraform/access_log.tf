@@ -62,3 +62,22 @@ resource "google_bigquery_table" "access_log" {
     require_partition_filter = true
   }
 }
+
+resource "google_storage_bucket" "geolite2" {
+  project                     = var.project
+  name                        = var.geolite2_bucket
+  location                    = "US-CENTRAL1"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = true
+
+  labels = {
+    service = var.name
+  }
+}
+
+resource "google_bigquery_dataset" "geolite2" {
+  dataset_id    = "${var.name}_geolite2"
+  friendly_name = "${var.name} geolite2"
+  description   = "${var.name} geolite2 dataset"
+  location      = "US"
+}
