@@ -1,0 +1,52 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "network",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "geoname_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "registered_country_geoname_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "represented_country_geoname_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_anonymous_proxy",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_satellite_provider",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "postal_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "latitude",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "longitude",
+    "type": "FLOAT"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "accuracy_radius",
+    "type": "INTEGER"
+  }
+]
