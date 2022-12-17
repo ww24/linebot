@@ -75,9 +75,89 @@ resource "google_storage_bucket" "geolite2" {
   }
 }
 
+# MaxMind GeoLite2
 resource "google_bigquery_dataset" "geolite2" {
-  dataset_id    = "${var.name}_geolite2"
-  friendly_name = "${var.name} geolite2"
-  description   = "${var.name} geolite2 dataset"
+  dataset_id    = "geolite2"
+  friendly_name = "GeoLite2"
+  description   = "geolite2 dataset"
   location      = "US"
+}
+
+resource "google_bigquery_table" "geolite2-city-blocks" {
+  dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  table_id   = "GeoLite2-City-Blocks"
+  schema     = file("geolite2/geolite2_city_blocks_schema.json")
+}
+
+resource "google_bigquery_table" "geolite2-city-locations" {
+  dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  table_id   = "GeoLite2-City-Locations"
+  schema     = file("geolite2/geolite2_city_locations_schema.json")
+}
+
+# Data Transfer Service (GCS => BigQuery)
+resource "google_bigquery_data_transfer_config" "load-geolite2-city-blocks" {
+  display_name           = "Load geolite2.GeoLite2-City-Blocks"
+  location               = "US"
+  data_source_id         = "google_cloud_storage"
+  schedule               = "every day 17:00" # 02:00 JST
+  destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  service_account_name   = google_service_account.access-log.email
+  params = {
+    destination_table_name_template = google_bigquery_table.geolite2-city-blocks.table_id
+    write_disposition               = "MIRROR"
+    data_path_template              = "gs://${var.geolite2_bucket}/GeoLite2-City-Blocks-IPv*.csv"
+    file_format                     = "CSV"
+    max_bad_records                 = "0"
+    skip_leading_rows               = "1"
+    ignore_unknown_values           = "true"
+  }
+
+  depends_on = [google_bigquery_table.geolite2-city-blocks]
+}
+
+resource "google_bigquery_data_transfer_config" "load-geoLite2-city-locations" {
+  display_name           = "Load geolite2.GeoLite2-City-Locations"
+  location               = "US"
+  data_source_id         = "google_cloud_storage"
+  schedule               = "every day 17:00" # 02:00 JST
+  destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  service_account_name   = google_service_account.access-log.email
+  params = {
+    destination_table_name_template = google_bigquery_table.geolite2-city-locations.table_id
+    write_disposition               = "MIRROR"
+    data_path_template              = "gs://${var.geolite2_bucket}/GeoLite2-City-Locations-en.csv"
+    file_format                     = "CSV"
+    max_bad_records                 = "0"
+    skip_leading_rows               = "1"
+    ignore_unknown_values           = "true"
+  }
+
+  depends_on = [google_bigquery_table.geolite2-city-locations]
+}
+
+# Scheduled Queries
+resource "google_bigquery_data_transfer_config" "transform-geolite2-city" {
+  display_name           = "Transform geolite2.GeoLite2-City"
+  location               = "US"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 18:00" # 03:00 JST
+  destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  service_account_name   = google_service_account.access-log.email
+  params = {
+    destination_table_name_template = "GeoLite2-City"
+    write_disposition               = "WRITE_TRUNCATE"
+    query                           = file("geolite2/transform_geolite2_city.sql")
+  }
+}
+
+resource "google_bigquery_data_transfer_config" "snapshot-geolite2-city" {
+  display_name         = "Snapshot geolite2.GeoLite2-City"
+  location             = "US"
+  data_source_id       = "scheduled_query"
+  schedule             = "every day 19:00" # 04:00 JST
+  service_account_name = google_service_account.access-log.email
+  params = {
+    query = file("geolite2/snapshot_geolite2_city.sql")
+  }
 }

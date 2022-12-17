@@ -1,0 +1,72 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "geoname_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "locale_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "continent_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "continent_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "country_iso_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "country_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subdivision_1_iso_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subdivision_1_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subdivision_2_iso_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "subdivision_2_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "city_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "metro_code",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "time_zone",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_in_european_union",
+    "type": "INTEGER"
+  }
+]

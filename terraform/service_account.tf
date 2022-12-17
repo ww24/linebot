@@ -96,3 +96,27 @@ resource "google_storage_bucket_iam_member" "screenshot-storage" {
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.screenshot.email}"
 }
+
+# access-log GSA
+resource "google_service_account" "access-log" {
+  account_id   = "${var.name}-access-log"
+  display_name = "${var.name}-access-log Service Account"
+}
+
+resource "google_bigquery_dataset_iam_member" "access-log" {
+  dataset_id = google_bigquery_dataset.geolite2.dataset_id
+  role       = "roles/bigquery.admin"
+  member     = "serviceAccount:${google_service_account.access-log.email}"
+}
+
+resource "google_storage_bucket_iam_member" "access-log" {
+  bucket = google_storage_bucket.geolite2.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.access-log.email}"
+}
+
+resource "google_project_iam_member" "access-log" {
+  project = var.project
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.access-log.email}"
+}
