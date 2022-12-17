@@ -97,6 +97,21 @@ resource "google_storage_bucket_iam_member" "screenshot-storage" {
   member = "serviceAccount:${google_service_account.screenshot.email}"
 }
 
+# allows Cloud Pub/Sub Service Account to push BigQuery Dataset
+# https://cloud.google.com/iam/docs/service-agents
+resource "google_project_service_identity" "pubsub" {
+  provider = google-beta
+  service  = "pubsub.googleapis.com"
+}
+
+resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
+  dataset_id = google_bigquery_table.access_log.dataset_id
+  table_id   = google_bigquery_table.access_log.table_id
+  for_each   = toset(["roles/bigquery.metadataViewer", "roles/bigquery.dataEditor"])
+  role       = each.key
+  member     = "serviceAccount:${google_project_service_identity.pubsub.email}"
+}
+
 # access-log GSA
 resource "google_service_account" "access-log" {
   account_id   = "${var.name}-access-log"
@@ -109,14 +124,21 @@ resource "google_bigquery_dataset_iam_member" "access-log" {
   member     = "serviceAccount:${google_service_account.access-log.email}"
 }
 
-resource "google_storage_bucket_iam_member" "access-log" {
-  bucket = google_storage_bucket.geolite2.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.access-log.email}"
-}
-
 resource "google_project_iam_member" "access-log" {
   project = var.project
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.access-log.email}"
+}
+
+# BigQuery Connection
+resource "google_bigquery_connection" "geolite2" {
+  connection_id = "geolite2"
+  location      = "US"
+  cloud_resource {}
+}
+
+resource "google_storage_bucket_iam_member" "geolite2" {
+  bucket = google_storage_bucket.geolite2.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_bigquery_connection.geolite2.cloud_resource[0].service_account_id}"
 }

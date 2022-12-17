@@ -29,19 +29,6 @@ resource "google_pubsub_subscription" "access_log_bq" {
   depends_on = [google_bigquery_table_iam_member.pubsub_sa_bigquery]
 }
 
-resource "google_project_service_identity" "pubsub" {
-  provider = google-beta
-  service  = "pubsub.googleapis.com"
-}
-
-resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
-  dataset_id = google_bigquery_table.access_log.dataset_id
-  table_id   = google_bigquery_table.access_log.table_id
-  for_each   = toset(["roles/bigquery.metadataViewer", "roles/bigquery.dataEditor"])
-  role       = each.key
-  member     = "serviceAccount:${google_project_service_identity.pubsub.email}"
-}
-
 resource "google_bigquery_dataset" "access_log" {
   dataset_id    = "${var.name}_access_log"
   friendly_name = "${var.name} access log"
@@ -87,53 +74,42 @@ resource "google_bigquery_table" "geolite2-city-blocks" {
   dataset_id = google_bigquery_dataset.geolite2.dataset_id
   table_id   = "GeoLite2-City-Blocks"
   schema     = file("geolite2/geolite2_city_blocks_schema.json")
+  external_data_configuration {
+    connection_id         = google_bigquery_connection.geolite2.name
+    autodetect            = false
+    ignore_unknown_values = true
+    source_uris           = ["gs://${var.geolite2_bucket}/GeoLite2-City-Blocks-IPv*.csv"]
+    source_format         = "CSV"
+    csv_options {
+      quote             = ""
+      skip_leading_rows = 1
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [external_data_configuration[0].connection_id]
+  }
 }
 
 resource "google_bigquery_table" "geolite2-city-locations" {
   dataset_id = google_bigquery_dataset.geolite2.dataset_id
   table_id   = "GeoLite2-City-Locations"
   schema     = file("geolite2/geolite2_city_locations_schema.json")
-}
-
-# Data Transfer Service (GCS => BigQuery)
-resource "google_bigquery_data_transfer_config" "load-geolite2-city-blocks" {
-  display_name           = "Load geolite2.GeoLite2-City-Blocks"
-  location               = "US"
-  data_source_id         = "google_cloud_storage"
-  schedule               = "every day 17:00" # 02:00 JST
-  destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
-  service_account_name   = google_service_account.access-log.email
-  params = {
-    destination_table_name_template = google_bigquery_table.geolite2-city-blocks.table_id
-    write_disposition               = "MIRROR"
-    data_path_template              = "gs://${var.geolite2_bucket}/GeoLite2-City-Blocks-IPv*.csv"
-    file_format                     = "CSV"
-    max_bad_records                 = "0"
-    skip_leading_rows               = "1"
-    ignore_unknown_values           = "true"
+  external_data_configuration {
+    connection_id         = google_bigquery_connection.geolite2.name
+    autodetect            = false
+    ignore_unknown_values = true
+    source_uris           = ["gs://${var.geolite2_bucket}/GeoLite2-City-Locations-en.csv"]
+    source_format         = "CSV"
+    csv_options {
+      quote             = ""
+      skip_leading_rows = 1
+    }
   }
 
-  depends_on = [google_bigquery_table.geolite2-city-blocks]
-}
-
-resource "google_bigquery_data_transfer_config" "load-geoLite2-city-locations" {
-  display_name           = "Load geolite2.GeoLite2-City-Locations"
-  location               = "US"
-  data_source_id         = "google_cloud_storage"
-  schedule               = "every day 17:00" # 02:00 JST
-  destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
-  service_account_name   = google_service_account.access-log.email
-  params = {
-    destination_table_name_template = google_bigquery_table.geolite2-city-locations.table_id
-    write_disposition               = "MIRROR"
-    data_path_template              = "gs://${var.geolite2_bucket}/GeoLite2-City-Locations-en.csv"
-    file_format                     = "CSV"
-    max_bad_records                 = "0"
-    skip_leading_rows               = "1"
-    ignore_unknown_values           = "true"
+  lifecycle {
+    ignore_changes = [external_data_configuration[0].connection_id]
   }
-
-  depends_on = [google_bigquery_table.geolite2-city-locations]
 }
 
 # Scheduled Queries
