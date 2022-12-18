@@ -69,6 +69,11 @@ variable "service_endpoint" {
   description = "Cloud Run Service Endpoint (https://*.a.run.app)"
 }
 
+variable "maxmind_license_key" {
+  type        = string
+  description = "MaxMind License Key"
+}
+
 locals {
   # OpenTelemetry sampling rate
   linebot_otel_sampling_rate = "1"

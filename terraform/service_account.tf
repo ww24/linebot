@@ -130,6 +130,24 @@ resource "google_project_iam_member" "access-log" {
   member  = "serviceAccount:${google_service_account.access-log.email}"
 }
 
+# maxmind GSA
+resource "google_service_account" "maxmind" {
+  account_id   = "${var.name}-maxmind"
+  display_name = "${var.name}-maxmind Service Account"
+}
+
+resource "google_storage_bucket_iam_member" "maxmind-bucket" {
+  bucket = google_storage_bucket.geolite2.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.maxmind.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "maxmind-secret" {
+  secret_id = google_secret_manager_secret.maxmind-license-key.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.maxmind.email}"
+}
+
 # BigQuery Connection
 resource "google_bigquery_connection" "geolite2" {
   connection_id = "geolite2"
