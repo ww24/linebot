@@ -31,3 +31,20 @@ resource "google_secret_manager_secret_version" "line-channel-access-token" {
   secret      = google_secret_manager_secret.line-channel-access-token.id
   secret_data = var.line_channel_access_token
 }
+
+resource "google_secret_manager_secret" "maxmind-license-key" {
+  secret_id = "maxmind-license-key"
+
+  labels = {
+    service = var.name
+  }
+
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "maxmind-license-key" {
+  secret      = google_secret_manager_secret.maxmind-license-key.id
+  secret_data = var.maxmind_license_key
+}

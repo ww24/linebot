@@ -137,3 +137,85 @@ resource "google_bigquery_data_transfer_config" "snapshot-geolite2-city" {
     query = file("geolite2/snapshot_geolite2_city.sql")
   }
 }
+
+resource "google_cloud_run_v2_job" "maxmind" {
+  name         = "maxmind"
+  location     = "us-central1"
+  launch_stage = "BETA"
+
+  template {
+    parallelism = 1
+    task_count  = 1
+
+    template {
+      service_account = google_service_account.maxmind.email
+      timeout         = "60s"
+      max_retries     = 3
+
+      containers {
+        image = "us.gcr.io/google.com/cloudsdktool/google-cloud-cli:412.0.0-alpine"
+
+        resources {
+          limits = {
+            cpu    = "1000m" # minimum
+            memory = "512Mi" # minimum
+          }
+        }
+
+        command = ["bash"]
+        args = [
+          "-euc",
+          <<-EOT
+          curl -sL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=$${MAXMIND_LICENSE_KEY}&suffix=zip" -o City.zip
+          curl -sL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=$${MAXMIND_LICENSE_KEY}&suffix=zip.sha256" | awk '{print $1"  City.zip"}' > shasum.txt
+          sha256sum -c shasum.txt
+          unzip -p City.zip "GeoLite2-**/GeoLite2-City-Blocks-IPv4.csv" > GeoLite2-City-Blocks-IPv4.csv
+          unzip -p City.zip "GeoLite2-**/GeoLite2-City-Blocks-IPv6.csv" > GeoLite2-City-Blocks-IPv6.csv
+          unzip -p City.zip "GeoLite2-**/GeoLite2-City-Locations-en.csv" > GeoLite2-City-Locations-en.csv
+          gsutil cp GeoLite2-City-Blocks-IPv*.csv GeoLite2-City-Locations-en.csv "$${DESTINATION_URL}"
+          EOT
+        ]
+
+        env {
+          name = "MAXMIND_LICENSE_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.maxmind-license-key.secret_id
+              version = "latest"
+            }
+          }
+        }
+
+        env {
+          name  = "DESTINATION_URL"
+          value = google_storage_bucket.geolite2.url
+        }
+      }
+    }
+  }
+}
+
+locals {
+  maxmind_job = {
+    location = google_cloud_run_v2_job.maxmind.location
+    name     = google_cloud_run_v2_job.maxmind.name
+  }
+}
+
+resource "google_cloud_scheduler_job" "maxmind" {
+  name             = "maxmind"
+  description      = "MaxMind Scheduler"
+  schedule         = "0 1 * * *"
+  time_zone        = "Asia/Tokyo"
+  attempt_deadline = "30s"
+  region           = local.maxmind_job.location
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://${local.maxmind_job.location}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project}/jobs/${local.maxmind_job.name}:run"
+
+    oauth_token {
+      service_account_email = google_service_account.invoker.email
+    }
+  }
+}
