@@ -9,7 +9,7 @@ SET snapshot_name = CONCAT("`geolite2.GeoLite2_City_", FORMAT_DATETIME('%Y%m%d',
 SET query = CONCAT(
   "CREATE SNAPSHOT TABLE IF NOT EXISTS ",
   snapshot_name,
-  " CLONE `geolite2.GeoLite2_City` OPTIONS(expiration_timestamp = TIMESTAMP '",
+  " CLONE `geolite2.GeoLite2-City` OPTIONS(expiration_timestamp = TIMESTAMP '",
   expiration,
   "');"
 );
