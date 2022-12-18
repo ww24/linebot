@@ -117,7 +117,7 @@ resource "google_bigquery_data_transfer_config" "transform-geolite2-city" {
   display_name           = "Transform geolite2.GeoLite2-City"
   location               = "US"
   data_source_id         = "scheduled_query"
-  schedule               = "every day 18:00" # 03:00 JST
+  schedule               = "every day 17:00" # 02:00 JST
   destination_dataset_id = google_bigquery_dataset.geolite2.dataset_id
   service_account_name   = google_service_account.access-log.email
   params = {
@@ -131,7 +131,7 @@ resource "google_bigquery_data_transfer_config" "snapshot-geolite2-city" {
   display_name         = "Snapshot geolite2.GeoLite2-City"
   location             = "US"
   data_source_id       = "scheduled_query"
-  schedule             = "every day 19:00" # 04:00 JST
+  schedule             = "every day 18:00" # 03:00 JST
   service_account_name = google_service_account.access-log.email
   params = {
     query = file("geolite2/snapshot_geolite2_city.sql")
