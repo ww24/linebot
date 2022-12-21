@@ -1,4 +1,4 @@
--- Snapshot geolite2.GeoLite2-City
+-- Snapshot geolite2.GeoLite2_City_YYYYMMDD
 DECLARE snapshot_name STRING;
 DECLARE expiration TIMESTAMP;
 DECLARE query STRING;

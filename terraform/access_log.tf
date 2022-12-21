@@ -128,7 +128,7 @@ resource "google_bigquery_data_transfer_config" "transform-geolite2-city" {
 }
 
 resource "google_bigquery_data_transfer_config" "snapshot-geolite2-city" {
-  display_name         = "Snapshot geolite2.GeoLite2-City"
+  display_name         = "Snapshot geolite2.GeoLite2_City_YYYYMMDD"
   location             = "US"
   data_source_id       = "scheduled_query"
   schedule             = "every day 18:00" # 03:00 JST
