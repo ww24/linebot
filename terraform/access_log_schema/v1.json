@@ -1,61 +1,49 @@
 [
   {
-    "mode": "NULLABLE",
     "name": "timestamp",
     "type": "TIMESTAMP"
   },
   {
-    "mode": "NULLABLE",
     "name": "id",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "traceId",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "ip",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "userAgent",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "method",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "path",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "query",
     "type": "STRING"
   },
   {
-    "mode": "NULLABLE",
     "name": "status",
     "type": "INTEGER"
   },
   {
-    "mode": "NULLABLE",
     "name": "duration",
     "type": "INTEGER"
   },
   {
-    "mode": "NULLABLE",
     "name": "requestSize",
     "type": "INTEGER"
   },
   {
-    "mode": "NULLABLE",
     "name": "responseSize",
     "type": "INTEGER"
   }
