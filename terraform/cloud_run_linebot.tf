@@ -1,18 +1,18 @@
 data "google_cloud_run_service" "linebot" {
-  name     = var.name
-  location = var.location
+  name     = local.name
+  location = local.location
 }
 
 locals {
   current_image = data.google_cloud_run_service.linebot.template != null ? data.google_cloud_run_service.linebot.template[0].spec[0].containers[0].image : null
-  new_image     = "${var.location}-docker.pkg.dev/${var.project}/${var.gar_repository}/${var.image_name}:${var.image_tag}"
+  new_image     = "${local.location}-docker.pkg.dev/${var.project}/${local.gar_repository}/${local.name}:${var.image_tag}"
   image         = (local.current_image != null && var.image_tag == "latest") ? local.current_image : local.new_image
   image_tag     = split(":", local.image)[1]
 }
 
 resource "google_cloud_run_service" "linebot" {
-  name     = var.name
-  location = var.location
+  name     = local.name
+  location = local.location
   project  = var.project
 
   template {
@@ -92,7 +92,7 @@ resource "google_cloud_run_service" "linebot" {
 
         env {
           name  = "ACCESS_LOG_TOPIC"
-          value = local.access_log_topic
+          value = google_pubsub_topic.access_log_v1.name
         }
       }
     }
@@ -104,7 +104,7 @@ resource "google_cloud_run_service" "linebot" {
       }
 
       labels = {
-        service = var.name
+        service = local.name
       }
     }
   }

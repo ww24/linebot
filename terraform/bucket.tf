@@ -15,6 +15,6 @@ resource "google_storage_bucket" "image" {
   }
 
   labels = {
-    service = var.name
+    service = local.name
   }
 }
