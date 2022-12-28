@@ -77,7 +77,4 @@ variable "maxmind_license_key" {
 locals {
   # OpenTelemetry sampling rate
   linebot_otel_sampling_rate = "1"
-
-  # access log Pub/Sub Topic
-  access_log_topic = "linebot-access-log"
 }

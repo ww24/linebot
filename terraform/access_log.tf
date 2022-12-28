@@ -29,6 +29,31 @@ resource "google_pubsub_subscription" "access_log_bq" {
   depends_on = [google_bigquery_table_iam_member.pubsub_sa_bigquery]
 }
 
+resource "google_pubsub_topic" "access_log_v1" {
+  name = "${var.name}-access-log-v1"
+
+  schema_settings {
+    schema   = google_pubsub_schema.access_log_schema_v1.id
+    encoding = "BINARY"
+  }
+}
+
+resource "google_pubsub_subscription" "access_log_v1_bq" {
+  name                       = "${var.name}-access-log-v1-bq"
+  topic                      = google_pubsub_topic.access_log_v1.name
+  ack_deadline_seconds       = 10
+  message_retention_duration = "604800s"
+
+  bigquery_config {
+    table               = "${var.project}:${google_bigquery_table.access_log.dataset_id}.${google_bigquery_table.access_log.table_id}"
+    use_topic_schema    = true
+    write_metadata      = false
+    drop_unknown_fields = true
+  }
+
+  depends_on = [google_bigquery_table_iam_member.pubsub_sa_bigquery]
+}
+
 resource "google_bigquery_dataset" "access_log" {
   dataset_id    = "${var.name}_access_log"
   friendly_name = "${var.name} access log"

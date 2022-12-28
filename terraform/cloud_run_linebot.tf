@@ -92,7 +92,7 @@ resource "google_cloud_run_service" "linebot" {
 
         env {
           name  = "ACCESS_LOG_TOPIC"
-          value = local.access_log_topic
+          value = google_pubsub_topic.access_log_v1.name
         }
       }
     }
