@@ -2,7 +2,7 @@ resource "google_secret_manager_secret" "line-channel-secret" {
   secret_id = "line-channel-secret"
 
   labels = {
-    service = var.name
+    service = local.name
   }
 
   replication {
@@ -19,7 +19,7 @@ resource "google_secret_manager_secret" "line-channel-access-token" {
   secret_id = "line-channel-access-token"
 
   labels = {
-    service = var.name
+    service = local.name
   }
 
   replication {
@@ -36,7 +36,7 @@ resource "google_secret_manager_secret" "maxmind-license-key" {
   secret_id = "maxmind-license-key"
 
   labels = {
-    service = var.name
+    service = local.name
   }
 
   replication {

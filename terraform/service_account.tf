@@ -1,7 +1,7 @@
 # linebot GSA
 resource "google_service_account" "linebot" {
-  account_id   = var.name
-  display_name = "${var.name} Service Account"
+  account_id   = local.name
+  display_name = "${local.name} Service Account"
 }
 
 resource "google_project_iam_member" "linebot-firestore" {
@@ -66,8 +66,8 @@ resource "google_secret_manager_secret_iam_member" "linebot-secret" {
 
 # invoker GSA
 resource "google_service_account" "invoker" {
-  account_id   = "${var.name}-invoker"
-  display_name = "${var.name}-invoker Service Account"
+  account_id   = "${local.name}-invoker"
+  display_name = "${local.name}-invoker Service Account"
 }
 
 resource "google_project_iam_member" "invoker-cloudrun" {
@@ -78,7 +78,7 @@ resource "google_project_iam_member" "invoker-cloudrun" {
 
 # screenshot GSA
 resource "google_service_account" "screenshot" {
-  account_id   = var.name_screenshot
+  account_id   = local.name_screenshot
   display_name = "screenshot Service Account"
 }
 
@@ -117,8 +117,8 @@ resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
 
 # access-log GSA
 resource "google_service_account" "access-log" {
-  account_id   = "${var.name}-access-log"
-  display_name = "${var.name}-access-log Service Account"
+  account_id   = "${local.name}-access-log"
+  display_name = "${local.name}-access-log Service Account"
 }
 
 resource "google_bigquery_dataset_iam_member" "access-log" {
@@ -135,8 +135,8 @@ resource "google_project_iam_member" "access-log" {
 
 # maxmind GSA
 resource "google_service_account" "maxmind" {
-  account_id   = "${var.name}-maxmind"
-  display_name = "${var.name}-maxmind Service Account"
+  account_id   = "${local.name}-maxmind"
+  display_name = "${local.name}-maxmind Service Account"
 }
 
 resource "google_storage_bucket_iam_member" "maxmind-bucket" {

@@ -1,6 +1,6 @@
 resource "google_cloud_scheduler_job" "scheduler" {
-  name             = var.name
-  description      = "${var.name} scheduler"
+  name             = local.name
+  description      = "${local.name} scheduler"
   schedule         = "0 * * * *"
   time_zone        = "Asia/Tokyo"
   attempt_deadline = "180s"

@@ -1,11 +1,11 @@
 resource "google_app_engine_application" "app" {
   project     = var.project
-  location_id = var.location
+  location_id = local.location
 }
 
 resource "google_cloud_tasks_queue" "linebot" {
-  name     = var.name
-  location = var.location
+  name     = local.name
+  location = local.location
 
   rate_limits {
     max_dispatches_per_second = 2

@@ -1,8 +1,3 @@
-variable "location" {
-  type    = string
-  default = "asia-northeast1"
-}
-
 variable "project" {
   type        = string
   description = "GCP Project ID"
@@ -11,26 +6,6 @@ variable "project" {
 variable "google_credentials" {
   type        = string
   description = "GCP Service Account (credential json value)"
-}
-
-variable "name" {
-  type    = string
-  default = "linebot"
-}
-
-variable "name_screenshot" {
-  type    = string
-  default = "screenshot"
-}
-
-variable "gar_repository" {
-  type    = string
-  default = "ww24"
-}
-
-variable "image_name" {
-  type    = string
-  default = "linebot"
 }
 
 variable "image_tag" {
@@ -75,6 +50,16 @@ variable "maxmind_license_key" {
 }
 
 locals {
+  # GCP location
+  location = "asia-northeast1"
+
+  # Application name
+  name            = "linebot"
+  name_screenshot = "screenshot"
+
+  # Google Artifact Registry
+  gar_repository = "ww24"
+
   # OpenTelemetry sampling rate
   linebot_otel_sampling_rate = "1"
 }

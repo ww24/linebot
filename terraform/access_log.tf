@@ -1,11 +1,11 @@
 resource "google_pubsub_schema" "access_log_schema_v1" {
-  name       = "${var.name}-access-log-v1"
+  name       = "${local.name}-access-log-v1"
   type       = "AVRO"
   definition = file("access_log_schema/v1.avsc")
 }
 
 resource "google_pubsub_topic" "access_log_v1" {
-  name = "${var.name}-access-log-v1"
+  name = "${local.name}-access-log-v1"
 
   schema_settings {
     schema   = google_pubsub_schema.access_log_schema_v1.id
@@ -14,7 +14,7 @@ resource "google_pubsub_topic" "access_log_v1" {
 }
 
 resource "google_pubsub_subscription" "access_log_v1_bq" {
-  name                       = "${var.name}-access-log-v1-bq"
+  name                       = "${local.name}-access-log-v1-bq"
   topic                      = google_pubsub_topic.access_log_v1.name
   ack_deadline_seconds       = 10
   message_retention_duration = "604800s"
@@ -30,15 +30,15 @@ resource "google_pubsub_subscription" "access_log_v1_bq" {
 }
 
 resource "google_bigquery_dataset" "access_log" {
-  dataset_id    = "${var.name}_access_log"
-  friendly_name = "${var.name} access log"
-  description   = "${var.name} access log dataset"
+  dataset_id    = "${local.name}_access_log"
+  friendly_name = "${local.name} access log"
+  description   = "${local.name} access log dataset"
   location      = "US"
 }
 
 resource "google_bigquery_table" "access_log" {
   dataset_id = google_bigquery_dataset.access_log.dataset_id
-  table_id   = "${var.name}_access_log"
+  table_id   = "${local.name}_access_log"
   clustering = ["timestamp"]
   schema     = file("access_log_schema/v1.json")
 
@@ -58,7 +58,7 @@ resource "google_storage_bucket" "geolite2" {
   uniform_bucket_level_access = true
 
   labels = {
-    service = var.name
+    service = local.name
   }
 }
 
