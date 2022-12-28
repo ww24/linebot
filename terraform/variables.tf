@@ -49,6 +49,16 @@ variable "maxmind_license_key" {
   description = "MaxMind License Key"
 }
 
+variable "screenshot_target_url" {
+  type        = string
+  description = "Screenshot target url"
+}
+
+variable "screenshot_target_selector" {
+  type        = string
+  description = "Screenshot target HTML selector"
+}
+
 locals {
   # GCP location
   location = "asia-northeast1"
@@ -62,4 +72,7 @@ locals {
 
   # OpenTelemetry sampling rate
   linebot_otel_sampling_rate = "1"
+
+  # Browser timeout
+  screenshot_browser_timeout = "90s"
 }
