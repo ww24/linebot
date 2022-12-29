@@ -120,14 +120,16 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	publisher := accesslog.NewPublisher(pubsubClient, accessLog)
+	publisher, cleanup2 := accesslog.NewPublisher(pubsubClient, accessLog)
 	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image, publisher, accessLog)
 	if err != nil {
+		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
 	mainBot := newBot(lineBot, handler, tracerProvider)
 	return mainBot, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

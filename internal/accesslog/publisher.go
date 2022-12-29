@@ -25,16 +25,16 @@ type PubSubPublisher struct {
 	topic *pubsub.Topic
 }
 
-func NewPublisher(p *pubsub.Client, cfg *config.AccessLog) Publisher {
+func NewPublisher(p *pubsub.Client, cfg *config.AccessLog) (Publisher, func()) {
 	if cfg.Topic == "" {
-		return new(NoopPublisher)
+		return new(NoopPublisher), func() {} // noop
 	}
 
 	topic := p.Topic(cfg.Topic)
 	topic.PublishSettings.DelayThreshold = time.Second
 	return &PubSubPublisher{
 		topic: topic,
-	}
+	}, topic.Stop
 }
 
 func (p *PubSubPublisher) Publish(ctx context.Context, al *avro.AccessLog) {
