@@ -38,7 +38,7 @@ resource "google_bigquery_dataset" "access_log" {
 
 resource "google_bigquery_table" "access_log" {
   dataset_id = google_bigquery_dataset.access_log.dataset_id
-  table_id   = "${local.name}_access_log"
+  table_id   = "access_log"
   clustering = ["timestamp"]
   schema     = file("access_log_schema/v1.json")
 
@@ -47,6 +47,27 @@ resource "google_bigquery_table" "access_log" {
     type                     = "DAY"
     field                    = "timestamp"
     require_partition_filter = true
+  }
+}
+
+resource "google_bigquery_routine" "with_geolocation" {
+  dataset_id   = google_bigquery_dataset.access_log.dataset_id
+  routine_id   = "with_geolocation"
+  routine_type = "TABLE_VALUED_FUNCTION"
+  language     = "SQL"
+  definition_body = templatefile("geolite2/function_with_geolocation.sql", {
+    project = var.project,
+    dataset = google_bigquery_dataset.access_log.dataset_id,
+  })
+  arguments {
+    name          = "since"
+    argument_kind = "FIXED_TYPE"
+    data_type     = jsonencode({ "typeKind" : "TIMESTAMP" })
+  }
+  arguments {
+    name          = "until"
+    argument_kind = "FIXED_TYPE"
+    data_type     = jsonencode({ "typeKind" : "TIMESTAMP" })
   }
 }
 
