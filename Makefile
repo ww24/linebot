@@ -1,7 +1,7 @@
 GO = go
 BIN := $(abspath ./bin)
-FIRESTORE_EMULATOR_HOST ?= localhost:8833
-GOOGLE_CLOUD_PROJECT = emulator
+firestore_emulator ?= localhost:8833
+default_project ?= emulator
 GO_ENV ?= GOBIN=$(BIN)
 
 $(BIN)/testtime:
@@ -23,8 +23,8 @@ run:
 
 .PHONY: run-with-emulator
 run-with-emulator:
-	FIRESTORE_EMULATOR_HOST="$(FIRESTORE_EMULATOR_HOST)" \
-	GOOGLE_CLOUD_PROJECT="$(GOOGLE_CLOUD_PROJECT)" \
+	FIRESTORE_EMULATOR_HOST="$(firestore_emulator)" \
+	GOOGLE_CLOUD_PROJECT="$(default_project)" \
 	$(GO) run ./cmd/linebot
 
 .PHONY: generate
@@ -41,9 +41,9 @@ lint:
 .PHONY: test
 test: FLAGS ?=
 test: $(BIN)/testtime
-	FIRESTORE_EMULATOR_HOST="$(FIRESTORE_EMULATOR_HOST)" \
+	FIRESTORE_EMULATOR_HOST="$(firestore_emulator)" \
 	$(GO_ENV) $(GO) test $(FLAGS) -race -overlay="$(shell $(BIN)/testtime -u)" ./...
 
 .PHONY: emulator
 emulator:
-	firebase emulators:start --project="$(GOOGLE_CLOUD_PROJECT)"
+	firebase emulators:start --project="$(default_project)"
