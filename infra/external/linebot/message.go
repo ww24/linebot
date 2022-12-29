@@ -97,8 +97,8 @@ func (p *ShoppingDeleteConfirmation) ToMessage() linebot.SendingMessage {
 	msg = linebot.NewTextMessage(p.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 		Items: []*linebot.QuickReplyButton{
-			{Action: linebot.NewPostbackAction("YES", "Shopping#deleteConfirm", "", "YES")},
-			{Action: linebot.NewPostbackAction("NO", "Shopping#deleteCancel", "", "NO")},
+			{Action: linebot.NewPostbackAction("YES", "Shopping#deleteConfirm", "", "YES", "", "")},
+			{Action: linebot.NewPostbackAction("NO", "Shopping#deleteCancel", "", "NO", "", "")},
 		},
 	})
 	return msg
@@ -119,22 +119,22 @@ func (p *ShoppingMenu) ToMessage() linebot.SendingMessage {
 	case model.ShoppingReplyTypeEmptyList:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 			Items: []*linebot.QuickReplyButton{
-				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加")},
+				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加", "", "")},
 			},
 		})
 	case model.ShoppingReplyTypeWithoutView:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 			Items: []*linebot.QuickReplyButton{
-				{Action: linebot.NewPostbackAction("削除", "Shopping#delete", "", "削除")},
-				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加")},
+				{Action: linebot.NewPostbackAction("削除", "Shopping#delete", "", "削除", "", "")},
+				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加", "", "")},
 			},
 		})
 	default:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 			Items: []*linebot.QuickReplyButton{
-				{Action: linebot.NewPostbackAction("削除", "Shopping#delete", "", "削除")},
-				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加")},
-				{Action: linebot.NewPostbackAction("表示", "Shopping#view", "", "表示")},
+				{Action: linebot.NewPostbackAction("削除", "Shopping#delete", "", "削除", "", "")},
+				{Action: linebot.NewPostbackAction("追加", "Shopping#add", "", "追加", "", "")},
+				{Action: linebot.NewPostbackAction("表示", "Shopping#view", "", "表示", "", "")},
 			},
 		})
 	}
@@ -162,7 +162,7 @@ func (r *ReminderMenu) ToMessage() linebot.SendingMessage {
 	default:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 			Items: []*linebot.QuickReplyButton{
-				{Action: linebot.NewPostbackAction("追加", "Reminder#add", "", "追加")},
+				{Action: linebot.NewPostbackAction("追加", "Reminder#add", "", "追加", "", "")},
 			},
 		})
 	}
@@ -181,7 +181,7 @@ func (r *ReminderChoices) ToMessage() linebot.SendingMessage {
 	for i := range r.labels {
 		label := r.labels[i]
 		items = append(items, &linebot.QuickReplyButton{
-			Action: linebot.NewPostbackAction(label, "Reminder#add#"+r.types[i].String(), "", label),
+			Action: linebot.NewPostbackAction(label, "Reminder#add#"+r.types[i].String(), "", label, "", ""),
 		})
 	}
 
@@ -219,8 +219,8 @@ func (c *ReminderDeleteConfirmation) ToMessage() linebot.SendingMessage {
 	msg = linebot.NewTextMessage(c.text)
 	msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
 		Items: []*linebot.QuickReplyButton{
-			{Action: linebot.NewPostbackAction("YES", c.data, "", "YES")},
-			{Action: linebot.NewPostbackAction("NO", "Reminder#cancel", "", "NO")},
+			{Action: linebot.NewPostbackAction("YES", c.data, "", "YES", "", "")},
+			{Action: linebot.NewPostbackAction("NO", "Reminder#cancel", "", "NO", "", "")},
 		},
 	})
 
