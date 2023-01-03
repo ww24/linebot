@@ -75,4 +75,14 @@ locals {
 
   # Browser timeout
   screenshot_browser_timeout = "90s"
+
+  # VPC
+  vpc = {
+    serverless = {
+      # Every VPC connector requires its own /28 subnet to place connector instances on;
+      # this subnet must not have any other resources on it other than the VPC connector.
+      ip_cidr_range = "10.100.0.0/28"
+      region        = local.location
+    }
+  }
 }
