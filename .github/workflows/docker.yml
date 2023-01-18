@@ -36,7 +36,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-      - uses: hadolint/hadolint-action@v3.0.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: docker/${{ matrix.target }}/Dockerfile
           ignore: DL3008
