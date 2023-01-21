@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.9.0
 	cloud.google.com/go/profiler v0.3.1
 	cloud.google.com/go/pubsub v1.28.0
-	cloud.google.com/go/storage v1.28.1
+	cloud.google.com/go/storage v1.29.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.10.2
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/blendle/zapdriver v1.3.1
@@ -40,7 +40,7 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.105.0 // indirect
+	cloud.google.com/go v0.107.0 // indirect
 	cloud.google.com/go/compute v1.14.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v0.8.0 // indirect
@@ -82,7 +82,7 @@ require (
 	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef // indirect
+	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
