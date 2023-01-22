@@ -201,7 +201,7 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		cl := h.log.WithTraceFromContext(ctx)
-		cl.Info("execute reminder")
+		cl.Info("serve image")
 
 		w.Header().Set("content-type", "image/png")
 		w.Header().Set("allow", "OPTIONS, HEAD, GET")
