@@ -163,21 +163,3 @@ resource "google_storage_bucket_iam_member" "geolite2" {
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_bigquery_connection.geolite2.cloud_resource[0].service_account_id}"
 }
-
-# GAR
-data "google_artifact_registry_repository" "repo" {
-  location      = local.location
-  repository_id = local.gar_repository
-}
-
-resource "google_artifact_registry_repository_iam_member" "linebot" {
-  for_each = toset([
-    "serviceAccount:${google_service_account.linebot.email}",
-    "serviceAccount:${google_service_account.screenshot.email}",
-  ])
-  project    = data.google_artifact_registry_repository.repo.project
-  location   = data.google_artifact_registry_repository.repo.location
-  repository = data.google_artifact_registry_repository.repo.name
-  role       = "roles/artifactregistry.reader"
-  member     = each.value
-}
