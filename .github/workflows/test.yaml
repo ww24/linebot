@@ -19,12 +19,12 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v3.3.0
+      - uses: actions/setup-go@v3.5.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v3.3.1
         with:
           version: ${{ inputs.golangci_lint_version }}
 
@@ -52,14 +52,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v3.3.0
+      - uses: actions/cache@v3.2.3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v3.5.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: Test
@@ -71,8 +71,8 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v3.3.0
+      - uses: actions/setup-go@v3.5.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: Check generated files
