@@ -166,3 +166,4 @@ jobs:
             VERSION=v${{ inputs.image_tag }}
           tags: |
             ${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ matrix.target }}:${{ inputs.image_tag }}
+          provenance: false # keep compatibility to run on Cloud Run
