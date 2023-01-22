@@ -9,12 +9,12 @@ jobs:
       contents: "read"
       pull-requests: "read"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: 14
       - name: Install dependencies
         run: npm install
-      - uses: wagoid/commitlint-github-action@v5
+      - uses: wagoid/commitlint-github-action@v5.3.0
