@@ -19,7 +19,7 @@ require (
 	github.com/ikawaha/kagome-dict/ipa v1.0.9
 	github.com/ikawaha/kagome/v2 v2.9.0
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/line/line-bot-sdk-go/v7 v7.18.0
+	github.com/line/line-bot-sdk-go/v7 v7.19.0
 	github.com/rs/xid v1.4.0
 	github.com/stretchr/testify v1.8.1
 	github.com/tenntenn/testtime v0.2.2
