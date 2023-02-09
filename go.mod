@@ -25,7 +25,7 @@ require (
 	github.com/tenntenn/testtime v0.2.2
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.37.0
-	go.opentelemetry.io/contrib/propagators/b3 v1.13.0
+	go.opentelemetry.io/contrib/propagators/b3 v1.14.0
 	go.opentelemetry.io/otel v1.13.0
 	go.opentelemetry.io/otel/bridge/opencensus v0.34.0
 	go.opentelemetry.io/otel/sdk v1.13.0
