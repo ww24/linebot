@@ -101,10 +101,6 @@ resource "google_cloud_run_service" "linebot" {
       annotations = {
         "autoscaling.knative.dev/maxScale" = "1"
         "autoscaling.knative.dev/minScale" = "1"
-
-        # set Serverless VPC Access connector to use static ip in egress connection
-        "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.main.name
-        "run.googleapis.com/vpc-access-egress"    = "all-traffic"
       }
 
       labels = {
