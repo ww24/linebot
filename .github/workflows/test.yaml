@@ -20,7 +20,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3.3.0
-      - uses: actions/setup-go@v3.5.0
+      - uses: actions/setup-go@v4.0.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: golangci-lint
@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - uses: actions/setup-go@v3.5.0
+      - uses: actions/setup-go@v4.0.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: Test
@@ -72,7 +72,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3.3.0
-      - uses: actions/setup-go@v3.5.0
+      - uses: actions/setup-go@v4.0.0
         with:
           go-version: ${{ inputs.go_version }}
       - name: Check generated files
