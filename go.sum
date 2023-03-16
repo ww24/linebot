@@ -25,11 +25,11 @@ cloud.google.com/go/storage v1.29.0/go.mod h1:4puEjyTKnku6gfKoTfNOU/W+a9JyuVNxjp
 cloud.google.com/go/trace v1.8.0 h1:GFPLxbp5/FzdgTzor3nlNYNxMd6hLmzkE7sA9F0qQcA=
 cloud.google.com/go/trace v1.8.0/go.mod h1:zH7vcsbAhklH8hWFig58HvxcxyQbaIqMarMg9hn5ECA=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.11.2 h1:Z5/bjyZhqXd7dNI76Z/KnyxtqavKF1UgGhInFSAIa8s=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.11.2/go.mod h1:mHbBqn8wTt1/+bTA55xe2mLX5b+RKz2dVcGz8sH2HsY=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.35.2 h1:xXo67CnDmiDMhgD3zAiuejKKMQ9nNkAQZZ4RS5U5jJY=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.35.2 h1:uH5W8NML+jD8iFiBbNUh5X7Nt0FVDK44Hel+Ux0ZEqU=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.35.2/go.mod h1:H785fvlgotVZqht+1rHhXSs8EJ8uPVmpBYkTYO3ccpc=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.12.0 h1:VqRrsKqdr9rEDAqu3Rowg63OAQU3r8cIAFpbLxCbBtA=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.12.0/go.mod h1:5+A4DITfFAc62a48+Tolz/7Pvnn7LitOwlqRQnOtrlY=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/cloudmock v0.36.0 h1:X80uwIJN1QTdM/Ou7V/flg7YmY36mQGsEEhNb9+hQkI=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.36.0 h1:0AXq7h5nGMp+9HEyBg6bmRfrP4h8OE/TbX8/sM/zqHk=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.36.0/go.mod h1:PyZfB7cJvIzvwjkHdW5XexMK6S9StvCGHsfWbKI7o40=
 github.com/actgardner/gogen-avro/v10 v10.2.1 h1:z3pOGblRjAJCYpkIJ8CmbMJdksi4rAhaygw0dyXZ930=
 github.com/actgardner/gogen-avro/v10 v10.2.1/go.mod h1:QUhjeHPchheYmMDni/Nx7VB0RsT/ee8YIgGY/xpEQgQ=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
