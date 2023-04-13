@@ -29,7 +29,7 @@ jobs:
       matrix:
         target: [linebot, screenshot]
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3.5.1
       - uses: actions/cache@v3.3.1
         with:
           path: /tmp/.buildx-cache
@@ -64,7 +64,7 @@ jobs:
       matrix:
         target: [linebot, screenshot]
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3.5.1
       - uses: actions/cache@v3.3.1
         with:
           path: /tmp/.buildx-cache
@@ -133,7 +133,7 @@ jobs:
       matrix:
         target: [linebot, screenshot]
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3.5.1
       - uses: actions/cache@v3.3.1
         with:
           path: /tmp/.buildx-cache
