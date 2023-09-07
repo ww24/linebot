@@ -1,6 +1,8 @@
 module github.com/ww24/linebot
 
-go 1.19
+go 1.21
+
+toolchain go1.21.0
 
 require (
 	cloud.google.com/go/cloudtasks v1.9.0
