@@ -29,7 +29,6 @@ var Set = wire.NewSet(
 )
 
 type handler struct {
-	log          *logger.Logger
 	bot          service.Bot
 	auth         *Authorizer
 	eventHandler usecase.EventHandler
@@ -38,7 +37,6 @@ type handler struct {
 }
 
 func NewHandler(
-	log *logger.Logger,
 	bot service.Bot,
 	auth *Authorizer,
 	eventHandler usecase.EventHandler,
@@ -47,13 +45,12 @@ func NewHandler(
 	cfg *config.AccessLog,
 ) (http.Handler, error) {
 	h := &handler{
-		log:          log,
 		bot:          bot,
 		auth:         auth,
 		eventHandler: eventHandler,
 		imageHandler: imageHandler,
 		middlewares: []func(http.Handler) http.Handler{
-			panicHandler(log),
+			panicHandler(),
 			tracer.HTTPMiddleware(),
 			accessLogHandler(publisher, cfg),
 		},
@@ -84,7 +81,7 @@ func (h *handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := h.log.WithTraceFromContext(ctx)
+		cl := logger.DefaultLogger(ctx)
 		cl.Info("line callback received")
 
 		events, err := h.bot.EventsFromRequest(r)
@@ -107,7 +104,7 @@ func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := h.log.WithTraceFromContext(ctx)
+		cl := logger.DefaultLogger(ctx)
 		cl.Info("execute scheduler")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
@@ -143,7 +140,7 @@ func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := h.log.WithTraceFromContext(ctx)
+		cl := logger.DefaultLogger(ctx)
 		cl.Info("execute reminder")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
@@ -200,7 +197,7 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := h.log.WithTraceFromContext(ctx)
+		cl := logger.DefaultLogger(ctx)
 		cl.Info("serve image")
 
 		w.Header().Set("content-type", "image/png")

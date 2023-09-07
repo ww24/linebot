@@ -26,7 +26,6 @@ func register(
 	context.Context,
 ) (*bot, func(), error) {
 	wire.Build(
-		newLogger,
 		config.Set,
 		firestore.Set,
 		scheduler.Set,

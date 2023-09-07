@@ -8,7 +8,6 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
 )
@@ -25,7 +24,6 @@ func newJob(
 	conf *config.Screenshot,
 	screenshot usecase.ScreenshotHandler,
 	_ trace.TracerProvider,
-	_ *logger.Logger,
 ) *job {
 	return &job{
 		config:     conf,
@@ -44,13 +42,4 @@ func (j *job) run(ctx context.Context) error {
 	}
 
 	return nil
-}
-
-func newLogger(ctx context.Context) (*logger.Logger, error) {
-	l, err := logger.New(ctx, serviceName, version)
-	if err != nil {
-		return nil, xerrors.Errorf("failed to initialize logger: %w", err)
-	}
-
-	return l, nil
 }

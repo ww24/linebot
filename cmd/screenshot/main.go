@@ -34,9 +34,9 @@ func main() {
 	defer span.End()
 
 	log.SetFlags(0)
-	if err := logger.InitializeLogger(ctx, serviceName, version); err != nil {
+	if err := logger.SetConfig(ctx, serviceName, version); err != nil {
 		stop()
-		log.Printf("ERROR logger.InitializeLogger: %+v", err)
+		log.Printf("ERROR logger.SetMeta: %+v", err)
 		os.Exit(1)
 	}
 	dl := logger.DefaultLogger(ctx)

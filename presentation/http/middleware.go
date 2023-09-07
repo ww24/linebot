@@ -18,12 +18,14 @@ import (
 	"github.com/ww24/linebot/logger"
 )
 
-func panicHandler(log *logger.Logger) func(http.Handler) http.Handler {
+func panicHandler() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
-					log.Error("paniced in http handler", zap.Any("error", err))
+					ctx := r.Context()
+					cl := logger.DefaultLogger(ctx)
+					cl.Error("paniced in http handler", zap.Any("error", err))
 					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 				}
 			}()
