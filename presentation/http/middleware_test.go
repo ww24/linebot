@@ -7,8 +7,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/ww24/linebot/logger"
 )
 
 func TestPanicHandler(t *testing.T) {
@@ -44,7 +42,7 @@ func TestPanicHandler(t *testing.T) {
 			t.Parallel()
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest(http.MethodGet, "/", nil)
-			panicHandler(logger.NewNop())(tt.h).ServeHTTP(w, r)
+			panicHandler()(tt.h).ServeHTTP(w, r)
 			assert.Equal(t, tt.wantStatus, w.Code)
 			assert.Equal(t, tt.wantBody, w.Body.String())
 		})

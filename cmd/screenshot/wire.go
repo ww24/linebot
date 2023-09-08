@@ -20,7 +20,6 @@ func register(
 	ctx context.Context,
 ) (*job, func(), error) {
 	wire.Build(
-		newLogger,
 		config.Set,
 		gcs.Set,
 		browser.Set,

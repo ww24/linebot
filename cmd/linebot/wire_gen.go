@@ -29,10 +29,6 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	logger, err := newLogger(contextContext)
-	if err != nil {
-		return nil, nil, err
-	}
 	linebotLINEBot, err := linebot.NewLINEBot(lineBot)
 	if err != nil {
 		return nil, nil, err
@@ -121,7 +117,7 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		return nil, nil, err
 	}
 	publisher, cleanup2 := accesslog.NewPublisher(pubsubClient, accessLog)
-	handler, err := http.NewHandler(logger, botImpl, authorizer, eventHandler, image, publisher, accessLog)
+	handler, err := http.NewHandler(botImpl, authorizer, eventHandler, image, publisher, accessLog)
 	if err != nil {
 		cleanup2()
 		cleanup()

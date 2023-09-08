@@ -49,12 +49,7 @@ func register(ctx context.Context) (*job, func(), error) {
 	}
 	spanExporter := tracer.NewCloudTraceExporter()
 	tracerProvider, cleanup := tracer.New(tracerConfig, otel, spanExporter)
-	logger, err := newLogger(ctx)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	mainJob := newJob(screenshot, interactorScreenshot, tracerProvider, logger)
+	mainJob := newJob(screenshot, interactorScreenshot, tracerProvider)
 	return mainJob, func() {
 		cleanup()
 	}, nil

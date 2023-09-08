@@ -2,6 +2,7 @@ package logger
 
 import (
 	"context"
+	"sync/atomic"
 
 	"github.com/blendle/zapdriver"
 	"go.opentelemetry.io/otel/trace"
@@ -13,19 +14,23 @@ import (
 )
 
 //nolint:gochecknoglobals
-var defaultLogger = NewNop()
+var defaultLogger atomic.Pointer[Logger]
 
-func InitializeLogger(ctx context.Context, name, version string) error {
-	logger, err := New(ctx, name, version)
+func init() {
+	defaultLogger.Store(NewNop())
+}
+
+func SetConfig(ctx context.Context, name, version string) error {
+	logger, err := new(ctx, name, version)
 	if err != nil {
 		return err
 	}
-	defaultLogger = logger
+	defaultLogger.Store(logger)
 	return nil
 }
 
 func DefaultLogger(ctx context.Context) *zap.Logger {
-	return defaultLogger.WithTraceFromContext(ctx)
+	return defaultLogger.Load().WithTraceFromContext(ctx)
 }
 
 type Logger struct {
@@ -35,7 +40,7 @@ type Logger struct {
 
 func NewNop() *Logger { return &Logger{Logger: zap.NewNop()} }
 
-func New(ctx context.Context, name, version string) (*Logger, error) {
+func new(ctx context.Context, name, version string) (*Logger, error) {
 	opt := zap.WrapCore(func(core zapcore.Core) zapcore.Core {
 		return newCore(core)
 	})
