@@ -1,7 +1,6 @@
 resource "google_cloud_run_v2_job" "screenshot" {
-  name         = local.name_screenshot
-  location     = "asia-northeast1"
-  launch_stage = "BETA"
+  name     = local.name_screenshot
+  location = "asia-northeast1"
 
   template {
     parallelism = 0

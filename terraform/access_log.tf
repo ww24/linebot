@@ -160,9 +160,8 @@ resource "google_bigquery_data_transfer_config" "snapshot-geolite2-city" {
 }
 
 resource "google_cloud_run_v2_job" "maxmind" {
-  name         = "maxmind"
-  location     = "us-central1"
-  launch_stage = "BETA"
+  name     = "maxmind"
+  location = "us-central1"
 
   template {
     parallelism = 1
