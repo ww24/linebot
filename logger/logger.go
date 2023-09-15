@@ -20,8 +20,8 @@ func init() {
 	defaultLogger.Store(NewNop())
 }
 
-func SetConfig(ctx context.Context, name, version string) error {
-	logger, err := new(ctx, name, version)
+func SetConfig(name, version string) error {
+	logger, err := new(name, version)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ type Logger struct {
 
 func NewNop() *Logger { return &Logger{Logger: zap.NewNop()} }
 
-func new(ctx context.Context, name, version string) (*Logger, error) {
+func new(name, version string) (*Logger, error) {
 	opt := zap.WrapCore(func(core zapcore.Core) zapcore.Core {
 		return newCore(core)
 	})
@@ -52,7 +52,7 @@ func new(ctx context.Context, name, version string) (*Logger, error) {
 
 	logger = logger.With(newServiceContext(name, version))
 
-	projectID, err := gcp.ProjectID(ctx)
+	projectID, err := gcp.ProjectID()
 	if err != nil {
 		logger.Warn("failed to get project id", zap.Error(err))
 	}
