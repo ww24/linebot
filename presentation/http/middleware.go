@@ -24,7 +24,7 @@ func panicHandler() func(http.Handler) http.Handler {
 			defer func() {
 				if err := recover(); err != nil {
 					ctx := r.Context()
-					cl := logger.DefaultLogger(ctx)
+					cl := logger.Default(ctx)
 					cl.Error("paniced in http handler", zap.Any("error", err))
 					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 				}

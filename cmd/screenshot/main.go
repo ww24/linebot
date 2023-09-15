@@ -39,7 +39,7 @@ func main() {
 		log.Printf("ERROR logger.SetMeta: %+v", err)
 		os.Exit(1)
 	}
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 
 	// set GOMAXPROCS
 	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {

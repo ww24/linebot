@@ -81,7 +81,7 @@ func (h *handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.DefaultLogger(ctx)
+		cl := logger.Default(ctx)
 		cl.Info("line callback received")
 
 		events, err := h.bot.EventsFromRequest(r)
@@ -104,7 +104,7 @@ func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.DefaultLogger(ctx)
+		cl := logger.Default(ctx)
 		cl.Info("execute scheduler")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
@@ -140,7 +140,7 @@ func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.DefaultLogger(ctx)
+		cl := logger.Default(ctx)
 		cl.Info("execute reminder")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
@@ -197,7 +197,7 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.DefaultLogger(ctx)
+		cl := logger.Default(ctx)
 		cl.Info("serve image")
 
 		w.Header().Set("content-type", "image/png")

@@ -40,7 +40,7 @@ func NewPublisher(p *pubsub.Client, cfg *config.AccessLog) (Publisher, func()) {
 func (p *PubSubPublisher) Publish(ctx context.Context, al *avro.AccessLog) {
 	buf := new(bytes.Buffer)
 	if err := al.Serialize(buf); err != nil {
-		dl := logger.DefaultLogger(ctx)
+		dl := logger.Default(ctx)
 		dl.Error("failed to serialize access log", zap.Error(err))
 		return
 	}

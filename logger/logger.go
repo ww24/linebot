@@ -29,7 +29,7 @@ func SetConfig(name, version string) error {
 	return nil
 }
 
-func DefaultLogger(ctx context.Context) *zap.Logger {
+func Default(ctx context.Context) *Logger {
 	return defaultLogger.Load().WithTraceFromContext(ctx)
 }
 
