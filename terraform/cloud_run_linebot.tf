@@ -30,6 +30,16 @@ resource "google_cloud_run_service" "linebot" {
           }
         }
 
+        startup_probe {
+          initial_delay_seconds = 0
+          timeout_seconds       = 240
+          period_seconds        = 240
+          failure_threshold     = 1
+          tcp_socket {
+            port = 8080
+          }
+        }
+
         env {
           name = "LINE_CHANNEL_SECRET"
           value_from {
