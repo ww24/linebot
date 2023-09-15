@@ -33,7 +33,7 @@ func main() {
 	defer stop()
 
 	log.SetFlags(0)
-	if err := logger.SetConfig(ctx, serviceName, version); err != nil {
+	if err := logger.SetConfig(serviceName, version); err != nil {
 		log.Printf("ERROR logger.SetMeta: %+v", err)
 		return
 	}

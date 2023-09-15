@@ -42,7 +42,7 @@ type Scheduler struct {
 }
 
 func New(ctx context.Context, conf *config.LINEBot) (*Scheduler, error) {
-	projectID, err := gcp.ProjectID(ctx)
+	projectID, err := gcp.ProjectID()
 	if err != nil {
 		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 	}

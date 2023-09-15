@@ -23,7 +23,7 @@ func New(ctx context.Context) (*pubsub.Client, error) {
 		projectID = "emulator"
 	} else {
 		var err error
-		projectID, err = gcp.ProjectID(ctx)
+		projectID, err = gcp.ProjectID()
 		if err != nil {
 			return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
 		}
