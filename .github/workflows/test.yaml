@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v4.0.0
       - uses: actions/setup-go@v4.1.0
         with:
           go-version: ${{ inputs.go_version }}
@@ -52,7 +52,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v4.0.0
       - uses: actions/cache@v3.3.2
         with:
           path: ~/go/pkg/mod
@@ -71,7 +71,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v4.0.0
       - uses: actions/setup-go@v4.1.0
         with:
           go-version: ${{ inputs.go_version }}
