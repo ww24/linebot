@@ -79,7 +79,7 @@ func New(c *Config, conf *config.Otel, exporter sdktrace.SpanExporter) (trace.Tr
 		ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 		defer cancel()
 		if err := tp.Shutdown(ctx); err != nil {
-			dl := logger.DefaultLogger(ctx)
+			dl := logger.Default(ctx)
 			dl.Error("failed to shutdown Cloud Trace exporter", zap.Error(err))
 		}
 	}

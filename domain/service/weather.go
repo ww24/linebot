@@ -48,7 +48,7 @@ func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
 		return xerrors.Errorf("imageStore.Save: %w", err)
 	}
 
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 	dl.Info("weather image saved", zap.String("name", name))
 
 	return nil

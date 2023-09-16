@@ -65,7 +65,7 @@ func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
 	}
 	imageURL := w.urlPrefix + "/" + imageName
 
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 	dl.Info("send image message", zap.String("imageURL", imageURL))
 
 	msg := w.message.Image(imageURL, imageURL)

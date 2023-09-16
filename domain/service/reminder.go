@@ -121,7 +121,7 @@ func (r *ReminderImpl) SyncSchedule(ctx context.Context, items model.ReminderIte
 
 	now := time.Now()
 
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 	dl.Info("start to sync schedule",
 		zap.Any("items", items),
 		zap.Int("count", len(items)),

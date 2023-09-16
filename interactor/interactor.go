@@ -76,7 +76,7 @@ func NewEventHandler(
 }
 
 func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error {
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 
 	for _, e := range events {
 		if !h.conversationIDs.Available(e.ConversationID()) {
@@ -127,7 +127,7 @@ func (h *EventHandler) HandleSchedule(ctx context.Context) error {
 }
 
 func (h *EventHandler) HandleReminder(ctx context.Context, itemIDJSON *model.ReminderItemIDJSON) error {
-	dl := logger.DefaultLogger(ctx)
+	dl := logger.Default(ctx)
 
 	item, err := h.reminder.Get(ctx, model.ConversationID(itemIDJSON.ConversationID), model.ReminderItemID(itemIDJSON.ItemID))
 	if err != nil {

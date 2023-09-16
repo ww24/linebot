@@ -2,6 +2,8 @@ package logger
 
 import (
 	"context"
+	"io"
+	"os"
 	"sync/atomic"
 
 	"github.com/blendle/zapdriver"
@@ -20,16 +22,7 @@ func init() {
 	defaultLogger.Store(NewNop())
 }
 
-func SetConfig(name, version string) error {
-	logger, err := new(name, version)
-	if err != nil {
-		return err
-	}
-	defaultLogger.Store(logger)
-	return nil
-}
-
-func DefaultLogger(ctx context.Context) *zap.Logger {
+func Default(ctx context.Context) *Logger {
 	return defaultLogger.Load().WithTraceFromContext(ctx)
 }
 
@@ -40,17 +33,22 @@ type Logger struct {
 
 func NewNop() *Logger { return &Logger{Logger: zap.NewNop()} }
 
-func new(name, version string) (*Logger, error) {
-	opt := zap.WrapCore(func(core zapcore.Core) zapcore.Core {
-		return newCore(core)
-	})
+func new(w io.Writer) (*Logger, error) {
+	ws := zapcore.Lock(zapcore.AddSync(w))
+	enc := zapcore.NewJSONEncoder(zapdriver.NewProductionEncoderConfig())
+	enabler := zap.NewAtomicLevelAt(zap.InfoLevel)
+	opts := []zap.Option{
+		zap.WrapCore(func(zapcore.Core) zapcore.Core {
+			core := zapcore.NewCore(enc, ws, enabler)
+			return newCore(core)
+		}),
+		zap.AddStacktrace(zapcore.ErrorLevel),
+	}
 
-	logger, err := zapdriver.NewProduction(opt)
+	logger, err := zapdriver.NewProduction(opts...)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to initialize zapdriver: %w", err)
 	}
-
-	logger = logger.With(newServiceContext(name, version))
 
 	projectID, err := gcp.ProjectID()
 	if err != nil {
@@ -63,10 +61,39 @@ func new(name, version string) (*Logger, error) {
 	}, nil
 }
 
-func (l *Logger) WithTraceFromContext(ctx context.Context) *zap.Logger {
+func (l *Logger) clone() *Logger {
+	cp := *l
+	return &cp
+}
+
+func (l *Logger) withConfig(service, version string) *Logger {
+	return l.WithLogger(l.With(newServiceContext(service, version)))
+}
+
+func (l *Logger) WithLogger(zl *zap.Logger) *Logger {
+	cp := l.clone()
+	cp.Logger = zl
+	return cp
+}
+
+func SetConfig(service, version string) error {
+	return SetConfigWithWriter(service, version, os.Stderr)
+}
+
+func SetConfigWithWriter(service, version string, w io.Writer) error {
+	logger, err := new(w)
+	if err != nil {
+		return err
+	}
+	logger = logger.withConfig(service, version)
+	defaultLogger.Store(logger)
+	return nil
+}
+
+func (l *Logger) WithTraceFromContext(ctx context.Context) *Logger {
 	spanCtx := trace.SpanContextFromContext(ctx)
 	if !spanCtx.IsValid() || l.projectID == "" {
-		return l.Logger
+		return l
 	}
 
 	fields := zapdriver.TraceContext(
@@ -75,5 +102,5 @@ func (l *Logger) WithTraceFromContext(ctx context.Context) *zap.Logger {
 		spanCtx.IsSampled(),
 		l.projectID,
 	)
-	return l.With(fields...)
+	return l.WithLogger(l.With(fields...))
 }
