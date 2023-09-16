@@ -7,7 +7,7 @@ COPY . .
 
 ENV CGO_ENABLED=0
 RUN go build -buildmode pie \
-  -ldflags "-X main.version=${VERSION} -w" \
+  -ldflags "-X main.version=${VERSION} -s -w" -trimpath \
   -o /usr/local/bin/screenshot ./cmd/screenshot
 
 FROM chromedp/headless-shell:100.0.4896.56

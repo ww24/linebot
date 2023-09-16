@@ -42,7 +42,8 @@ lint:
 test: FLAGS ?=
 test: $(BIN)/testtime
 	FIRESTORE_EMULATOR_HOST="$(firestore_emulator)" \
-	$(GO_ENV) $(GO) test $(FLAGS) -race -overlay="$(shell $(BIN)/testtime -u)" ./...
+	GOOGLE_CLOUD_PROJECT="$(default_project)" \
+	$(GO_ENV) $(GO) test $(FLAGS) -trimpath -race -overlay="$(shell $(BIN)/testtime -u)" ./...
 
 .PHONY: emulator
 emulator:
