@@ -45,10 +45,10 @@ func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func
 				Id:           &avro.UnionNullString{String: xid.New().String(), UnionType: avro.UnionNullStringTypeEnumString},
 				TraceId:      nil,
 				Ip:           nil,
-				UserAgent:    &avro.UnionNullString{String: r.UserAgent(), UnionType: avro.UnionNullStringTypeEnumString},
+				UserAgent:    &avro.UnionNullString{String: strings.ToValidUTF8(r.UserAgent(), ""), UnionType: avro.UnionNullStringTypeEnumString},
 				Method:       &avro.UnionNullString{String: r.Method, UnionType: avro.UnionNullStringTypeEnumString},
-				Path:         &avro.UnionNullString{String: r.URL.Path, UnionType: avro.UnionNullStringTypeEnumString},
-				Query:        &avro.UnionNullString{String: r.URL.RawQuery, UnionType: avro.UnionNullStringTypeEnumString},
+				Path:         &avro.UnionNullString{String: strings.ToValidUTF8(r.URL.Path, ""), UnionType: avro.UnionNullStringTypeEnumString},
+				Query:        &avro.UnionNullString{String: strings.ToValidUTF8(r.URL.RawQuery, ""), UnionType: avro.UnionNullStringTypeEnumString},
 				Status:       nil,
 				Duration:     nil,
 				RequestSize:  &avro.UnionNullInt{Int: int32(r.ContentLength), UnionType: avro.UnionNullIntTypeEnumInt},
@@ -60,7 +60,7 @@ func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func
 			}
 
 			if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
-				ips := strings.Split(xff, ",")
+				ips := strings.Split(strings.ToValidUTF8(xff, ""), ",")
 				trustedProxies := cfg.TrustedProxies
 				if len(ips) > trustedProxies {
 					clientIP := textproto.TrimString(ips[len(ips)-trustedProxies-1])
