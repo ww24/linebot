@@ -6,7 +6,6 @@ import (
 	"time"
 
 	octrace "go.opencensus.io/trace"
-	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/bridge/opencensus"
 	"go.opentelemetry.io/otel/propagation"
@@ -25,9 +24,8 @@ const shutdownTimeout = 5 * time.Second
 func init() {
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
-			// propagation.Baggage{},
-			b3.New(),
 			propagation.TraceContext{},
+			propagation.Baggage{},
 		),
 	)
 
