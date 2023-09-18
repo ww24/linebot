@@ -40,7 +40,14 @@ func register(ctx context.Context) (*job, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	weatherImpl := service.NewWeather(weatherImageStore, time)
+	serviceEndpoint, err := config.NewServiceEndpoint()
+	if err != nil {
+		return nil, nil, err
+	}
+	weatherImpl, err := service.NewWeather(weatherImageStore, time, serviceEndpoint)
+	if err != nil {
+		return nil, nil, err
+	}
 	interactorScreenshot := interactor.NewScreenshot(browserBrowser, weatherImpl)
 	tracerConfig := _wireConfigValue
 	otel, err := config.NewOtel()

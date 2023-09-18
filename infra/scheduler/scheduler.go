@@ -41,7 +41,7 @@ type Scheduler struct {
 	audience                   string
 }
 
-func New(ctx context.Context, conf *config.LINEBot) (*Scheduler, error) {
+func New(ctx context.Context, conf *config.LINEBot, cs *config.ServiceEndpoint) (*Scheduler, error) {
 	projectID, err := gcp.ProjectID()
 	if err != nil {
 		return nil, xerrors.Errorf("gcp.ProjectID: %w", err)
@@ -52,7 +52,7 @@ func New(ctx context.Context, conf *config.LINEBot) (*Scheduler, error) {
 		return nil, xerrors.Errorf("failed to initialize CloudTasks client: %w", err)
 	}
 
-	endpoint, err := conf.ServiceEndpoint(reminderEndpoint)
+	endpoint, err := cs.ResolveServiceEndpoint(reminderEndpoint)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to get service endpoint: %w", err)
 	}

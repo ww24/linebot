@@ -18,8 +18,8 @@ type Authorizer struct {
 	invokerServiceAccountID string
 }
 
-func NewAuthorizer(ctx context.Context, conf *config.LINEBot) (*Authorizer, error) {
-	serviceEndpoint, err := conf.ServiceEndpoint("")
+func NewAuthorizer(ctx context.Context, conf *config.LINEBot, cs *config.ServiceEndpoint) (*Authorizer, error) {
+	serviceEndpoint, err := cs.ResolveServiceEndpoint("")
 	if err != nil {
 		return nil, xerrors.New("failed to get service endpoint")
 	}

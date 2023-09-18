@@ -1,8 +1,6 @@
 package config
 
 import (
-	"net/url"
-	"os"
 	"strconv"
 
 	"github.com/kelseyhightower/envconfig"
@@ -20,7 +18,6 @@ type LINEBot struct {
 	CloudTasksQueue            string   `split_words:"true" required:"true"`
 	InvokerServiceAccountID    string   `split_words:"true" required:"true"`
 	InvokerServiceAccountEmail string   `split_words:"true" required:"true"`
-	serviceEndpoint            *url.URL `ignored:"true"`
 }
 
 func NewLINEBot() (*LINEBot, error) {
@@ -28,31 +25,11 @@ func NewLINEBot() (*LINEBot, error) {
 	if err := envconfig.Process("", &conf); err != nil {
 		return nil, xerrors.Errorf("failed to parse linebot config: %w", err)
 	}
-
-	if endpoint := os.Getenv("SERVICE_ENDPOINT"); endpoint != "" {
-		if u, err := url.Parse(endpoint); err != nil {
-			return nil, xerrors.Errorf("failed to parse SERVICE_ENDPOINT: %w", err)
-		} else {
-			conf.serviceEndpoint = u
-		}
-	}
-
 	return &conf, nil
 }
 
 func (c *LINEBot) Addr() string {
 	return ":" + strconv.Itoa(c.Port)
-}
-
-func (c *LINEBot) ServiceEndpoint(path string) (*url.URL, error) {
-	if c.serviceEndpoint == nil {
-		return nil, xerrors.New("service endpoint is not configured")
-	}
-	r, err := url.Parse(path)
-	if err != nil {
-		return nil, xerrors.Errorf("failed to parse path: %w", err)
-	}
-	return c.serviceEndpoint.ResolveReference(r), nil
 }
 
 func (c *LINEBot) ConversationIDs() *ConversationIDs {
