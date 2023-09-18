@@ -3,7 +3,6 @@ package logger
 import (
 	"os"
 
-	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zapgrpc"
 	"google.golang.org/grpc/grpclog"
@@ -11,22 +10,11 @@ import (
 
 func init() {
 	logLevel := getGRPCLogLevel()
-	logger, err := new(os.Stderr)
+	logger, err := newLogger(os.Stderr, logLevel)
 	if err != nil {
 		panic(err)
 	}
-	l := logger.WithOptions(zap.WrapCore(func(core zapcore.Core) zapcore.Core {
-		newCore, err := zapcore.NewIncreaseLevelCore(core, logLevel)
-		if err != nil {
-			logger.Warn("logger: failed to increase log level",
-				zap.Error(err),
-				zap.String("level", logLevel.String()),
-			)
-			return core
-		}
-		return newCore
-	}))
-	grpclog.SetLoggerV2(zapgrpc.NewLogger(l))
+	grpclog.SetLoggerV2(zapgrpc.NewLogger(logger.Logger))
 }
 
 func getGRPCLogLevel() zapcore.Level {
@@ -35,12 +23,12 @@ func getGRPCLogLevel() zapcore.Level {
 	severity := os.Getenv("GRPC_GO_LOG_SEVERITY_LEVEL")
 	switch severity {
 	case "", "ERROR", "error": // If env is unset, set level to ERROR.
-		return zap.ErrorLevel
+		return zapcore.ErrorLevel
 	case "WARNING", "warning":
-		return zap.WarnLevel
+		return zapcore.WarnLevel
 	case "INFO", "info":
-		return zap.InfoLevel
+		return zapcore.InfoLevel
 	default:
-		return zap.ErrorLevel
+		return zapcore.ErrorLevel
 	}
 }
