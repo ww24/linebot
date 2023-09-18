@@ -17,7 +17,7 @@ require (
 	github.com/go-logr/zapr v1.2.4
 	github.com/go-oss/scheduler v0.1.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-jsonnet v0.19.1
+	github.com/google/go-jsonnet v0.20.0
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.10
 	github.com/ikawaha/kagome/v2 v2.9.3
