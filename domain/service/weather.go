@@ -16,6 +16,7 @@ import (
 
 const (
 	weatherImageTTL = 2 * time.Hour
+	urlPathPrefix   = "/image"
 )
 
 type Weather interface {
@@ -26,16 +27,23 @@ type Weather interface {
 type WeatherImpl struct {
 	imageStore repository.WeatherImageStore
 	loc        *time.Location
+	urlPrefix  string
 }
 
 func NewWeather(
 	imageStore repository.WeatherImageStore,
 	ct *config.Time,
-) *WeatherImpl {
+	conf *config.ServiceEndpoint,
+) (*WeatherImpl, error) {
+	endpoint, err := conf.ResolveServiceEndpoint(urlPathPrefix)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to get endpoint: %w", err)
+	}
 	return &WeatherImpl{
 		imageStore: imageStore,
 		loc:        ct.DefaultLocation(),
-	}
+		urlPrefix:  endpoint.String(),
+	}, nil
 }
 
 func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
@@ -68,5 +76,6 @@ func (w *WeatherImpl) LatestImage(ctx context.Context) (string, error) {
 		return "", xerrors.Errorf("imageStore.Get: %w", err)
 	}
 
-	return name, nil
+	imageURL := w.urlPrefix + "/" + name
+	return imageURL, nil
 }

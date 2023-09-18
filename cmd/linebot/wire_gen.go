@@ -35,7 +35,11 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	}
 	messageProviderSet := linebot.NewMessageProviderSet()
 	botImpl := service.NewBot(linebotLINEBot, messageProviderSet)
-	authorizer, err := http.NewAuthorizer(contextContext, lineBot)
+	serviceEndpoint, err := config.NewServiceEndpoint()
+	if err != nil {
+		return nil, nil, err
+	}
+	authorizer, err := http.NewAuthorizer(contextContext, lineBot, serviceEndpoint)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -62,7 +66,7 @@ func register(contextContext context.Context) (*bot, func(), error) {
 	}
 	interactorShopping := interactor.NewShopping(conversationImpl, shoppingImpl, parser, messageProviderSet, botImpl)
 	reminder := firestore.NewReminder(conversation)
-	schedulerScheduler, err := scheduler.New(contextContext, lineBot)
+	schedulerScheduler, err := scheduler.New(contextContext, lineBot, serviceEndpoint)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -89,12 +93,12 @@ func register(contextContext context.Context) (*bot, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	weatherImpl := service.NewWeather(weatherImageStore, time)
-	weather, err := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl, lineBot)
+	weatherImpl, err := service.NewWeather(weatherImageStore, time, serviceEndpoint)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
+	weather := interactor.NewWeather(weatherImpl, messageProviderSet, botImpl)
 	eventHandler, err := interactor.NewEventHandler(interactorShopping, interactorReminder, weather, conversationImpl, reminderImpl, messageProviderSet, botImpl, lineBot)
 	if err != nil {
 		cleanup()

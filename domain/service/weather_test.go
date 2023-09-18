@@ -15,8 +15,9 @@ import (
 	"github.com/ww24/linebot/mock/mock_repository"
 )
 
-func TestWeatherImpl_ImageURL(t *testing.T) {
+func TestWeatherImpl_LatestImage(t *testing.T) {
 	t.Parallel()
+	const urlPrefix = "https://example.com/image"
 	ctx := context.Background()
 	loc := time.FixedZone("Asia/Tokyo", 9*60*60)
 	tests := []struct {
@@ -35,7 +36,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				).Return("20220101/image.png", nil)
 			},
 			time:     time.Date(2022, 1, 1, 12, 0, 0, 0, loc),
-			want:     "20220101/image.png",
+			want:     urlPrefix + "/20220101/image.png",
 			wantCode: code.OK,
 		},
 		{
@@ -53,7 +54,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 				)
 			},
 			time:     time.Date(2022, 1, 1, 1, 0, 0, 0, loc),
-			want:     "20211231/image.png",
+			want:     urlPrefix + "/20211231/image.png",
 			wantCode: code.OK,
 		},
 		{
@@ -99,6 +100,7 @@ func TestWeatherImpl_ImageURL(t *testing.T) {
 			service := &WeatherImpl{
 				imageStore: m,
 				loc:        loc,
+				urlPrefix:  urlPrefix,
 			}
 
 			got, err := service.LatestImage(ctx)
