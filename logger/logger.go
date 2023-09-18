@@ -15,6 +15,8 @@ import (
 	"github.com/ww24/linebot/internal/gcp"
 )
 
+const logLevelEnv = "LOG_LEVEL"
+
 //nolint:gochecknoglobals
 var defaultLogger atomic.Pointer[Logger]
 
@@ -33,13 +35,12 @@ type Logger struct {
 
 func NewNop() *Logger { return &Logger{Logger: zap.NewNop()} }
 
-func new(w io.Writer) (*Logger, error) {
+func newLogger(w io.Writer, lvl zapcore.LevelEnabler) (*Logger, error) {
 	ws := zapcore.Lock(zapcore.AddSync(w))
 	enc := zapcore.NewJSONEncoder(zapdriver.NewProductionEncoderConfig())
-	enabler := zap.NewAtomicLevelAt(zap.InfoLevel)
 	opts := []zap.Option{
 		zap.WrapCore(func(zapcore.Core) zapcore.Core {
-			core := zapcore.NewCore(enc, ws, enabler)
+			core := zapcore.NewCore(enc, ws, lvl)
 			return newCore(core)
 		}),
 		zap.AddStacktrace(zapcore.ErrorLevel),
@@ -81,7 +82,8 @@ func SetConfig(service, version string) error {
 }
 
 func SetConfigWithWriter(service, version string, w io.Writer) error {
-	logger, err := new(w)
+	logLevel := getLogLevel(logLevelEnv)
+	logger, err := newLogger(w, logLevel)
 	if err != nil {
 		return err
 	}
@@ -103,4 +105,20 @@ func (l *Logger) WithTraceFromContext(ctx context.Context) *Logger {
 		l.projectID,
 	)
 	return l.WithLogger(l.With(fields...))
+}
+
+func getLogLevel(env string) zapcore.Level {
+	logLevel := os.Getenv(env)
+	switch logLevel {
+	case "DEBUG", "debug":
+		return zapcore.DebugLevel
+	case "INFO", "info":
+		return zapcore.InfoLevel
+	case "WARN", "warn":
+		return zapcore.WarnLevel
+	case "ERROR", "error":
+		return zapcore.ErrorLevel
+	default:
+		return zapcore.InfoLevel
+	}
 }

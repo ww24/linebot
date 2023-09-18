@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap/zapcore"
 )
 
 func TestMain(m *testing.M) {
@@ -39,7 +40,7 @@ func TestLogger_withConfig(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			buf := &bytes.Buffer{}
-			l, err := new(buf)
+			l, err := newLogger(buf, zapcore.InfoLevel)
 			require.NoError(t, err)
 			if tt.service != "" {
 				l = l.withConfig(tt.service, tt.version)
@@ -86,7 +87,7 @@ func TestLogger_WithTraceFromContext(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			buf := &bytes.Buffer{}
-			l, err := new(buf)
+			l, err := newLogger(buf, zapcore.InfoLevel)
 			require.NoError(t, err)
 			l.projectID = "project-id"
 			l = l.WithTraceFromContext(tt.ctx(t))
