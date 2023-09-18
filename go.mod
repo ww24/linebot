@@ -22,7 +22,7 @@ require (
 	github.com/ikawaha/kagome/v2 v2.9.3
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/line/line-bot-sdk-go/v7 v7.19.0
-	github.com/rs/xid v1.4.0
+	github.com/rs/xid v1.5.0
 	github.com/stretchr/testify v1.8.4
 	github.com/tenntenn/testtime v0.2.2
 	go.opencensus.io v0.24.0
