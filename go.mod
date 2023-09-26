@@ -12,7 +12,6 @@ require (
 	cloud.google.com/go/storage v1.33.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.19.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
-	github.com/blendle/zapdriver v1.3.1
 	github.com/chromedp/chromedp v0.9.2
 	github.com/go-logr/zapr v1.2.4
 	github.com/go-oss/scheduler v0.1.0
