@@ -56,7 +56,7 @@ func (a *Authorizer) Authorize(ctx context.Context, r *http.Request) error {
 	if payload.Issuer != "https://accounts.google.com" ||
 		payload.Subject != a.invokerServiceAccountID {
 		dl := logger.Default(ctx)
-		dl.Warn("invalid token payload",
+		dl.Warn("http: invalid token payload",
 			zap.String("iss", payload.Issuer),
 			zap.String("subject", payload.Subject),
 		)

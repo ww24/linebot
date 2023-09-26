@@ -45,7 +45,7 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 	writer := obj.NewWriter(ctx)
 
 	dl := logger.Default(ctx)
-	dl.Info("upload image", zap.String("key", key))
+	dl.Info("gcs: upload image", zap.String("key", key))
 
 	if _, err := io.Copy(writer, r); err != nil {
 		return "", xerrors.Errorf("io.Copy: %w", err)

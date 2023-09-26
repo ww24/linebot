@@ -46,7 +46,7 @@ func newLogger(w io.Writer, lvl zapcore.LevelEnabler) *Logger {
 
 	projectID, err := gcp.ProjectID()
 	if err != nil {
-		logger.Warn("failed to get project id", zap.Error(err))
+		logger.Warn("logger: failed to get project id", zap.Error(err))
 	}
 
 	return &Logger{

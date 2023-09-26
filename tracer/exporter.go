@@ -14,7 +14,7 @@ func NewCloudTraceExporter() sdktrace.SpanExporter {
 	exporter, err := cloudtrace.New()
 	if err != nil {
 		dl := logger.Default(context.Background())
-		dl.Error("unable to set up cloud trace exporter", zap.Error(err))
+		dl.Error("tracer: unable to set up cloud trace exporter", zap.Error(err))
 		return new(noopExporter)
 	}
 	return exporter

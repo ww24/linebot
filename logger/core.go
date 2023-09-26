@@ -35,9 +35,10 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 			fields = append(fields, zap.Object("context", report))
 		}
 	}
-	if loc := newSourceLocation(e.Caller); loc != nil {
-		fields = append(fields, zap.Object("logging.googleapis.com/sourceLocation", loc))
-	}
+	// TODO: uncomment
+	// if loc := newSourceLocation(e.Caller); loc != nil {
+	// 	fields = append(fields, zap.Object("logging.googleapis.com/sourceLocation", loc))
+	// }
 
 	//nolint: wrapcheck
 	return c.Core.Write(e, fields)

@@ -80,7 +80,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 
 	for _, e := range events {
 		if !h.conversationIDs.Available(e.ConversationID()) {
-			dl.Warn("not allowed conversation",
+			dl.Warn("interactor: not allowed conversation",
 				zap.String("ConversationID", e.ConversationID().String()),
 			)
 			return nil
@@ -98,7 +98,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 					return nil
 				}
 
-				dl.Error("failed to handle event", zap.Error(err))
+				dl.Error("interactor: failed to handle event", zap.Error(err))
 				return h.handleError(ctx, e)
 			}
 		}
@@ -132,7 +132,7 @@ func (h *EventHandler) HandleReminder(ctx context.Context, itemIDJSON *model.Rem
 	item, err := h.reminder.Get(ctx, model.ConversationID(itemIDJSON.ConversationID), model.ReminderItemID(itemIDJSON.ItemID))
 	if err != nil {
 		if code.From(err) == code.NotFound {
-			dl.Info("reminder item not found", zap.Error(err))
+			dl.Info("interactor: reminder item not found", zap.Error(err))
 			return nil
 		}
 		return xerrors.Errorf("failed to get reminder item: %w", err)
