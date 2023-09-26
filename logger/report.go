@@ -3,6 +3,7 @@ package logger
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -54,7 +55,7 @@ type sourceReference struct {
 }
 
 func (r *sourceReference) MarshalLogObject(enc zapcore.ObjectEncoder) error {
-	enc.AddString("repository", r.Repository)
+	enc.AddString("repository", strings.Replace(r.Repository, "git://", "https://", 1))
 	enc.AddString("revisionId", r.RevisionID)
 	return nil
 }
