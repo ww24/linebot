@@ -119,7 +119,7 @@ func newEncoderConfig() zapcore.EncoderConfig {
 		NameKey:        "logger",
 		CallerKey:      "",
 		MessageKey:     "message",
-		StacktraceKey:  "stacktrace",
+		StacktraceKey:  "stack_trace",
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    encodeLevel,
 		EncodeTime:     zapcore.RFC3339NanoTimeEncoder,
