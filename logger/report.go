@@ -45,15 +45,44 @@ func (l *sourceLocation) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	return nil
 }
 
+// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/ErrorContext#SourceReference
+type sourceReference struct {
+	Repository string
+	RevisionID string
+}
+
+func (r *sourceReference) MarshalLogObject(enc zapcore.ObjectEncoder) error {
+	enc.AddString("repository", r.Repository)
+	enc.AddString("revisionId", r.RevisionID)
+	return nil
+}
+
+type sourceReferences []*sourceReference
+
+func (r sourceReferences) MarshalLogArray(enc zapcore.ArrayEncoder) error {
+	for _, sr := range r {
+		if err := enc.AppendObject(sr); err != nil {
+			return fmt.Errorf("failed to append sourceReference: %w", err)
+		}
+	}
+	return nil
+}
+
 // see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/ErrorContext
 type errorContext struct {
-	ReportLocation *sourceLocation
+	ReportLocation   *sourceLocation
+	SourceReferences sourceReferences
 }
 
 func (c *errorContext) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	if c.ReportLocation != nil {
 		if err := enc.AddObject("reportLocation", c.ReportLocation); err != nil {
 			return fmt.Errorf("failed to add reportLocation field: %w", err)
+		}
+	}
+	if len(c.SourceReferences) > 0 {
+		if err := enc.AddArray("sourceReferences", c.SourceReferences); err != nil {
+			return fmt.Errorf("failed to add sourceReferences field: %w", err)
 		}
 	}
 	return nil
