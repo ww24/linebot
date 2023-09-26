@@ -2,6 +2,7 @@ package logger
 
 import (
 	"fmt"
+	"strconv"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -80,7 +81,7 @@ type logEntrySourceLocation struct {
 
 func (l *logEntrySourceLocation) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	enc.AddString("file", l.File)
-	enc.AddInt("line", l.Line)
+	enc.AddString("line", strconv.Itoa(l.Line))
 	enc.AddString("function", l.Function)
 	return nil
 }

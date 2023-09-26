@@ -26,5 +26,5 @@ func Example() {
 	dl.Info("message", zap.String("key", "value"))
 
 	// Output:
-	// {"severity":"INFO","timestamp":"2023-01-01T00:00:00Z","message":"message","serviceContext":{"service":"service-name","version":"v1.0.0"},"key":"value","logging.googleapis.com/sourceLocation":{"file":"github.com/ww24/linebot/logger/example_test.go","line":26,"function":"github.com/ww24/linebot/logger_test.Example"}}
+	// {"severity":"INFO","timestamp":"2023-01-01T00:00:00Z","message":"message","serviceContext":{"service":"service-name","version":"v1.0.0"},"key":"value","logging.googleapis.com/sourceLocation":{"file":"github.com/ww24/linebot/logger/example_test.go","line":"26","function":"github.com/ww24/linebot/logger_test.Example"}}
 }
