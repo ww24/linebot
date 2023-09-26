@@ -12,6 +12,10 @@ type ServiceEndpoint struct {
 	serviceEndpoint *url.URL `ignored:"true"`
 }
 
+func (c *ServiceEndpoint) Valid() bool {
+	return c.ServiceEndpoint != ""
+}
+
 func NewServiceEndpoint() (*ServiceEndpoint, error) {
 	var conf ServiceEndpoint
 	if err := envconfig.Process("", &conf); err != nil {

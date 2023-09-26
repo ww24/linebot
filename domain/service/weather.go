@@ -35,15 +35,18 @@ func NewWeather(
 	ct *config.Time,
 	conf *config.ServiceEndpoint,
 ) (*WeatherImpl, error) {
-	endpoint, err := conf.ResolveServiceEndpoint(urlPathPrefix)
-	if err != nil {
-		return nil, xerrors.Errorf("failed to get endpoint: %w", err)
-	}
-	return &WeatherImpl{
+	weather := &WeatherImpl{
 		imageStore: imageStore,
 		loc:        ct.DefaultLocation(),
-		urlPrefix:  endpoint.String(),
-	}, nil
+	}
+	if conf.Valid() {
+		endpoint, err := conf.ResolveServiceEndpoint(urlPathPrefix)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to get endpoint: %w", err)
+		}
+		weather.urlPrefix = endpoint.String()
+	}
+	return weather, nil
 }
 
 func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
