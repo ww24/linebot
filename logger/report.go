@@ -73,15 +73,12 @@ func newErrorReport(caller zapcore.EntryCaller) *errorContext {
 }
 
 // see: https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogEntrySourceLocation
-//
-//nolint:unused
 type logEntrySourceLocation struct {
 	File     string
 	Line     int
 	Function string
 }
 
-//nolint:unused
 func (l *logEntrySourceLocation) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	enc.AddString("file", l.File)
 	enc.AddString("line", strconv.Itoa(l.Line))
@@ -89,7 +86,6 @@ func (l *logEntrySourceLocation) MarshalLogObject(enc zapcore.ObjectEncoder) err
 	return nil
 }
 
-//nolint:unused
 func newSourceLocation(caller zapcore.EntryCaller) *logEntrySourceLocation {
 	if !caller.Defined {
 		return nil

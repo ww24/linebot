@@ -40,7 +40,6 @@ func newLogger(w io.Writer, lvl zapcore.LevelEnabler) *Logger {
 	core := newCore(zapcore.NewCore(enc, ws, lvl))
 	opts := []zap.Option{
 		zap.AddCaller(),
-		zap.AddStacktrace(zapcore.ErrorLevel),
 	}
 	logger := zap.New(core, opts...)
 
@@ -119,7 +118,7 @@ func newEncoderConfig() zapcore.EncoderConfig {
 		NameKey:        "logger",
 		CallerKey:      "",
 		MessageKey:     "message",
-		StacktraceKey:  "stack_trace",
+		StacktraceKey:  "stacktrace",
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    encodeLevel,
 		EncodeTime:     zapcore.RFC3339NanoTimeEncoder,

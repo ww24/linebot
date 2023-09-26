@@ -1,6 +1,8 @@
 package logger
 
 import (
+	"runtime/debug"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -32,13 +34,15 @@ func (c *core) Check(e zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.Checked
 func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 	if zapcore.ErrorLevel.Enabled(e.Level) {
 		if report := newErrorReport(e.Caller); report != nil {
-			fields = append(fields, zap.Object("context", report))
+			fields = append(fields,
+				zap.Object("context", report),
+				zap.String("exception", e.Message+"\n"+string(debug.Stack())),
+			)
 		}
 	}
-	// TODO: uncomment
-	// if loc := newSourceLocation(e.Caller); loc != nil {
-	// 	fields = append(fields, zap.Object("logging.googleapis.com/sourceLocation", loc))
-	// }
+	if loc := newSourceLocation(e.Caller); loc != nil {
+		fields = append(fields, zap.Object("logging.googleapis.com/sourceLocation", loc))
+	}
 
 	//nolint: wrapcheck
 	return c.Core.Write(e, fields)
