@@ -6,7 +6,7 @@ resource "google_secret_manager_secret" "line-channel-secret" {
   }
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
@@ -23,7 +23,7 @@ resource "google_secret_manager_secret" "line-channel-access-token" {
   }
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
@@ -40,7 +40,7 @@ resource "google_secret_manager_secret" "maxmind-license-key" {
   }
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
