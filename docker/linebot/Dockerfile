@@ -3,13 +3,14 @@ FROM golang:1.21 AS build
 ARG VERSION
 ARG REVISION
 ARG REPOSITORY
+ARG BUILD_INFO="github.com/ww24/linebot/internal/buildinfo"
 
 WORKDIR $GOPATH/src/github.com/ww24/linebot
 COPY . .
 
 ENV CGO_ENABLED=0
 RUN go build -buildmode pie \
-  -ldflags "-X buildinfo.version=${VERSION} -X buildinfo.revision=${REVISION} -X buildinfo.repository=${REPOSITORY} -s -w" \
+  -ldflags "-X ${BUILD_INFO}.version=${VERSION} -X ${BUILD_INFO}.revision=${REVISION} -X ${BUILD_INFO}.repository=${REPOSITORY} -s -w" \
   -trimpath \
   -o /usr/local/bin/linebot ./cmd/linebot
 
