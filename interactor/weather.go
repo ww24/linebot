@@ -57,7 +57,7 @@ func (w *Weather) handleWeather(ctx context.Context, e *model.Event) error {
 	}
 
 	dl := logger.Default(ctx)
-	dl.Info("send image message", zap.String("imageURL", imageURL))
+	dl.Info("interactor: send image message", zap.String("imageURL", imageURL))
 
 	msg := w.message.Image(imageURL, imageURL)
 	if err := w.bot.ReplyMessage(ctx, e, msg); err != nil {

@@ -41,12 +41,12 @@ func main() {
 
 	// set GOMAXPROCS
 	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
-		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
+		dl.Warn("main: failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	bot, cleanup, err := register(ctx)
 	if err != nil {
-		dl.Error("register", zap.Error(err))
+		dl.Error("main: register", zap.Error(err))
 		panic(err)
 	}
 	defer cleanup()
@@ -61,7 +61,7 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			dl.Error("failed to start cloud profiler", zap.Error(err))
+			dl.Error("main: failed to start cloud profiler", zap.Error(err))
 		}
 	}
 
@@ -70,7 +70,7 @@ func main() {
 		Addr:              bot.conf.Addr(),
 		ReadHeaderTimeout: readHeaderTimeout,
 	}
-	dl.Info("start server",
+	dl.Info("main: start server",
 		zap.Int("GOMAXPROCS", runtime.GOMAXPROCS(0)),
 		zap.String("addr", bot.conf.Addr()),
 	)
@@ -84,6 +84,6 @@ func main() {
 	c, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 	if err := srv.Shutdown(c); err != nil {
-		dl.Error("failed to shutdown server", zap.Error(err))
+		dl.Error("main: failed to shutdown server", zap.Error(err))
 	}
 }

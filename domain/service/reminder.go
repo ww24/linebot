@@ -122,14 +122,14 @@ func (r *ReminderImpl) SyncSchedule(ctx context.Context, items model.ReminderIte
 	now := time.Now()
 
 	dl := logger.Default(ctx)
-	dl.Info("start to sync schedule",
+	dl.Info("service: start to sync schedule",
 		zap.Any("items", items),
 		zap.Int("count", len(items)),
 	)
 
 	items = items.FilterNextSchedule(now, syncInterval)
 
-	dl.Info("FilterNextSchedule", zap.Int("count", len(items)))
+	dl.Info("service: FilterNextSchedule", zap.Int("count", len(items)))
 
 	var conversationID model.ConversationID
 	start := 0

@@ -43,13 +43,13 @@ func main() {
 
 	// set GOMAXPROCS
 	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
-		dl.Warn("failed to set GOMAXPROCS", zap.Error(err))
+		dl.Warn("main: failed to set GOMAXPROCS", zap.Error(err))
 	}
 
 	job, cleanup, err := register(ctx)
 	if err != nil {
 		stop()
-		dl.Error("register", zap.Error(err))
+		dl.Error("main: register", zap.Error(err))
 		os.Exit(1)
 	}
 	defer cleanup()
@@ -64,17 +64,17 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			dl.Error("failed to start cloud profiler", zap.Error(err))
+			dl.Error("main: failed to start cloud profiler", zap.Error(err))
 		}
 	}
 
-	dl.Info("start job")
+	dl.Info("main: start job")
 	if err := job.run(ctx); err != nil {
 		stop()
 		cleanup()
-		dl.Error("failed to exec job", zap.Error(err))
+		dl.Error("main: failed to exec job", zap.Error(err))
 		os.Exit(1)
 	}
 
-	dl.Info("done")
+	dl.Info("main: done")
 }

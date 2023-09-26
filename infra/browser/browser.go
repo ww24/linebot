@@ -56,7 +56,7 @@ func (b *Browser) Screenshot(ctx context.Context, target *url.URL, targetSelecto
 	defer cancel()
 
 	dl := logger.Default(ctx)
-	dl.Info("capture screenshot",
+	dl.Info("browser: capture screenshot",
 		zap.String("target", target.String()),
 		zap.String("selector", targetSelector),
 	)

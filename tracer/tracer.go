@@ -78,7 +78,7 @@ func New(c *Config, conf *config.Otel, exporter sdktrace.SpanExporter) (trace.Tr
 		defer cancel()
 		if err := tp.Shutdown(ctx); err != nil {
 			dl := logger.Default(ctx)
-			dl.Error("failed to shutdown Cloud Trace exporter", zap.Error(err))
+			dl.Error("tracer: failed to shutdown Cloud Trace exporter", zap.Error(err))
 		}
 	}
 	return tp, cleanup
