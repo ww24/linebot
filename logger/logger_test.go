@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
@@ -40,8 +41,7 @@ func TestLogger_withConfig(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			buf := &bytes.Buffer{}
-			l, err := newLogger(buf, zapcore.InfoLevel)
-			require.NoError(t, err)
+			l := newLogger(buf, zapcore.InfoLevel)
 			if tt.service != "" {
 				l = l.withConfig(tt.service, tt.version)
 			}
@@ -58,6 +58,8 @@ func TestLogger_withConfig(t *testing.T) {
 
 func TestLogger_WithTraceFromContext(t *testing.T) {
 	t.Parallel()
+	testTime := time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
+	clock := StaticClock(testTime)
 	tests := []struct {
 		name string
 		ctx  func(*testing.T) context.Context
@@ -79,7 +81,7 @@ func TestLogger_WithTraceFromContext(t *testing.T) {
 				sc := spanContext(t, traceIDHex, spanIDHex)
 				return trace.ContextWithSpanContext(ctx, sc)
 			},
-			want: `"logging.googleapis.com/trace":"projects/project-id/traces/7e4ba55b36bb0d64c25dc7ac6d32a907","logging.googleapis.com/spanId":"05ce485f05506425","logging.googleapis.com/trace_sampled":true,`,
+			want: `{"severity":"INFO","timestamp":"2023-01-01T00:00:00Z","message":"WithTraceFromContext","logging.googleapis.com/trace":"projects/project-id/traces/7e4ba55b36bb0d64c25dc7ac6d32a907","logging.googleapis.com/spanId":"05ce485f05506425","logging.googleapis.com/trace_sampled":true}` + "\n",
 		},
 	}
 	for _, tt := range tests {
@@ -87,8 +89,8 @@ func TestLogger_WithTraceFromContext(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			buf := &bytes.Buffer{}
-			l, err := newLogger(buf, zapcore.InfoLevel)
-			require.NoError(t, err)
+			l := newLogger(buf, zapcore.InfoLevel)
+			l.Logger = l.Logger.WithOptions(zap.WithCaller(false), zap.AddStacktrace(zapcore.FatalLevel), zap.WithClock(clock))
 			l.projectID = "project-id"
 			l = l.WithTraceFromContext(tt.ctx(t))
 			l.Info("WithTraceFromContext")
@@ -98,7 +100,7 @@ func TestLogger_WithTraceFromContext(t *testing.T) {
 				assert.NotContains(t, buf.String(), `"logging.googleapis.com/spanId":`)
 				assert.NotContains(t, buf.String(), `"logging.googleapis.com/trace_sampled":`)
 			} else {
-				assert.Contains(t, buf.String(), tt.want)
+				assert.Equal(t, tt.want, buf.String())
 			}
 		})
 	}
@@ -170,4 +172,16 @@ func TestSetConfig_check_race(t *testing.T) {
 			SetConfig(tt.service, tt.version)
 		})
 	}
+}
+
+type StaticClock time.Time
+
+func (c StaticClock) Now() time.Time {
+	return time.Time(c)
+}
+
+func (c StaticClock) NewTicker(time.Duration) *time.Ticker {
+	tk := time.NewTicker(time.Second)
+	tk.Stop()
+	return tk
 }
