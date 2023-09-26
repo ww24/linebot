@@ -1,13 +1,16 @@
 FROM golang:1.21 AS build
 
 ARG VERSION
+ARG REVISION
+ARG REPOSITORY
 
 WORKDIR $GOPATH/src/github.com/ww24/screenshot
 COPY . .
 
 ENV CGO_ENABLED=0
 RUN go build -buildmode pie \
-  -ldflags "-X main.version=${VERSION} -s -w" -trimpath \
+  -ldflags "-X buildinfo.version=${VERSION} -X buildinfo.revision=${REVISION} -X buildinfo.repository=${REPOSITORY} -s -w" \
+  -trimpath \
   -o /usr/local/bin/screenshot ./cmd/screenshot
 
 FROM chromedp/headless-shell:100.0.4896.56

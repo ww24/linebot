@@ -105,6 +105,8 @@ jobs:
           push: true
           build-args: |
             VERSION=${{ steps.params.outputs.version }}
+            REVISION=${{ github.sha }}
+            REPOSITORY=${{ github.repositoryUrl }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ matrix.target }}:${{ inputs.image_tag }}
       - name: Run Trivy vulnerability scanner
@@ -164,6 +166,8 @@ jobs:
           push: true
           build-args: |
             VERSION=v${{ inputs.image_tag }}
+            REVISION=${{ github.sha }}
+            REPOSITORY=${{ github.repositoryUrl }}
           tags: |
             ${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ matrix.target }}:${{ inputs.image_tag }}
           provenance: false # keep compatibility to run on Cloud Run
