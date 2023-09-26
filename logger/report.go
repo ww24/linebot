@@ -6,6 +6,8 @@ import (
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	"github.com/ww24/linebot/internal/buildinfo"
 )
 
 // see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/ServiceContext
@@ -97,6 +99,12 @@ func newErrorReport(caller zapcore.EntryCaller) *errorContext {
 			FilePath:     caller.File,
 			LineNumber:   caller.Line,
 			FunctionName: caller.Function,
+		},
+		SourceReferences: sourceReferences{
+			{
+				Repository: buildinfo.Repository(),
+				RevisionID: buildinfo.Revision(),
+			},
 		},
 	}
 }
