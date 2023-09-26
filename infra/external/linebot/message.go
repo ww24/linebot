@@ -114,7 +114,6 @@ func (p *ShoppingMenu) ToMessage() linebot.SendingMessage {
 	var msg linebot.SendingMessage
 	msg = linebot.NewTextMessage(p.text)
 
-	//nolint: exhaustive
 	switch p.replyType {
 	case model.ShoppingReplyTypeEmptyList:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
@@ -157,7 +156,6 @@ func (r *ReminderMenu) ToMessage() linebot.SendingMessage {
 		msg = linebot.NewTextMessage(r.text)
 	}
 
-	//nolint: exhaustive
 	switch r.replyType {
 	default:
 		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{

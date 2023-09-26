@@ -93,6 +93,8 @@ linters-settings:
       - standard
       - default
       - prefix(github.com/ww24/linebot)
+  exhaustive:
+    default-signifies-exhaustive: true
   exhaustruct:
     include:
       - "github.com/ww24/linebot/domain"

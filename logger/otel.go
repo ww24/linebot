@@ -9,9 +9,6 @@ import (
 
 func init() {
 	logLevel := getLogLevel("OTEL_LOG_SEVERITY_LEVEL")
-	logger, err := newLogger(os.Stderr, logLevel)
-	if err != nil {
-		panic(err)
-	}
+	logger := newLogger(os.Stderr, logLevel)
 	otel.SetLogger(zapr.NewLogger(logger.Logger))
 }
