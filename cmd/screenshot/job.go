@@ -7,13 +7,14 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"golang.org/x/xerrors"
 
+	"github.com/ww24/linebot/internal/buildinfo"
 	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
 )
 
 //nolint:gochecknoglobals
-var tc = tracer.NewConfig(serviceName, version)
+var tc = tracer.NewConfig(serviceName, buildinfo.Version())
 
 type job struct {
 	config     *config.Screenshot

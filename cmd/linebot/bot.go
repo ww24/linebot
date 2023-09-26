@@ -5,12 +5,13 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/ww24/linebot/internal/buildinfo"
 	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/tracer"
 )
 
 //nolint:gochecknoglobals
-var tc = tracer.NewConfig(serviceName, version)
+var tc = tracer.NewConfig(serviceName, buildinfo.Version())
 
 type bot struct {
 	conf    *config.LINEBot

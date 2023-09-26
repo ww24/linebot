@@ -14,6 +14,7 @@ import (
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 
+	"github.com/ww24/linebot/internal/buildinfo"
 	"github.com/ww24/linebot/logger"
 )
 
@@ -23,17 +24,12 @@ const (
 	readHeaderTimeout = 10 * time.Second
 )
 
-var (
-	// version is set during build
-	version string
-)
-
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	log.SetFlags(0)
-	if err := logger.SetConfig(serviceName, version); err != nil {
+	if err := logger.SetConfig(serviceName, buildinfo.Version()); err != nil {
 		log.Printf("ERROR logger.SetMeta: %+v", err)
 		return
 	}
@@ -52,7 +48,7 @@ func main() {
 	defer cleanup()
 
 	// initialize cloud profiler and tracing if build is production
-	if version != "" {
+	if version := buildinfo.Version(); version != "" {
 		profilerConfig := profiler.Config{
 			Service:           serviceName,
 			ServiceVersion:    version,
