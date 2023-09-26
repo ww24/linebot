@@ -1,8 +1,6 @@
 package logger
 
 import (
-	"runtime/debug"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -36,7 +34,9 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 		if report := newErrorReport(e.Caller); report != nil {
 			fields = append(fields,
 				zap.Object("context", report),
-				zap.String("exception", e.Message+"\n"+string(debug.Stack())),
+				// see: https://cloud.google.com/error-reporting/docs/formatting-error-messages#log-error
+				// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report#ReportedErrorEvent
+				zap.String("stack_trace", e.Message+"\n"+e.Stack),
 			)
 		}
 	}
