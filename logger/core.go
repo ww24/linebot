@@ -2,10 +2,13 @@ package logger
 
 import (
 	"runtime/debug"
+	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
+
+const skipStack = 4
 
 // core implements zapcore.Core.
 type core struct {
@@ -38,7 +41,7 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 				zap.Object("context", report),
 				// see: https://cloud.google.com/error-reporting/docs/formatting-error-messages#log-error
 				// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report#ReportedErrorEvent
-				zap.String("stack_trace", e.Message+"\n"+string(debug.Stack())),
+				zap.String("stack_trace", e.Message+"\n"+stacktrace(skipStack)),
 			)
 		}
 	}
@@ -48,4 +51,12 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 
 	//nolint: wrapcheck
 	return c.Core.Write(e, fields)
+}
+
+func stacktrace(skipStack int) string {
+	stacks := strings.Split(string(debug.Stack()), "\n")
+	if len(stacks) < skipStack*2+1 {
+		return strings.Join(stacks, "\n")
+	}
+	return strings.Join(append(stacks[0:1], stacks[skipStack*2+1:]...), "\n")
 }
