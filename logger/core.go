@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-const skipStack = 4
+const skipStack = 5
 
 // core implements zapcore.Core.
 type core struct {
