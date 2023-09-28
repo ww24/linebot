@@ -19,7 +19,7 @@ require (
 	github.com/google/go-jsonnet v0.20.0
 	github.com/google/wire v0.5.0
 	github.com/ikawaha/kagome-dict/ipa v1.0.10
-	github.com/ikawaha/kagome/v2 v2.9.3
+	github.com/ikawaha/kagome/v2 v2.9.4
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/line/line-bot-sdk-go/v7 v7.21.0
 	github.com/rs/xid v1.5.0
