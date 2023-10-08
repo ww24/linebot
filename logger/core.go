@@ -1,14 +1,12 @@
 package logger
 
 import (
+	"bytes"
 	"runtime/debug"
-	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
-
-const skipStack = 5
 
 // core implements zapcore.Core.
 type core struct {
@@ -41,7 +39,7 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 				zap.Object("context", report),
 				// see: https://cloud.google.com/error-reporting/docs/formatting-error-messages#log-error
 				// see: https://cloud.google.com/error-reporting/reference/rest/v1beta1/projects.events/report#ReportedErrorEvent
-				zap.String("stack_trace", e.Message+"\n"+stacktrace(skipStack)),
+				zap.String("stack_trace", e.Message+"\n"+chopStack(debug.Stack())),
 			)
 		}
 	}
@@ -53,10 +51,38 @@ func (c *core) Write(e zapcore.Entry, fields []zapcore.Field) error {
 	return c.Core.Write(e, fields)
 }
 
-func stacktrace(skipStack int) string {
-	stacks := strings.Split(string(debug.Stack()), "\n")
-	if len(stacks) < skipStack*2+1 {
-		return strings.Join(stacks, "\n")
+// chopStack trims a stack trace so that the function which panics or calls Error is first.
+// original: https://github.com/googleapis/google-cloud-go/blob/errorreporting/v0.3.0/errorreporting/errors.go#L211-L234
+func chopStack(s []byte) string {
+	targets := []string{
+		"go.uber.org/zap.(*Logger).Error",
+		"go.uber.org/zap.(*Logger).DPanic",
+		"go.uber.org/zap.(*Logger).Panic",
+		"go.uber.org/zap.(*Logger).Fatal",
 	}
-	return strings.Join(append(stacks[0:1], stacks[skipStack*2+1:]...), "\n")
+	headerLine := bytes.IndexByte(s, '\n')
+	if headerLine == -1 {
+		return string(s)
+	}
+	stack := s[headerLine:]
+	targetLine := -1
+	for _, target := range targets {
+		targetLine = bytes.Index(stack, []byte(target))
+		if targetLine != -1 {
+			break
+		}
+	}
+	if targetLine == -1 {
+		return string(s)
+	}
+	stack = stack[targetLine+1:]
+	// stack has two lines per frame
+	for i := 0; i < 2; i++ {
+		nextLine := bytes.IndexByte(stack, '\n')
+		if nextLine == -1 {
+			return string(s)
+		}
+		stack = stack[nextLine+1:]
+	}
+	return string(s[:headerLine+1]) + string(stack)
 }
