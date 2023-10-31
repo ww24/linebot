@@ -1,0 +1,5103 @@
+{
+	"capabilityInfo": [
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNANALYZED",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main cloud.google.com/go/profiler.Start (*cloud.google.com/go/profiler.allowUntilSuccess).do cloud.google.com/go/profiler.debugLog (*log.Logger).Printf",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "cloud.google.com/go/profiler.Start",
+					"site": {
+						"filename": "main.go",
+						"line": "58",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/profiler.allowUntilSuccess).do",
+					"site": {
+						"filename": "profiler.go",
+						"line": "221",
+						"column": "28"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/profiler.debugLog",
+					"site": {
+						"filename": "profiler.go",
+						"line": "210",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*log.Logger).Printf",
+					"site": {
+						"filename": "profiler.go",
+						"line": "268",
+						"column": "16"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNANALYZED",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/tracer.New go.opentelemetry.io/otel/sdk/resource.NewWithAttributes go.opentelemetry.io/otel/sdk/resource.NewSchemaless go.opentelemetry.io/otel/attribute.NewSetWithFiltered (*sync.Pool).Get",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "52",
+						"column": "39"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.NewWithAttributes",
+					"site": {
+						"filename": "tracer.go",
+						"line": "50",
+						"column": "41"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.NewSchemaless",
+					"site": {
+						"filename": "resource.go",
+						"line": "61",
+						"column": "27"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/attribute.NewSetWithFiltered",
+					"site": {
+						"filename": "resource.go",
+						"line": "77",
+						"column": "38"
+					}
+				},
+				{
+					"name": "(*sync.Pool).Get",
+					"site": {
+						"filename": "set.go",
+						"line": "223",
+						"column": "22"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNANALYZED",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap.Logger).check go.uber.org/zap/internal/stacktrace.Capture (*go.uber.org/zap/internal/pool.Pool[*go.uber.org/zap/internal/stacktrace.Stack]).Get[*go.uber.org/zap/internal/stacktrace.Stack] (*sync.Pool).Get",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).check",
+					"site": {
+						"filename": "logger.go",
+						"line": "261",
+						"column": "20"
+					}
+				},
+				{
+					"name": "go.uber.org/zap/internal/stacktrace.Capture",
+					"site": {
+						"filename": "logger.go",
+						"line": "393",
+						"column": "29"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/internal/pool.Pool[*go.uber.org/zap/internal/stacktrace.Stack]).Get[*go.uber.org/zap/internal/stacktrace.Stack]",
+					"site": {
+						"filename": "stack.go",
+						"line": "72",
+						"column": "25"
+					}
+				},
+				{
+					"name": "(*sync.Pool).Get",
+					"site": {
+						"filename": "pool.go",
+						"line": "52",
+						"column": "19"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNANALYZED",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/domain/service.init go.opentelemetry.io/otel.Tracer (*go.opentelemetry.io/otel/sdk/trace.TracerProvider).Tracer go.opentelemetry.io/otel/internal/global.Info (github.com/go-logr/logr.Logger).Info (*github.com/go-logr/stdr.logger).Info (github.com/go-logr/stdr.logger).Info (*log.Logger).Output",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/domain/service.init"
+				},
+				{
+					"name": "go.opentelemetry.io/otel.Tracer",
+					"site": {
+						"filename": "service.go",
+						"line": "22",
+						"column": "25"
+					}
+				},
+				{
+					"name": "(*go.opentelemetry.io/otel/sdk/trace.TracerProvider).Tracer",
+					"site": {
+						"filename": "trace.go",
+						"line": "27",
+						"column": "35"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/internal/global.Info",
+					"site": {
+						"filename": "provider.go",
+						"line": "178",
+						"column": "14"
+					}
+				},
+				{
+					"name": "(github.com/go-logr/logr.Logger).Info",
+					"site": {
+						"filename": "internal_logging.go",
+						"line": "52",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*github.com/go-logr/stdr.logger).Info",
+					"site": {
+						"filename": "logr.go",
+						"line": "278",
+						"column": "14"
+					}
+				},
+				{
+					"name": "(github.com/go-logr/stdr.logger).Info"
+				},
+				{
+					"name": "(*log.Logger).Output",
+					"site": {
+						"filename": "stdr.go",
+						"line": "132",
+						"column": "18"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_FILES",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main (*go.uber.org/zap.Logger).Error (*go.uber.org/zap.Logger).check (*os.File).Sync",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "main.go",
+						"line": "45",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).check",
+					"site": {
+						"filename": "logger.go",
+						"line": "261",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*os.File).Sync",
+					"site": {
+						"filename": "logger.go",
+						"line": "399",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_FILES",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap.Logger).check (*os.File).Sync",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "55",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).check",
+					"site": {
+						"filename": "logger.go",
+						"line": "261",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*os.File).Sync",
+					"site": {
+						"filename": "logger.go",
+						"line": "399",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_FILES",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap.Logger).check (*os.File).Sync",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).check",
+					"site": {
+						"filename": "logger.go",
+						"line": "261",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*os.File).Sync",
+					"site": {
+						"filename": "logger.go",
+						"line": "399",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_FILES",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/presentation/http.init github.com/rs/xid.init github.com/rs/xid.init#1 io/ioutil.ReadFile os.ReadFile",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/presentation/http.init"
+				},
+				{
+					"name": "github.com/rs/xid.init"
+				},
+				{
+					"name": "github.com/rs/xid.init#1"
+				},
+				{
+					"name": "io/ioutil.ReadFile",
+					"site": {
+						"filename": "id.go",
+						"line": "102",
+						"column": "27"
+					}
+				},
+				{
+					"name": "os.ReadFile",
+					"site": {
+						"filename": "ioutil.go",
+						"line": "37",
+						"column": "20"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_ARBITRARY_EXECUTION",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/scheduler.New cloud.google.com/go/cloudtasks/apiv2.NewClient google.golang.org/api/transport/grpc.DialPool google.golang.org/api/transport/grpc.dial google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible (*golang.org/x/oauth2.reuseTokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.ImpersonateTokenSource).Token (golang.org/x/net/http2.transportResponseBody).Close (*golang.org/x/net/http2.Framer).WriteWindowUpdate (*golang.org/x/net/http2.Framer).endWrite (*google.golang.org/grpc/internal/transport.bufWriter).Write (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).serverHandshake$bound (*crypto/tls.Conn).serverHandshake (*crypto/tls.serverHandshakeState).handshake (*crypto/tls.serverHandshakeState).doFullHandshake (*crypto/tls.Conn).processCertsFromClient (*crypto/x509.Certificate).Verify (*crypto/x509.Certificate).systemVerify crypto/x509/internal/macos.CFArrayAppendValue crypto/x509/internal/macos.syscall",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/scheduler.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "69",
+						"column": "42"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/cloudtasks/apiv2.NewClient",
+					"site": {
+						"filename": "scheduler.go",
+						"line": "50",
+						"column": "34"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.DialPool",
+					"site": {
+						"filename": "cloud_tasks_client.go",
+						"line": "659",
+						"column": "38"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.dial",
+					"site": {
+						"filename": "dial.go",
+						"line": "94",
+						"column": "20"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible",
+					"site": {
+						"filename": "dial.go",
+						"line": "156",
+						"column": "75"
+					}
+				},
+				{
+					"name": "(*golang.org/x/oauth2.reuseTokenSource).Token",
+					"site": {
+						"filename": "dial.go",
+						"line": "262",
+						"column": "22"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.ImpersonateTokenSource).Token",
+					"site": {
+						"filename": "oauth2.go",
+						"line": "311",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(golang.org/x/net/http2.transportResponseBody).Close",
+					"site": {
+						"filename": "impersonate.go",
+						"line": "83",
+						"column": "2"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).WriteWindowUpdate",
+					"site": {
+						"filename": "transport.go",
+						"line": "2624",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).endWrite",
+					"site": {
+						"filename": "frame.go",
+						"line": "989",
+						"column": "19"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.bufWriter).Write",
+					"site": {
+						"filename": "frame.go",
+						"line": "371",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Write",
+					"site": {
+						"filename": "http_util.go",
+						"line": "339",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Handshake",
+					"site": {
+						"filename": "conn.go",
+						"line": "1193",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).HandshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1476",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).handshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1492",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake$bound",
+					"site": {
+						"filename": "conn.go",
+						"line": "1552",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake"
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).handshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "61",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).doFullHandshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "103",
+						"column": "31"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).processCertsFromClient",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "636",
+						"column": "37"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).Verify",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "897",
+						"column": "33"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).systemVerify",
+					"site": {
+						"filename": "verify.go",
+						"line": "770",
+						"column": "25"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.CFArrayAppendValue",
+					"site": {
+						"filename": "root_darwin.go",
+						"line": "20",
+						"column": "26"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.syscall",
+					"site": {
+						"filename": "corefoundation.go",
+						"line": "169",
+						"column": "9"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_ARBITRARY_EXECUTION",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/scheduler.New cloud.google.com/go/cloudtasks/apiv2.NewClient google.golang.org/api/transport/grpc.DialPool google.golang.org/api/transport/grpc.dial google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible (*golang.org/x/oauth2.reuseTokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.ImpersonateTokenSource).Token (golang.org/x/net/http2.transportResponseBody).Close (*golang.org/x/net/http2.Framer).WriteWindowUpdate (*golang.org/x/net/http2.Framer).endWrite (*google.golang.org/grpc/internal/transport.bufWriter).Write (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).serverHandshake$bound (*crypto/tls.Conn).serverHandshake (*crypto/tls.serverHandshakeState).handshake (*crypto/tls.serverHandshakeState).doFullHandshake (*crypto/tls.Conn).processCertsFromClient (*crypto/x509.Certificate).Verify (*crypto/x509.Certificate).systemVerify crypto/x509/internal/macos.CFArrayAppendValue crypto/x509/internal/macos.syscall",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register",
+					"site": {
+						"filename": "main.go",
+						"line": "43",
+						"column": "31"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/scheduler.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "69",
+						"column": "42"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/cloudtasks/apiv2.NewClient",
+					"site": {
+						"filename": "scheduler.go",
+						"line": "50",
+						"column": "34"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.DialPool",
+					"site": {
+						"filename": "cloud_tasks_client.go",
+						"line": "659",
+						"column": "38"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.dial",
+					"site": {
+						"filename": "dial.go",
+						"line": "94",
+						"column": "20"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible",
+					"site": {
+						"filename": "dial.go",
+						"line": "156",
+						"column": "75"
+					}
+				},
+				{
+					"name": "(*golang.org/x/oauth2.reuseTokenSource).Token",
+					"site": {
+						"filename": "dial.go",
+						"line": "262",
+						"column": "22"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.ImpersonateTokenSource).Token",
+					"site": {
+						"filename": "oauth2.go",
+						"line": "311",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(golang.org/x/net/http2.transportResponseBody).Close",
+					"site": {
+						"filename": "impersonate.go",
+						"line": "83",
+						"column": "2"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).WriteWindowUpdate",
+					"site": {
+						"filename": "transport.go",
+						"line": "2624",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).endWrite",
+					"site": {
+						"filename": "frame.go",
+						"line": "989",
+						"column": "19"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.bufWriter).Write",
+					"site": {
+						"filename": "frame.go",
+						"line": "371",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Write",
+					"site": {
+						"filename": "http_util.go",
+						"line": "339",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Handshake",
+					"site": {
+						"filename": "conn.go",
+						"line": "1193",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).HandshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1476",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).handshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1492",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake$bound",
+					"site": {
+						"filename": "conn.go",
+						"line": "1552",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake"
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).handshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "61",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).doFullHandshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "103",
+						"column": "31"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).processCertsFromClient",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "636",
+						"column": "37"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).Verify",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "897",
+						"column": "33"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).systemVerify",
+					"site": {
+						"filename": "verify.go",
+						"line": "770",
+						"column": "25"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.CFArrayAppendValue",
+					"site": {
+						"filename": "root_darwin.go",
+						"line": "20",
+						"column": "26"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.syscall",
+					"site": {
+						"filename": "corefoundation.go",
+						"line": "169",
+						"column": "9"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_ARBITRARY_EXECUTION",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/logger.init github.com/ww24/linebot/logger.init#1 github.com/ww24/linebot/logger.newLogger github.com/ww24/linebot/internal/gcp.ProjectID sync.OnceValues[string error]$2 sync.OnceValues[string error]$1 github.com/ww24/linebot/internal/gcp.withTimeout$1 github.com/ww24/linebot/internal/gcp.getProjectID golang.org/x/oauth2/google.FindDefaultCredentials golang.org/x/oauth2/google.FindDefaultCredentialsWithParams cloud.google.com/go/compute/metadata.OnGCE cloud.google.com/go/compute/metadata.initOnGCE cloud.google.com/go/compute/metadata.testOnGCE cloud.google.com/go/compute/metadata.testOnGCE$1 (golang.org/x/net/http2.transportResponseBody).Close (*golang.org/x/net/http2.Framer).WriteWindowUpdate (*golang.org/x/net/http2.Framer).endWrite (*google.golang.org/grpc/internal/transport.bufWriter).Write (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).serverHandshake$bound (*crypto/tls.Conn).serverHandshake (*crypto/tls.serverHandshakeState).handshake (*crypto/tls.serverHandshakeState).doFullHandshake (*crypto/tls.Conn).processCertsFromClient (*crypto/x509.Certificate).Verify (*crypto/x509.Certificate).systemVerify crypto/x509/internal/macos.CFArrayAppendValue crypto/x509/internal/macos.syscall",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.init#1"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.newLogger",
+					"site": {
+						"filename": "grpc.go",
+						"line": "13",
+						"column": "21"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.ProjectID",
+					"site": {
+						"filename": "logger.go",
+						"line": "46",
+						"column": "33"
+					}
+				},
+				{
+					"name": "sync.OnceValues[string error]$2",
+					"site": {
+						"filename": "gcp.go",
+						"line": "23",
+						"column": "18"
+					}
+				},
+				{
+					"name": "sync.OnceValues[string error]$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.withTimeout$1",
+					"site": {
+						"filename": "oncefunc.go",
+						"line": "87",
+						"column": "13"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.getProjectID",
+					"site": {
+						"filename": "gcp.go",
+						"line": "30",
+						"column": "11"
+					}
+				},
+				{
+					"name": "golang.org/x/oauth2/google.FindDefaultCredentials",
+					"site": {
+						"filename": "gcp.go",
+						"line": "39",
+						"column": "45"
+					}
+				},
+				{
+					"name": "golang.org/x/oauth2/google.FindDefaultCredentialsWithParams",
+					"site": {
+						"filename": "default.go",
+						"line": "176",
+						"column": "41"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.OnGCE",
+					"site": {
+						"filename": "default.go",
+						"line": "160",
+						"column": "19"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.initOnGCE"
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.testOnGCE",
+					"site": {
+						"filename": "metadata.go",
+						"line": "120",
+						"column": "19"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.testOnGCE$1",
+					"site": {
+						"filename": "metadata.go",
+						"line": "136",
+						"column": "2"
+					}
+				},
+				{
+					"name": "(golang.org/x/net/http2.transportResponseBody).Close",
+					"site": {
+						"filename": "metadata.go",
+						"line": "144",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).WriteWindowUpdate",
+					"site": {
+						"filename": "transport.go",
+						"line": "2624",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).endWrite",
+					"site": {
+						"filename": "frame.go",
+						"line": "989",
+						"column": "19"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.bufWriter).Write",
+					"site": {
+						"filename": "frame.go",
+						"line": "371",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Write",
+					"site": {
+						"filename": "http_util.go",
+						"line": "339",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Handshake",
+					"site": {
+						"filename": "conn.go",
+						"line": "1193",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).HandshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1476",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).handshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1492",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake$bound",
+					"site": {
+						"filename": "conn.go",
+						"line": "1552",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake"
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).handshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "61",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).doFullHandshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "103",
+						"column": "31"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).processCertsFromClient",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "636",
+						"column": "37"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).Verify",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "897",
+						"column": "33"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).systemVerify",
+					"site": {
+						"filename": "verify.go",
+						"line": "770",
+						"column": "25"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.CFArrayAppendValue",
+					"site": {
+						"filename": "root_darwin.go",
+						"line": "20",
+						"column": "26"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.syscall",
+					"site": {
+						"filename": "corefoundation.go",
+						"line": "169",
+						"column": "9"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_ARBITRARY_EXECUTION",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/internal/accesslog.NewPublisher$2 (*cloud.google.com/go/pubsub.Topic).Stop (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop (*sync.Map).Range (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1 (*google.golang.org/api/support/bundler.Bundler).Flush (*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle (*google.golang.org/api/support/bundler.Bundler).handle (*cloud.google.com/go/firestore.BulkWriter).send$bound (*cloud.google.com/go/firestore.BulkWriter).send (*cloud.google.com/go/firestore/apiv1.Client).BatchWrite (*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchWrite github.com/googleapis/gax-go/v2.Invoke github.com/googleapis/gax-go/v2.invoke (*cloud.google.com/go/cloudtasks/apiv2.restClient).CreateQueue$1 (golang.org/x/net/http2.transportResponseBody).Close (*golang.org/x/net/http2.Framer).WriteWindowUpdate (*golang.org/x/net/http2.Framer).endWrite (*google.golang.org/grpc/internal/transport.bufWriter).Write (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).serverHandshake$bound (*crypto/tls.Conn).serverHandshake (*crypto/tls.serverHandshakeState).handshake (*crypto/tls.serverHandshakeState).doFullHandshake (*crypto/tls.Conn).processCertsFromClient (*crypto/x509.Certificate).Verify (*crypto/x509.Certificate).systemVerify crypto/x509/internal/macos.CFArrayAppendValue crypto/x509/internal/macos.syscall",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/accesslog.NewPublisher$2",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "132",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub.Topic).Stop",
+					"site": {
+						"filename": "publisher.go",
+						"line": "45",
+						"column": "13"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop",
+					"site": {
+						"filename": "topic.go",
+						"line": "622",
+						"column": "26"
+					}
+				},
+				{
+					"name": "(*sync.Map).Range",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "160",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1",
+					"site": {
+						"filename": "map.go",
+						"line": "476",
+						"column": "8"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).Flush",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "161",
+						"column": "30"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "381",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).handle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "179",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore.BulkWriter).send$bound",
+					"site": {
+						"filename": "bundler.go",
+						"line": "324",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore.BulkWriter).send"
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1.Client).BatchWrite",
+					"site": {
+						"filename": "bulkwriter.go",
+						"line": "313",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchWrite",
+					"site": {
+						"filename": "firestore_client.go",
+						"line": "690",
+						"column": "36"
+					}
+				},
+				{
+					"name": "github.com/googleapis/gax-go/v2.Invoke",
+					"site": {
+						"filename": "firestore_client.go",
+						"line": "1204",
+						"column": "19"
+					}
+				},
+				{
+					"name": "github.com/googleapis/gax-go/v2.invoke",
+					"site": {
+						"filename": "invoke.go",
+						"line": "50",
+						"column": "15"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/cloudtasks/apiv2.restClient).CreateQueue$1",
+					"site": {
+						"filename": "invoke.go",
+						"line": "82",
+						"column": "14"
+					}
+				},
+				{
+					"name": "(golang.org/x/net/http2.transportResponseBody).Close",
+					"site": {
+						"filename": "cloud_tasks_client.go",
+						"line": "1356",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).WriteWindowUpdate",
+					"site": {
+						"filename": "transport.go",
+						"line": "2624",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).endWrite",
+					"site": {
+						"filename": "frame.go",
+						"line": "989",
+						"column": "19"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.bufWriter).Write",
+					"site": {
+						"filename": "frame.go",
+						"line": "371",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Write",
+					"site": {
+						"filename": "http_util.go",
+						"line": "339",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Handshake",
+					"site": {
+						"filename": "conn.go",
+						"line": "1193",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).HandshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1476",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).handshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1492",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake$bound",
+					"site": {
+						"filename": "conn.go",
+						"line": "1552",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).serverHandshake"
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).handshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "61",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.serverHandshakeState).doFullHandshake",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "103",
+						"column": "31"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).processCertsFromClient",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "636",
+						"column": "37"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).Verify",
+					"site": {
+						"filename": "handshake_server.go",
+						"line": "897",
+						"column": "33"
+					}
+				},
+				{
+					"name": "(*crypto/x509.Certificate).systemVerify",
+					"site": {
+						"filename": "verify.go",
+						"line": "770",
+						"column": "25"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.CFArrayAppendValue",
+					"site": {
+						"filename": "root_darwin.go",
+						"line": "20",
+						"column": "26"
+					}
+				},
+				{
+					"name": "crypto/x509/internal/macos.syscall",
+					"site": {
+						"filename": "corefoundation.go",
+						"line": "169",
+						"column": "9"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_SYSTEM_CALLS",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/tracer.init go.opentelemetry.io/otel/sdk/resource.init golang.org/x/sys/unix.init",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.init"
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.init"
+				},
+				{
+					"name": "golang.org/x/sys/unix.init"
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_SYSTEM_CALLS",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/tracer.New go.opentelemetry.io/otel/sdk/trace.NewTracerProvider go.opentelemetry.io/otel/sdk/trace.ensureValidTracerProviderConfig go.opentelemetry.io/otel/sdk/resource.Default go.opentelemetry.io/otel/sdk/resource.Default$1 go.opentelemetry.io/otel/sdk/resource.Detect go.opentelemetry.io/otel/sdk/resource.detect (go.opentelemetry.io/otel/sdk/resource.osDescriptionDetector).Detect go.opentelemetry.io/otel/sdk/resource.platformOSDescription go.opentelemetry.io/otel/sdk/resource.uname golang.org/x/sys/unix.ByteSliceToString",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "52",
+						"column": "39"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/trace.NewTracerProvider",
+					"site": {
+						"filename": "tracer.go",
+						"line": "69",
+						"column": "34"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/trace.ensureValidTracerProviderConfig",
+					"site": {
+						"filename": "provider.go",
+						"line": "112",
+						"column": "37"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Default",
+					"site": {
+						"filename": "provider.go",
+						"line": "497",
+						"column": "34"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Default$1"
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Detect",
+					"site": {
+						"filename": "resource.go",
+						"line": "205",
+						"column": "32"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.detect",
+					"site": {
+						"filename": "auto.go",
+						"line": "50",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(go.opentelemetry.io/otel/sdk/resource.osDescriptionDetector).Detect",
+					"site": {
+						"filename": "auto.go",
+						"line": "66",
+						"column": "27"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.platformOSDescription",
+					"site": {
+						"filename": "os.go",
+						"line": "58",
+						"column": "35"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.uname",
+					"site": {
+						"filename": "os_unix.go",
+						"line": "45",
+						"column": "21"
+					}
+				},
+				{
+					"name": "golang.org/x/sys/unix.ByteSliceToString",
+					"site": {
+						"filename": "os_unix.go",
+						"line": "71",
+						"column": "25"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_SYSTEM_CALLS",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/tracer.New go.opentelemetry.io/otel/sdk/trace.NewTracerProvider go.opentelemetry.io/otel/sdk/trace.ensureValidTracerProviderConfig go.opentelemetry.io/otel/sdk/resource.Default go.opentelemetry.io/otel/sdk/resource.Default$1 go.opentelemetry.io/otel/sdk/resource.Detect go.opentelemetry.io/otel/sdk/resource.detect (go.opentelemetry.io/otel/sdk/resource.osDescriptionDetector).Detect go.opentelemetry.io/otel/sdk/resource.platformOSDescription go.opentelemetry.io/otel/sdk/resource.uname golang.org/x/sys/unix.ByteSliceToString",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register",
+					"site": {
+						"filename": "main.go",
+						"line": "43",
+						"column": "31"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "52",
+						"column": "39"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/trace.NewTracerProvider",
+					"site": {
+						"filename": "tracer.go",
+						"line": "69",
+						"column": "34"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/trace.ensureValidTracerProviderConfig",
+					"site": {
+						"filename": "provider.go",
+						"line": "112",
+						"column": "37"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Default",
+					"site": {
+						"filename": "provider.go",
+						"line": "497",
+						"column": "34"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Default$1"
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.Detect",
+					"site": {
+						"filename": "resource.go",
+						"line": "205",
+						"column": "32"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.detect",
+					"site": {
+						"filename": "auto.go",
+						"line": "50",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(go.opentelemetry.io/otel/sdk/resource.osDescriptionDetector).Detect",
+					"site": {
+						"filename": "auto.go",
+						"line": "66",
+						"column": "27"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.platformOSDescription",
+					"site": {
+						"filename": "os.go",
+						"line": "58",
+						"column": "35"
+					}
+				},
+				{
+					"name": "go.opentelemetry.io/otel/sdk/resource.uname",
+					"site": {
+						"filename": "os_unix.go",
+						"line": "45",
+						"column": "21"
+					}
+				},
+				{
+					"name": "golang.org/x/sys/unix.ByteSliceToString",
+					"site": {
+						"filename": "os_unix.go",
+						"line": "71",
+						"column": "25"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_REFLECT",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/internal/config.NewAccessLog github.com/kelseyhightower/envconfig.Process github.com/kelseyhightower/envconfig.gatherInfo",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/config.NewAccessLog",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "118",
+						"column": "39"
+					}
+				},
+				{
+					"name": "github.com/kelseyhightower/envconfig.Process",
+					"site": {
+						"filename": "access_log.go",
+						"line": "15",
+						"column": "29"
+					}
+				},
+				{
+					"name": "github.com/kelseyhightower/envconfig.gatherInfo",
+					"site": {
+						"filename": "envconfig.go",
+						"line": "185",
+						"column": "26"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_REFLECT",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/infra/gcs.init cloud.google.com/go/storage.init (reflect.Value).MapKeys",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/gcs.init"
+				},
+				{
+					"name": "cloud.google.com/go/storage.init"
+				},
+				{
+					"name": "(reflect.Value).MapKeys",
+					"site": {
+						"filename": "storage.go",
+						"line": "71",
+						"column": "118"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_REFLECT",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/internal/config.NewAccessLog github.com/kelseyhightower/envconfig.Process github.com/kelseyhightower/envconfig.gatherInfo",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register",
+					"site": {
+						"filename": "main.go",
+						"line": "43",
+						"column": "31"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/config.NewAccessLog",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "118",
+						"column": "39"
+					}
+				},
+				{
+					"name": "github.com/kelseyhightower/envconfig.Process",
+					"site": {
+						"filename": "access_log.go",
+						"line": "15",
+						"column": "29"
+					}
+				},
+				{
+					"name": "github.com/kelseyhightower/envconfig.gatherInfo",
+					"site": {
+						"filename": "envconfig.go",
+						"line": "185",
+						"column": "26"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_REFLECT",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/internal/accesslog.NewPublisher$2 (*cloud.google.com/go/pubsub.Topic).Stop (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop (*sync.Map).Range (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1 (*google.golang.org/api/support/bundler.Bundler).Flush (*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle (*google.golang.org/api/support/bundler.Bundler).handle (reflect.Value).Interface",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/accesslog.NewPublisher$2",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "132",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub.Topic).Stop",
+					"site": {
+						"filename": "publisher.go",
+						"line": "45",
+						"column": "13"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop",
+					"site": {
+						"filename": "topic.go",
+						"line": "622",
+						"column": "26"
+					}
+				},
+				{
+					"name": "(*sync.Map).Range",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "160",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1",
+					"site": {
+						"filename": "map.go",
+						"line": "476",
+						"column": "8"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).Flush",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "161",
+						"column": "30"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "381",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).handle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "179",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(reflect.Value).Interface",
+					"site": {
+						"filename": "bundler.go",
+						"line": "324",
+						"column": "31"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_NETWORK",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main (*net/http.Server).ListenAndServe",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "(*net/http.Server).ListenAndServe",
+					"site": {
+						"filename": "main.go",
+						"line": "74",
+						"column": "2"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_DIRECT"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_NETWORK",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/presentation/http.NewHandler (*net/http.ServeMux).HandleFunc",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/presentation/http.NewHandler",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "124",
+						"column": "33"
+					}
+				},
+				{
+					"name": "(*net/http.ServeMux).HandleFunc",
+					"site": {
+						"filename": "handler.go",
+						"line": "60",
+						"column": "16"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_NETWORK",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init cloud.google.com/go/profiler.init google.golang.org/grpc.init golang.org/x/net/trace.init golang.org/x/net/trace.init#1 net/http.HandleFunc",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "cloud.google.com/go/profiler.init"
+				},
+				{
+					"name": "google.golang.org/grpc.init"
+				},
+				{
+					"name": "golang.org/x/net/trace.init"
+				},
+				{
+					"name": "golang.org/x/net/trace.init#1"
+				},
+				{
+					"name": "net/http.HandleFunc",
+					"site": {
+						"filename": "trace.go",
+						"line": "130",
+						"column": "17"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_NETWORK",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (*go.uber.org/zap/zapcore.ioCore).Write (*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry go.uber.org/zap/zapcore.addFields (go.uber.org/zap/zapcore.Field).AddTo (net/http.http2pseudoHeaderError).Error",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.ioCore).Write",
+					"site": {
+						"filename": "entry.go",
+						"line": "253",
+						"column": "47"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry",
+					"site": {
+						"filename": "core.go",
+						"line": "95",
+						"column": "31"
+					}
+				},
+				{
+					"name": "go.uber.org/zap/zapcore.addFields",
+					"site": {
+						"filename": "json_encoder.go",
+						"line": "420",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.Field).AddTo",
+					"site": {
+						"filename": "field.go",
+						"line": "210",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(net/http.http2pseudoHeaderError).Error",
+					"site": {
+						"filename": "field.go",
+						"line": "184",
+						"column": "57"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_EXEC",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/scheduler.New cloud.google.com/go/cloudtasks/apiv2.NewClient google.golang.org/api/transport/grpc.DialPool google.golang.org/api/transport/grpc.dial google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible (*golang.org/x/oauth2.reuseTokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand (golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run os/exec.CommandContext",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/scheduler.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "69",
+						"column": "42"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/cloudtasks/apiv2.NewClient",
+					"site": {
+						"filename": "scheduler.go",
+						"line": "50",
+						"column": "34"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.DialPool",
+					"site": {
+						"filename": "cloud_tasks_client.go",
+						"line": "659",
+						"column": "38"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.dial",
+					"site": {
+						"filename": "dial.go",
+						"line": "94",
+						"column": "20"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible",
+					"site": {
+						"filename": "dial.go",
+						"line": "156",
+						"column": "75"
+					}
+				},
+				{
+					"name": "(*golang.org/x/oauth2.reuseTokenSource).Token",
+					"site": {
+						"filename": "dial.go",
+						"line": "262",
+						"column": "22"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token",
+					"site": {
+						"filename": "oauth2.go",
+						"line": "311",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken",
+					"site": {
+						"filename": "basecredentials.go",
+						"line": "222",
+						"column": "46"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "241",
+						"column": "41"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "304",
+						"column": "27"
+					}
+				},
+				{
+					"name": "os/exec.CommandContext",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "112",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_EXEC",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/scheduler.New cloud.google.com/go/cloudtasks/apiv2.NewClient google.golang.org/api/transport/grpc.DialPool google.golang.org/api/transport/grpc.dial google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible (*golang.org/x/oauth2.reuseTokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand (golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run os/exec.CommandContext",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register",
+					"site": {
+						"filename": "main.go",
+						"line": "43",
+						"column": "31"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/scheduler.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "69",
+						"column": "42"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/cloudtasks/apiv2.NewClient",
+					"site": {
+						"filename": "scheduler.go",
+						"line": "50",
+						"column": "34"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.DialPool",
+					"site": {
+						"filename": "cloud_tasks_client.go",
+						"line": "659",
+						"column": "38"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.dial",
+					"site": {
+						"filename": "dial.go",
+						"line": "94",
+						"column": "20"
+					}
+				},
+				{
+					"name": "google.golang.org/api/transport/grpc.isTokenSourceDirectPathCompatible",
+					"site": {
+						"filename": "dial.go",
+						"line": "156",
+						"column": "75"
+					}
+				},
+				{
+					"name": "(*golang.org/x/oauth2.reuseTokenSource).Token",
+					"site": {
+						"filename": "dial.go",
+						"line": "262",
+						"column": "22"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token",
+					"site": {
+						"filename": "oauth2.go",
+						"line": "311",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken",
+					"site": {
+						"filename": "basecredentials.go",
+						"line": "222",
+						"column": "46"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "241",
+						"column": "41"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "304",
+						"column": "27"
+					}
+				},
+				{
+					"name": "os/exec.CommandContext",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "112",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_EXEC",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/logger.init github.com/ww24/linebot/logger.init#1 github.com/ww24/linebot/logger.newLogger github.com/ww24/linebot/internal/gcp.ProjectID sync.OnceValues[string error]$2 sync.OnceValues[string error]$1 github.com/ww24/linebot/internal/gcp.withTimeout$1 github.com/ww24/linebot/internal/gcp.getProjectID golang.org/x/oauth2/google.FindDefaultCredentials golang.org/x/oauth2/google.FindDefaultCredentialsWithParams cloud.google.com/go/compute/metadata.OnGCE cloud.google.com/go/compute/metadata.initOnGCE cloud.google.com/go/compute/metadata.testOnGCE cloud.google.com/go/compute/metadata.testOnGCE$1 (golang.org/x/net/http2.transportResponseBody).Close (*golang.org/x/net/http2.Framer).WriteWindowUpdate (*golang.org/x/net/http2.Framer).endWrite (*google.golang.org/grpc/internal/transport.bufWriter).Write (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).clientHandshake$bound (*crypto/tls.Conn).clientHandshake (*crypto/tls.clientHandshakeState).handshake (*crypto/tls.clientHandshakeState).doFullHandshake (*crypto/tls.Conn).getClientCertificate (*google.golang.org/api/internal/cert.secureConnectSource).getClientCertificate$bound (*google.golang.org/api/internal/cert.secureConnectSource).getClientCertificate os/exec.Command",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.init#1"
+				},
+				{
+					"name": "github.com/ww24/linebot/logger.newLogger",
+					"site": {
+						"filename": "grpc.go",
+						"line": "13",
+						"column": "21"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.ProjectID",
+					"site": {
+						"filename": "logger.go",
+						"line": "46",
+						"column": "33"
+					}
+				},
+				{
+					"name": "sync.OnceValues[string error]$2",
+					"site": {
+						"filename": "gcp.go",
+						"line": "23",
+						"column": "18"
+					}
+				},
+				{
+					"name": "sync.OnceValues[string error]$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.withTimeout$1",
+					"site": {
+						"filename": "oncefunc.go",
+						"line": "87",
+						"column": "13"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/gcp.getProjectID",
+					"site": {
+						"filename": "gcp.go",
+						"line": "30",
+						"column": "11"
+					}
+				},
+				{
+					"name": "golang.org/x/oauth2/google.FindDefaultCredentials",
+					"site": {
+						"filename": "gcp.go",
+						"line": "39",
+						"column": "45"
+					}
+				},
+				{
+					"name": "golang.org/x/oauth2/google.FindDefaultCredentialsWithParams",
+					"site": {
+						"filename": "default.go",
+						"line": "176",
+						"column": "41"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.OnGCE",
+					"site": {
+						"filename": "default.go",
+						"line": "160",
+						"column": "19"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.initOnGCE"
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.testOnGCE",
+					"site": {
+						"filename": "metadata.go",
+						"line": "120",
+						"column": "19"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/compute/metadata.testOnGCE$1",
+					"site": {
+						"filename": "metadata.go",
+						"line": "136",
+						"column": "2"
+					}
+				},
+				{
+					"name": "(golang.org/x/net/http2.transportResponseBody).Close",
+					"site": {
+						"filename": "metadata.go",
+						"line": "144",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).WriteWindowUpdate",
+					"site": {
+						"filename": "transport.go",
+						"line": "2624",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*golang.org/x/net/http2.Framer).endWrite",
+					"site": {
+						"filename": "frame.go",
+						"line": "989",
+						"column": "19"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.bufWriter).Write",
+					"site": {
+						"filename": "frame.go",
+						"line": "371",
+						"column": "21"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Write",
+					"site": {
+						"filename": "http_util.go",
+						"line": "339",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).Handshake",
+					"site": {
+						"filename": "conn.go",
+						"line": "1193",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).HandshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1476",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).handshakeContext",
+					"site": {
+						"filename": "conn.go",
+						"line": "1492",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).clientHandshake$bound",
+					"site": {
+						"filename": "conn.go",
+						"line": "1552",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).clientHandshake"
+				},
+				{
+					"name": "(*crypto/tls.clientHandshakeState).handshake",
+					"site": {
+						"filename": "handshake_client.go",
+						"line": "274",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*crypto/tls.clientHandshakeState).doFullHandshake",
+					"site": {
+						"filename": "handshake_client.go",
+						"line": "493",
+						"column": "31"
+					}
+				},
+				{
+					"name": "(*crypto/tls.Conn).getClientCertificate",
+					"site": {
+						"filename": "handshake_client.go",
+						"line": "615",
+						"column": "47"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/internal/cert.secureConnectSource).getClientCertificate$bound",
+					"site": {
+						"filename": "handshake_client.go",
+						"line": "1096",
+						"column": "39"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/internal/cert.secureConnectSource).getClientCertificate"
+				},
+				{
+					"name": "os/exec.Command",
+					"site": {
+						"filename": "secureconnect_cert.go",
+						"line": "100",
+						"column": "27"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_EXEC",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/internal/accesslog.NewPublisher$2 (*cloud.google.com/go/pubsub.Topic).Stop (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop (*sync.Map).Range (*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1 (*google.golang.org/api/support/bundler.Bundler).Flush (*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle (*google.golang.org/api/support/bundler.Bundler).handle (*cloud.google.com/go/firestore.BulkWriter).send$bound (*cloud.google.com/go/firestore.BulkWriter).send (*cloud.google.com/go/firestore/apiv1.Client).BatchWrite (*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchWrite github.com/googleapis/gax-go/v2.Invoke github.com/googleapis/gax-go/v2.invoke (*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchGetDocuments$1 (*cloud.google.com/go/firestore/apiv1/firestorepb.firestoreClient).BatchGetDocuments (*google.golang.org/grpc.clientStream).CloseSend (*google.golang.org/grpc.clientStream).withRetry google.golang.org/grpc.newClientStreamWithParams$2 (*google.golang.org/grpc.csAttempt).newStream (*google.golang.org/grpc/internal/transport.http2Client).NewStream (*google.golang.org/grpc/internal/transport.http2Client).createHeaderFields (*google.golang.org/grpc/internal/transport.http2Client).getTrAuthData (google.golang.org/grpc/credentials/oauth.TokenSource).GetRequestMetadata (*golang.org/x/oauth2.reuseTokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken (golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand (golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run os/exec.CommandContext",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/internal/accesslog.NewPublisher$2",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "132",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub.Topic).Stop",
+					"site": {
+						"filename": "publisher.go",
+						"line": "45",
+						"column": "13"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop",
+					"site": {
+						"filename": "topic.go",
+						"line": "622",
+						"column": "26"
+					}
+				},
+				{
+					"name": "(*sync.Map).Range",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "160",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/pubsub/internal/scheduler.PublishScheduler).FlushAndStop$1",
+					"site": {
+						"filename": "map.go",
+						"line": "476",
+						"column": "8"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).Flush",
+					"site": {
+						"filename": "publish_scheduler.go",
+						"line": "161",
+						"column": "30"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).enqueueCurBundle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "381",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*google.golang.org/api/support/bundler.Bundler).handle",
+					"site": {
+						"filename": "bundler.go",
+						"line": "179",
+						"column": "3"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore.BulkWriter).send$bound",
+					"site": {
+						"filename": "bundler.go",
+						"line": "324",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore.BulkWriter).send"
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1.Client).BatchWrite",
+					"site": {
+						"filename": "bulkwriter.go",
+						"line": "313",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchWrite",
+					"site": {
+						"filename": "firestore_client.go",
+						"line": "690",
+						"column": "36"
+					}
+				},
+				{
+					"name": "github.com/googleapis/gax-go/v2.Invoke",
+					"site": {
+						"filename": "firestore_client.go",
+						"line": "1204",
+						"column": "19"
+					}
+				},
+				{
+					"name": "github.com/googleapis/gax-go/v2.invoke",
+					"site": {
+						"filename": "invoke.go",
+						"line": "50",
+						"column": "15"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1.gRPCClient).BatchGetDocuments$1",
+					"site": {
+						"filename": "invoke.go",
+						"line": "82",
+						"column": "14"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/firestore/apiv1/firestorepb.firestoreClient).BatchGetDocuments",
+					"site": {
+						"filename": "firestore_client.go",
+						"line": "980",
+						"column": "41"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc.clientStream).CloseSend",
+					"site": {
+						"filename": "firestore.pb.go",
+						"line": "4646",
+						"column": "36"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc.clientStream).withRetry",
+					"site": {
+						"filename": "stream.go",
+						"line": "959",
+						"column": "14"
+					}
+				},
+				{
+					"name": "google.golang.org/grpc.newClientStreamWithParams$2",
+					"site": {
+						"filename": "stream.go",
+						"line": "760",
+						"column": "22"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc.csAttempt).newStream",
+					"site": {
+						"filename": "stream.go",
+						"line": "352",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.http2Client).NewStream",
+					"site": {
+						"filename": "stream.go",
+						"line": "502",
+						"column": "25"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.http2Client).createHeaderFields",
+					"site": {
+						"filename": "http2_client.go",
+						"line": "717",
+						"column": "43"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc/internal/transport.http2Client).getTrAuthData",
+					"site": {
+						"filename": "http2_client.go",
+						"line": "508",
+						"column": "34"
+					}
+				},
+				{
+					"name": "(google.golang.org/grpc/credentials/oauth.TokenSource).GetRequestMetadata",
+					"site": {
+						"filename": "http2_client.go",
+						"line": "626",
+						"column": "36"
+					}
+				},
+				{
+					"name": "(*golang.org/x/oauth2.reuseTokenSource).Token",
+					"site": {
+						"filename": "oauth.go",
+						"line": "42",
+						"column": "24"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.tokenSource).Token",
+					"site": {
+						"filename": "oauth2.go",
+						"line": "311",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).subjectToken",
+					"site": {
+						"filename": "basecredentials.go",
+						"line": "222",
+						"column": "46"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.executableCredentialSource).getTokenFromExecutableCommand",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "241",
+						"column": "41"
+					}
+				},
+				{
+					"name": "(golang.org/x/oauth2/google/internal/externalaccount.runtimeEnvironment).run",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "304",
+						"column": "27"
+					}
+				},
+				{
+					"name": "os/exec.CommandContext",
+					"site": {
+						"filename": "executablecredsource.go",
+						"line": "112",
+						"column": "28"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNSAFE_POINTER",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/infra/gcs.init cloud.google.com/go/storage.init google.golang.org/protobuf/reflect/protoreflect.init google.golang.org/protobuf/reflect/protoreflect.typeOf",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/gcs.init"
+				},
+				{
+					"name": "cloud.google.com/go/storage.init"
+				},
+				{
+					"name": "google.golang.org/protobuf/reflect/protoreflect.init"
+				},
+				{
+					"name": "google.golang.org/protobuf/reflect/protoreflect.typeOf",
+					"site": {
+						"filename": "value_unsafe.go",
+						"line": "33",
+						"column": "22"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNSAFE_POINTER",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/firestore.New cloud.google.com/go/firestore.NewClient google.golang.org/grpc.Dial google.golang.org/grpc.DialContext (*google.golang.org/grpc.ClientConn).exitIdleMode (*github.com/google/s2a-go.s2aTransportCreds).Clone github.com/golang/protobuf/proto.Clone google.golang.org/protobuf/proto.Clone (*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect (*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf google.golang.org/protobuf/internal/impl.pointerOfIface",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/firestore.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "53",
+						"column": "30"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/firestore.NewClient",
+					"site": {
+						"filename": "firestore.go",
+						"line": "47",
+						"column": "33"
+					}
+				},
+				{
+					"name": "google.golang.org/grpc.Dial",
+					"site": {
+						"filename": "client.go",
+						"line": "87",
+						"column": "25"
+					}
+				},
+				{
+					"name": "google.golang.org/grpc.DialContext",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "108",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc.ClientConn).exitIdleMode",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "263",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*github.com/google/s2a-go.s2aTransportCreds).Clone",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "372",
+						"column": "27"
+					}
+				},
+				{
+					"name": "github.com/golang/protobuf/proto.Clone",
+					"site": {
+						"filename": "s2a.go",
+						"line": "253",
+						"column": "30"
+					}
+				},
+				{
+					"name": "google.golang.org/protobuf/proto.Clone",
+					"site": {
+						"filename": "proto.go",
+						"line": "130",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect",
+					"site": {
+						"filename": "merge.go",
+						"line": "53",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf",
+					"site": {
+						"filename": "cloudtasks.pb.go",
+						"line": "821",
+						"column": "21"
+					}
+				},
+				{
+					"name": "google.golang.org/protobuf/internal/impl.pointerOfIface",
+					"site": {
+						"filename": "message_reflect.go",
+						"line": "401",
+						"column": "21"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNSAFE_POINTER",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/firestore.New cloud.google.com/go/firestore.NewClient google.golang.org/grpc.Dial google.golang.org/grpc.DialContext (*google.golang.org/grpc.ClientConn).exitIdleMode (*github.com/google/s2a-go.s2aTransportCreds).Clone github.com/golang/protobuf/proto.Clone google.golang.org/protobuf/proto.Clone (*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect (*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf google.golang.org/protobuf/internal/impl.pointerOfIface",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register",
+					"site": {
+						"filename": "main.go",
+						"line": "43",
+						"column": "31"
+					}
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/firestore.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "53",
+						"column": "30"
+					}
+				},
+				{
+					"name": "cloud.google.com/go/firestore.NewClient",
+					"site": {
+						"filename": "firestore.go",
+						"line": "47",
+						"column": "33"
+					}
+				},
+				{
+					"name": "google.golang.org/grpc.Dial",
+					"site": {
+						"filename": "client.go",
+						"line": "87",
+						"column": "25"
+					}
+				},
+				{
+					"name": "google.golang.org/grpc.DialContext",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "108",
+						"column": "20"
+					}
+				},
+				{
+					"name": "(*google.golang.org/grpc.ClientConn).exitIdleMode",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "263",
+						"column": "27"
+					}
+				},
+				{
+					"name": "(*github.com/google/s2a-go.s2aTransportCreds).Clone",
+					"site": {
+						"filename": "clientconn.go",
+						"line": "372",
+						"column": "27"
+					}
+				},
+				{
+					"name": "github.com/golang/protobuf/proto.Clone",
+					"site": {
+						"filename": "s2a.go",
+						"line": "253",
+						"column": "30"
+					}
+				},
+				{
+					"name": "google.golang.org/protobuf/proto.Clone",
+					"site": {
+						"filename": "proto.go",
+						"line": "130",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect",
+					"site": {
+						"filename": "merge.go",
+						"line": "53",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf",
+					"site": {
+						"filename": "cloudtasks.pb.go",
+						"line": "821",
+						"column": "21"
+					}
+				},
+				{
+					"name": "google.golang.org/protobuf/internal/impl.pointerOfIface",
+					"site": {
+						"filename": "message_reflect.go",
+						"line": "401",
+						"column": "21"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_UNSAFE_POINTER",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (*go.uber.org/zap/zapcore.ioCore).Write (*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry go.uber.org/zap/zapcore.addFields (go.uber.org/zap/zapcore.Field).AddTo go.uber.org/zap/zapcore.encodeStringer (*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.UpdateQueueRequest).String (google.golang.org/protobuf/internal/impl.Export).MessageStringOf (google.golang.org/protobuf/encoding/prototext.MarshalOptions).Format (*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect (*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf google.golang.org/protobuf/internal/impl.pointerOfIface",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.ioCore).Write",
+					"site": {
+						"filename": "entry.go",
+						"line": "253",
+						"column": "47"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry",
+					"site": {
+						"filename": "core.go",
+						"line": "95",
+						"column": "31"
+					}
+				},
+				{
+					"name": "go.uber.org/zap/zapcore.addFields",
+					"site": {
+						"filename": "json_encoder.go",
+						"line": "420",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.Field).AddTo",
+					"site": {
+						"filename": "field.go",
+						"line": "210",
+						"column": "18"
+					}
+				},
+				{
+					"name": "go.uber.org/zap/zapcore.encodeStringer",
+					"site": {
+						"filename": "field.go",
+						"line": "174",
+						"column": "23"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.UpdateQueueRequest).String",
+					"site": {
+						"filename": "field.go",
+						"line": "231",
+						"column": "51"
+					}
+				},
+				{
+					"name": "(google.golang.org/protobuf/internal/impl.Export).MessageStringOf",
+					"site": {
+						"filename": "cloudtasks.pb.go",
+						"line": "363",
+						"column": "36"
+					}
+				},
+				{
+					"name": "(google.golang.org/protobuf/encoding/prototext.MarshalOptions).Format",
+					"site": {
+						"filename": "api_export.go",
+						"line": "176",
+						"column": "58"
+					}
+				},
+				{
+					"name": "(*cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb.GetTaskRequest).ProtoReflect",
+					"site": {
+						"filename": "encode.go",
+						"line": "90",
+						"column": "32"
+					}
+				},
+				{
+					"name": "(*google.golang.org/protobuf/internal/impl.MessageInfo).MessageOf",
+					"site": {
+						"filename": "cloudtasks.pb.go",
+						"line": "821",
+						"column": "21"
+					}
+				},
+				{
+					"name": "google.golang.org/protobuf/internal/impl.pointerOfIface",
+					"site": {
+						"filename": "message_reflect.go",
+						"line": "401",
+						"column": "21"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_RUNTIME",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init cloud.google.com/go/profiler.init runtime/pprof.init",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "cloud.google.com/go/profiler.init"
+				},
+				{
+					"name": "runtime/pprof.init"
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_RUNTIME",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (go.uber.org/zap/zapcore.CheckWriteAction).OnWrite runtime.Goexit",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "main.go",
+						"line": "45",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.CheckWriteAction).OnWrite",
+					"site": {
+						"filename": "entry.go",
+						"line": "262",
+						"column": "15"
+					}
+				},
+				{
+					"name": "runtime.Goexit",
+					"site": {
+						"filename": "entry.go",
+						"line": "194",
+						"column": "17"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_RUNTIME",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (go.uber.org/zap/zapcore.CheckWriteAction).OnWrite runtime.Goexit",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "55",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.CheckWriteAction).OnWrite",
+					"site": {
+						"filename": "entry.go",
+						"line": "262",
+						"column": "15"
+					}
+				},
+				{
+					"name": "runtime.Goexit",
+					"site": {
+						"filename": "entry.go",
+						"line": "194",
+						"column": "17"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_RUNTIME",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (go.uber.org/zap/zapcore.CheckWriteAction).OnWrite runtime.Goexit",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.CheckWriteAction).OnWrite",
+					"site": {
+						"filename": "entry.go",
+						"line": "262",
+						"column": "15"
+					}
+				},
+				{
+					"name": "runtime.Goexit",
+					"site": {
+						"filename": "entry.go",
+						"line": "194",
+						"column": "17"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_MODIFY_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main log.SetFlags",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "log.SetFlags",
+					"site": {
+						"filename": "main.go",
+						"line": "31",
+						"column": "14"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_DIRECT"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_MODIFY_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init os/signal.init",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "os/signal.init"
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_DIRECT"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_READ_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register github.com/ww24/linebot/infra/firestore.New os.Getenv",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register"
+				},
+				{
+					"name": "github.com/ww24/linebot/infra/firestore.New",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "53",
+						"column": "30"
+					}
+				},
+				{
+					"name": "os.Getenv",
+					"site": {
+						"filename": "firestore.go",
+						"line": "36",
+						"column": "25"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_READ_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.main go.uber.org/automaxprocs/maxprocs.Set os.LookupEnv",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.main"
+				},
+				{
+					"name": "go.uber.org/automaxprocs/maxprocs.Set",
+					"site": {
+						"filename": "main.go",
+						"line": "39",
+						"column": "27"
+					}
+				},
+				{
+					"name": "os.LookupEnv",
+					"site": {
+						"filename": "maxprocs.go",
+						"line": "100",
+						"column": "32"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_READ_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.init github.com/ww24/linebot/presentation/http.init github.com/rs/xid.init os.Getpid",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.init"
+				},
+				{
+					"name": "github.com/ww24/linebot/presentation/http.init"
+				},
+				{
+					"name": "github.com/rs/xid.init"
+				},
+				{
+					"name": "os.Getpid",
+					"site": {
+						"filename": "id.go",
+						"line": "83",
+						"column": "17"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		},
+		{
+			"packageName": "main",
+			"capability": "CAPABILITY_READ_SYSTEM_STATE",
+			"depPath": "github.com/ww24/linebot/cmd/linebot.register$1 github.com/ww24/linebot/tracer.New$1 (*go.uber.org/zap.Logger).Error (*go.uber.org/zap/zapcore.CheckedEntry).Write (*go.uber.org/zap/zapcore.ioCore).Write (*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry go.uber.org/zap/zapcore.addFields (go.uber.org/zap/zapcore.Field).AddTo (os/user.UnknownUserIdError).Error",
+			"path": [
+				{
+					"name": "github.com/ww24/linebot/cmd/linebot.register$1"
+				},
+				{
+					"name": "github.com/ww24/linebot/tracer.New$1",
+					"site": {
+						"filename": "wire_gen.go",
+						"line": "133",
+						"column": "10"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap.Logger).Error",
+					"site": {
+						"filename": "tracer.go",
+						"line": "81",
+						"column": "12"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.CheckedEntry).Write",
+					"site": {
+						"filename": "logger.go",
+						"line": "262",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.ioCore).Write",
+					"site": {
+						"filename": "entry.go",
+						"line": "253",
+						"column": "47"
+					}
+				},
+				{
+					"name": "(*go.uber.org/zap/zapcore.jsonEncoder).EncodeEntry",
+					"site": {
+						"filename": "core.go",
+						"line": "95",
+						"column": "31"
+					}
+				},
+				{
+					"name": "go.uber.org/zap/zapcore.addFields",
+					"site": {
+						"filename": "json_encoder.go",
+						"line": "420",
+						"column": "11"
+					}
+				},
+				{
+					"name": "(go.uber.org/zap/zapcore.Field).AddTo",
+					"site": {
+						"filename": "field.go",
+						"line": "210",
+						"column": "18"
+					}
+				},
+				{
+					"name": "(os/user.UnknownUserIdError).Error",
+					"site": {
+						"filename": "field.go",
+						"line": "184",
+						"column": "57"
+					}
+				}
+			],
+			"packageDir": "github.com/ww24/linebot/cmd/linebot",
+			"capabilityType": "CAPABILITY_TYPE_TRANSITIVE"
+		}
+	],
+	"moduleInfo": [
+		{
+			"path": "cloud.google.com/go",
+			"version": "v0.110.7"
+		},
+		{
+			"path": "cloud.google.com/go/cloudtasks",
+			"version": "v1.12.1"
+		},
+		{
+			"path": "cloud.google.com/go/compute/metadata",
+			"version": "v0.2.3"
+		},
+		{
+			"path": "cloud.google.com/go/firestore",
+			"version": "v1.13.0"
+		},
+		{
+			"path": "cloud.google.com/go/iam",
+			"version": "v1.1.1"
+		},
+		{
+			"path": "cloud.google.com/go/longrunning",
+			"version": "v0.5.1"
+		},
+		{
+			"path": "cloud.google.com/go/profiler",
+			"version": "v0.3.1"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub",
+			"version": "v1.33.0"
+		},
+		{
+			"path": "cloud.google.com/go/storage",
+			"version": "v1.33.0"
+		},
+		{
+			"path": "cloud.google.com/go/trace",
+			"version": "v1.10.1"
+		},
+		{
+			"path": "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace",
+			"version": "v1.19.1"
+		},
+		{
+			"path": "github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping",
+			"version": "v0.43.1"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10",
+			"version": "v10.2.1"
+		},
+		{
+			"path": "github.com/felixge/httpsnoop",
+			"version": "v1.0.3"
+		},
+		{
+			"path": "github.com/go-logr/logr",
+			"version": "v1.2.4"
+		},
+		{
+			"path": "github.com/go-logr/stdr",
+			"version": "v1.2.2"
+		},
+		{
+			"path": "github.com/go-logr/zapr",
+			"version": "v1.2.4"
+		},
+		{
+			"path": "github.com/go-oss/scheduler",
+			"version": "v0.1.0"
+		},
+		{
+			"path": "github.com/golang/groupcache",
+			"version": "v0.0.0-20210331224755-41bb18bfe9da"
+		},
+		{
+			"path": "github.com/golang/protobuf",
+			"version": "v1.5.3"
+		},
+		{
+			"path": "github.com/golang/snappy",
+			"version": "v0.0.4"
+		},
+		{
+			"path": "github.com/google/go-cmp",
+			"version": "v0.5.9"
+		},
+		{
+			"path": "github.com/google/go-jsonnet",
+			"version": "v0.20.0"
+		},
+		{
+			"path": "github.com/google/pprof",
+			"version": "v0.0.0-20221103000818-d260c55eee4c"
+		},
+		{
+			"path": "github.com/google/s2a-go",
+			"version": "v0.1.7"
+		},
+		{
+			"path": "github.com/google/uuid",
+			"version": "v1.3.1"
+		},
+		{
+			"path": "github.com/google/wire",
+			"version": "v0.5.0"
+		},
+		{
+			"path": "github.com/googleapis/enterprise-certificate-proxy",
+			"version": "v0.3.1"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2",
+			"version": "v2.12.0"
+		},
+		{
+			"path": "github.com/ikawaha/kagome-dict",
+			"version": "v1.0.9"
+		},
+		{
+			"path": "github.com/ikawaha/kagome-dict/ipa",
+			"version": "v1.0.10"
+		},
+		{
+			"path": "github.com/ikawaha/kagome/v2",
+			"version": "v2.9.3"
+		},
+		{
+			"path": "github.com/kelseyhightower/envconfig",
+			"version": "v1.4.0"
+		},
+		{
+			"path": "github.com/line/line-bot-sdk-go/v7",
+			"version": "v7.21.0"
+		},
+		{
+			"path": "github.com/rs/xid",
+			"version": "v1.5.0"
+		},
+		{
+			"path": "go.opencensus.io",
+			"version": "v0.24.0"
+		},
+		{
+			"path": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+			"version": "v0.44.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel",
+			"version": "v1.19.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus",
+			"version": "v0.41.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/metric",
+			"version": "v1.19.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk",
+			"version": "v1.19.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/metric",
+			"version": "v0.41.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/trace",
+			"version": "v1.19.0"
+		},
+		{
+			"path": "go.uber.org/automaxprocs",
+			"version": "v1.5.3"
+		},
+		{
+			"path": "go.uber.org/multierr",
+			"version": "v1.10.0"
+		},
+		{
+			"path": "go.uber.org/zap",
+			"version": "v1.26.0"
+		},
+		{
+			"path": "golang.org/x/crypto",
+			"version": "v0.13.0"
+		},
+		{
+			"path": "golang.org/x/net",
+			"version": "v0.15.0"
+		},
+		{
+			"path": "golang.org/x/oauth2",
+			"version": "v0.12.0"
+		},
+		{
+			"path": "golang.org/x/sync",
+			"version": "v0.3.0"
+		},
+		{
+			"path": "golang.org/x/sys",
+			"version": "v0.12.0"
+		},
+		{
+			"path": "golang.org/x/text",
+			"version": "v0.13.0"
+		},
+		{
+			"path": "golang.org/x/time",
+			"version": "v0.3.0"
+		},
+		{
+			"path": "golang.org/x/xerrors",
+			"version": "v0.0.0-20220907171357-04be3eba64a2"
+		},
+		{
+			"path": "google.golang.org/api",
+			"version": "v0.143.0"
+		},
+		{
+			"path": "google.golang.org/genproto",
+			"version": "v0.0.0-20230913181813-007df8e322eb"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/api",
+			"version": "v0.0.0-20230913181813-007df8e322eb"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/rpc",
+			"version": "v0.0.0-20230920204549-e6e6cdab5c13"
+		},
+		{
+			"path": "google.golang.org/grpc",
+			"version": "v1.58.2"
+		},
+		{
+			"path": "google.golang.org/protobuf",
+			"version": "v1.31.0"
+		},
+		{
+			"path": "gopkg.in/yaml.v2",
+			"version": "v2.3.0"
+		},
+		{
+			"path": "sigs.k8s.io/yaml",
+			"version": "v1.1.0"
+		}
+	],
+	"packageInfo": [
+		{
+			"path": "cloud.google.com/go/cloudtasks/apiv2"
+		},
+		{
+			"path": "cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb"
+		},
+		{
+			"path": "cloud.google.com/go/cloudtasks/internal"
+		},
+		{
+			"path": "cloud.google.com/go/compute/metadata",
+			"ignoredFiles": [
+				"retry_linux.go",
+				"retry_linux_test.go",
+				"tidyfix.go"
+			]
+		},
+		{
+			"path": "cloud.google.com/go/firestore"
+		},
+		{
+			"path": "cloud.google.com/go/firestore/apiv1"
+		},
+		{
+			"path": "cloud.google.com/go/firestore/apiv1/firestorepb"
+		},
+		{
+			"path": "cloud.google.com/go/firestore/internal"
+		},
+		{
+			"path": "cloud.google.com/go/iam"
+		},
+		{
+			"path": "cloud.google.com/go/iam/apiv1/iampb"
+		},
+		{
+			"path": "cloud.google.com/go/internal"
+		},
+		{
+			"path": "cloud.google.com/go/internal/btree"
+		},
+		{
+			"path": "cloud.google.com/go/internal/detect"
+		},
+		{
+			"path": "cloud.google.com/go/internal/fields"
+		},
+		{
+			"path": "cloud.google.com/go/internal/optional"
+		},
+		{
+			"path": "cloud.google.com/go/internal/pubsub"
+		},
+		{
+			"path": "cloud.google.com/go/internal/trace"
+		},
+		{
+			"path": "cloud.google.com/go/internal/version"
+		},
+		{
+			"path": "cloud.google.com/go/longrunning/autogen/longrunningpb"
+		},
+		{
+			"path": "cloud.google.com/go/profiler",
+			"ignoredFiles": [
+				"integration_test.go"
+			]
+		},
+		{
+			"path": "cloud.google.com/go/profiler/internal"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub",
+			"ignoredFiles": [
+				"debug.go"
+			]
+		},
+		{
+			"path": "cloud.google.com/go/pubsub/apiv1"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub/apiv1/pubsubpb"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub/internal"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub/internal/distribution"
+		},
+		{
+			"path": "cloud.google.com/go/pubsub/internal/scheduler"
+		},
+		{
+			"path": "cloud.google.com/go/storage"
+		},
+		{
+			"path": "cloud.google.com/go/storage/internal"
+		},
+		{
+			"path": "cloud.google.com/go/storage/internal/apiv2"
+		},
+		{
+			"path": "cloud.google.com/go/storage/internal/apiv2/storagepb"
+		},
+		{
+			"path": "cloud.google.com/go/trace/apiv2"
+		},
+		{
+			"path": "cloud.google.com/go/trace/apiv2/tracepb"
+		},
+		{
+			"path": "cloud.google.com/go/trace/internal"
+		},
+		{
+			"path": "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
+		},
+		{
+			"path": "github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/compiler"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/container"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/container/avro"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/generator"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/parser"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/resolver"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/schema"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/util"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/vm"
+		},
+		{
+			"path": "github.com/actgardner/gogen-avro/v10/vm/types"
+		},
+		{
+			"path": "github.com/felixge/httpsnoop",
+			"ignoredFiles": [
+				"wrap_generated_lt_1.8.go",
+				"wrap_generated_lt_1.8_test.go"
+			]
+		},
+		{
+			"path": "github.com/go-logr/logr"
+		},
+		{
+			"path": "github.com/go-logr/logr/funcr"
+		},
+		{
+			"path": "github.com/go-logr/stdr"
+		},
+		{
+			"path": "github.com/go-logr/zapr"
+		},
+		{
+			"path": "github.com/go-oss/scheduler"
+		},
+		{
+			"path": "github.com/golang/groupcache/lru"
+		},
+		{
+			"path": "github.com/golang/protobuf/jsonpb"
+		},
+		{
+			"path": "github.com/golang/protobuf/proto"
+		},
+		{
+			"path": "github.com/golang/protobuf/ptypes"
+		},
+		{
+			"path": "github.com/golang/protobuf/ptypes/any"
+		},
+		{
+			"path": "github.com/golang/protobuf/ptypes/duration"
+		},
+		{
+			"path": "github.com/golang/protobuf/ptypes/timestamp"
+		},
+		{
+			"path": "github.com/golang/protobuf/ptypes/wrappers"
+		},
+		{
+			"path": "github.com/golang/snappy",
+			"ignoredFiles": [
+				"decode_other.go",
+				"encode_other.go",
+				"decode_amd64.s",
+				"encode_amd64.s"
+			]
+		},
+		{
+			"path": "github.com/google/go-cmp/cmp",
+			"ignoredFiles": [
+				"export_panic.go"
+			]
+		},
+		{
+			"path": "github.com/google/go-cmp/cmp/internal/diff",
+			"ignoredFiles": [
+				"debug_enable.go"
+			]
+		},
+		{
+			"path": "github.com/google/go-cmp/cmp/internal/flags"
+		},
+		{
+			"path": "github.com/google/go-cmp/cmp/internal/function"
+		},
+		{
+			"path": "github.com/google/go-cmp/cmp/internal/value",
+			"ignoredFiles": [
+				"pointer_purego.go"
+			]
+		},
+		{
+			"path": "github.com/google/go-jsonnet"
+		},
+		{
+			"path": "github.com/google/go-jsonnet/ast"
+		},
+		{
+			"path": "github.com/google/go-jsonnet/astgen"
+		},
+		{
+			"path": "github.com/google/go-jsonnet/internal/errors"
+		},
+		{
+			"path": "github.com/google/go-jsonnet/internal/parser"
+		},
+		{
+			"path": "github.com/google/go-jsonnet/internal/program"
+		},
+		{
+			"path": "github.com/google/pprof/profile"
+		},
+		{
+			"path": "github.com/google/s2a-go"
+		},
+		{
+			"path": "github.com/google/s2a-go/fallback"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/authinfo"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/handshaker"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/handshaker/service"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/common_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/s2a_context_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/s2a_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/v2/common_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/v2/s2a_context_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/proto/v2/s2a_go_proto"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/record"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/record/internal/aeadcrypter"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/record/internal/halfconn"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/tokenmanager"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/v2"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/v2/certverifier"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/v2/remotesigner"
+		},
+		{
+			"path": "github.com/google/s2a-go/internal/v2/tlsconfigstore"
+		},
+		{
+			"path": "github.com/google/s2a-go/retry"
+		},
+		{
+			"path": "github.com/google/s2a-go/stream"
+		},
+		{
+			"path": "github.com/google/uuid",
+			"ignoredFiles": [
+				"node_js.go"
+			]
+		},
+		{
+			"path": "github.com/google/wire"
+		},
+		{
+			"path": "github.com/googleapis/enterprise-certificate-proxy/client"
+		},
+		{
+			"path": "github.com/googleapis/enterprise-certificate-proxy/client/util"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2/apierror"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2/apierror/internal/proto"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2/callctx"
+		},
+		{
+			"path": "github.com/googleapis/gax-go/v2/internal"
+		},
+		{
+			"path": "github.com/ikawaha/kagome-dict/dict"
+		},
+		{
+			"path": "github.com/ikawaha/kagome-dict/dict/trie"
+		},
+		{
+			"path": "github.com/ikawaha/kagome-dict/ipa"
+		},
+		{
+			"path": "github.com/ikawaha/kagome/v2/filter"
+		},
+		{
+			"path": "github.com/ikawaha/kagome/v2/tokenizer"
+		},
+		{
+			"path": "github.com/ikawaha/kagome/v2/tokenizer/lattice"
+		},
+		{
+			"path": "github.com/kelseyhightower/envconfig",
+			"ignoredFiles": [
+				"env_syscall.go"
+			]
+		},
+		{
+			"path": "github.com/line/line-bot-sdk-go/v7/linebot"
+		},
+		{
+			"path": "github.com/rs/xid",
+			"ignoredFiles": [
+				"hostid_fallback.go",
+				"hostid_freebsd.go",
+				"hostid_linux.go",
+				"hostid_windows.go"
+			]
+		},
+		{
+			"path": "github.com/ww24/linebot/cmd/linebot",
+			"ignoredFiles": [
+				"wire.go"
+			]
+		},
+		{
+			"path": "github.com/ww24/linebot/domain/model"
+		},
+		{
+			"path": "github.com/ww24/linebot/domain/repository"
+		},
+		{
+			"path": "github.com/ww24/linebot/domain/service"
+		},
+		{
+			"path": "github.com/ww24/linebot/infra/external/linebot"
+		},
+		{
+			"path": "github.com/ww24/linebot/infra/firestore"
+		},
+		{
+			"path": "github.com/ww24/linebot/infra/gcs"
+		},
+		{
+			"path": "github.com/ww24/linebot/infra/pubsub"
+		},
+		{
+			"path": "github.com/ww24/linebot/infra/scheduler"
+		},
+		{
+			"path": "github.com/ww24/linebot/interactor"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/accesslog"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/accesslog/avro"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/buildinfo"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/code"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/config"
+		},
+		{
+			"path": "github.com/ww24/linebot/internal/gcp"
+		},
+		{
+			"path": "github.com/ww24/linebot/logger"
+		},
+		{
+			"path": "github.com/ww24/linebot/nl"
+		},
+		{
+			"path": "github.com/ww24/linebot/presentation/http"
+		},
+		{
+			"path": "github.com/ww24/linebot/tracer"
+		},
+		{
+			"path": "github.com/ww24/linebot/usecase"
+		},
+		{
+			"path": "go.opencensus.io"
+		},
+		{
+			"path": "go.opencensus.io/internal"
+		},
+		{
+			"path": "go.opencensus.io/internal/tagencoding"
+		},
+		{
+			"path": "go.opencensus.io/metric/metricdata"
+		},
+		{
+			"path": "go.opencensus.io/metric/metricexport"
+		},
+		{
+			"path": "go.opencensus.io/metric/metricproducer"
+		},
+		{
+			"path": "go.opencensus.io/plugin/ocgrpc"
+		},
+		{
+			"path": "go.opencensus.io/plugin/ochttp"
+		},
+		{
+			"path": "go.opencensus.io/plugin/ochttp/propagation/b3"
+		},
+		{
+			"path": "go.opencensus.io/resource"
+		},
+		{
+			"path": "go.opencensus.io/stats"
+		},
+		{
+			"path": "go.opencensus.io/stats/internal"
+		},
+		{
+			"path": "go.opencensus.io/stats/view"
+		},
+		{
+			"path": "go.opencensus.io/tag",
+			"ignoredFiles": [
+				"profile_not19.go"
+			]
+		},
+		{
+			"path": "go.opencensus.io/trace",
+			"ignoredFiles": [
+				"trace_nongo11.go"
+			]
+		},
+		{
+			"path": "go.opencensus.io/trace/internal"
+		},
+		{
+			"path": "go.opencensus.io/trace/propagation"
+		},
+		{
+			"path": "go.opencensus.io/trace/tracestate"
+		},
+		{
+			"path": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+		},
+		{
+			"path": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/filters"
+		},
+		{
+			"path": "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/semconvutil"
+		},
+		{
+			"path": "go.opentelemetry.io/otel"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/attribute"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/baggage"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus/internal"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus/internal/oc2otel"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus/internal/ocmetric"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/bridge/opencensus/internal/otel2oc"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/codes"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/internal"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/internal/attribute"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/internal/baggage"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/internal/global"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/metric"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/metric/embedded"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/metric/noop"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/propagation"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/instrumentation"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/internal"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/internal/env"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/metric"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/metric/internal"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/metric/internal/aggregate"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/metric/metricdata"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/resource",
+			"ignoredFiles": [
+				"export_unix_test.go",
+				"export_windows_test.go",
+				"host_id_bsd.go",
+				"host_id_linux.go",
+				"host_id_readfile.go",
+				"host_id_readfile_test.go",
+				"host_id_unsupported.go",
+				"host_id_windows.go",
+				"host_id_windows_test.go",
+				"os_release_unix.go",
+				"os_release_unix_test.go",
+				"os_unsupported.go",
+				"os_windows.go",
+				"os_windows_test.go"
+			]
+		},
+		{
+			"path": "go.opentelemetry.io/otel/sdk/trace"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/semconv/internal"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/semconv/v1.17.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/semconv/v1.18.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/semconv/v1.21.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/semconv/v1.4.0"
+		},
+		{
+			"path": "go.opentelemetry.io/otel/trace"
+		},
+		{
+			"path": "go.uber.org/automaxprocs/internal/runtime",
+			"ignoredFiles": [
+				"cpu_quota_linux.go",
+				"cpu_quota_linux_test.go"
+			]
+		},
+		{
+			"path": "go.uber.org/automaxprocs/maxprocs"
+		},
+		{
+			"path": "go.uber.org/multierr",
+			"ignoredFiles": [
+				"error_pre_go120.go"
+			]
+		},
+		{
+			"path": "go.uber.org/zap",
+			"ignoredFiles": [
+				"sink_windows_test.go"
+			]
+		},
+		{
+			"path": "go.uber.org/zap/buffer"
+		},
+		{
+			"path": "go.uber.org/zap/internal"
+		},
+		{
+			"path": "go.uber.org/zap/internal/bufferpool"
+		},
+		{
+			"path": "go.uber.org/zap/internal/color"
+		},
+		{
+			"path": "go.uber.org/zap/internal/exit"
+		},
+		{
+			"path": "go.uber.org/zap/internal/pool"
+		},
+		{
+			"path": "go.uber.org/zap/internal/stacktrace"
+		},
+		{
+			"path": "go.uber.org/zap/zapcore"
+		},
+		{
+			"path": "go.uber.org/zap/zapgrpc"
+		},
+		{
+			"path": "golang.org/x/crypto/chacha20",
+			"ignoredFiles": [
+				"chacha_noasm.go",
+				"chacha_ppc64le.go",
+				"chacha_s390x.go",
+				"chacha_ppc64le.s",
+				"chacha_s390x.s"
+			]
+		},
+		{
+			"path": "golang.org/x/crypto/chacha20poly1305",
+			"ignoredFiles": [
+				"chacha20poly1305_amd64.go",
+				"chacha20poly1305_amd64.s"
+			]
+		},
+		{
+			"path": "golang.org/x/crypto/cryptobyte"
+		},
+		{
+			"path": "golang.org/x/crypto/cryptobyte/asn1"
+		},
+		{
+			"path": "golang.org/x/crypto/hkdf"
+		},
+		{
+			"path": "golang.org/x/crypto/internal/alias",
+			"ignoredFiles": [
+				"alias_purego.go"
+			]
+		},
+		{
+			"path": "golang.org/x/crypto/internal/poly1305",
+			"ignoredFiles": [
+				"bits_compat.go",
+				"sum_amd64.go",
+				"sum_ppc64le.go",
+				"sum_s390x.go",
+				"sum_amd64.s",
+				"sum_ppc64le.s",
+				"sum_s390x.s"
+			]
+		},
+		{
+			"path": "golang.org/x/net/http/httpguts"
+		},
+		{
+			"path": "golang.org/x/net/http2",
+			"ignoredFiles": [
+				"not_go111.go",
+				"not_go115.go",
+				"not_go118.go"
+			]
+		},
+		{
+			"path": "golang.org/x/net/http2/hpack",
+			"ignoredFiles": [
+				"gen.go"
+			]
+		},
+		{
+			"path": "golang.org/x/net/idna",
+			"ignoredFiles": [
+				"idna9.0.0.go",
+				"pre_go118.go",
+				"tables10.0.0.go",
+				"tables11.0.0.go",
+				"tables12.0.0.go",
+				"tables13.0.0.go",
+				"tables9.0.0.go",
+				"trie12.0.0.go"
+			]
+		},
+		{
+			"path": "golang.org/x/net/internal/timeseries"
+		},
+		{
+			"path": "golang.org/x/net/trace"
+		},
+		{
+			"path": "golang.org/x/oauth2"
+		},
+		{
+			"path": "golang.org/x/oauth2/authhandler"
+		},
+		{
+			"path": "golang.org/x/oauth2/google",
+			"ignoredFiles": [
+				"appengine_gen1.go"
+			]
+		},
+		{
+			"path": "golang.org/x/oauth2/google/internal/externalaccount"
+		},
+		{
+			"path": "golang.org/x/oauth2/internal",
+			"ignoredFiles": [
+				"client_appengine.go"
+			]
+		},
+		{
+			"path": "golang.org/x/oauth2/jws"
+		},
+		{
+			"path": "golang.org/x/oauth2/jwt"
+		},
+		{
+			"path": "golang.org/x/sync/errgroup",
+			"ignoredFiles": [
+				"pre_go120.go"
+			]
+		},
+		{
+			"path": "golang.org/x/sync/semaphore"
+		},
+		{
+			"path": "golang.org/x/sys/unix",
+			"ignoredFiles": [
+				"affinity_linux.go",
+				"bluetooth_linux.go",
+				"cap_freebsd.go",
+				"creds_test.go",
+				"darwin_amd64_test.go",
+				"dev_aix_ppc.go",
+				"dev_aix_ppc64.go",
+				"dev_dragonfly.go",
+				"dev_freebsd.go",
+				"dev_linux.go",
+				"dev_linux_test.go",
+				"dev_netbsd.go",
+				"dev_openbsd.go",
+				"dev_zos.go",
+				"dev_zos_test.go",
+				"dup3_test.go",
+				"endian_big.go",
+				"epoll_zos.go",
+				"epoll_zos_test.go",
+				"export_mremap_test.go",
+				"fcntl.go",
+				"fcntl_linux_32bit.go",
+				"fstatfs_zos.go",
+				"fstatfs_zos_test.go",
+				"gccgo.go",
+				"gccgo_linux_amd64.go",
+				"ifreq_linux.go",
+				"ifreq_linux_test.go",
+				"ioctl_linux.go",
+				"ioctl_signed.go",
+				"ioctl_zos.go",
+				"mkasm.go",
+				"mkpost.go",
+				"mksyscall.go",
+				"mksyscall_aix_ppc.go",
+				"mksyscall_aix_ppc64.go",
+				"mksyscall_solaris.go",
+				"mksysctl_openbsd.go",
+				"mksysnum.go",
+				"mmap_zos_test.go",
+				"mremap.go",
+				"mremap_test.go",
+				"openbsd_test.go",
+				"pipe2_test.go",
+				"pledge_openbsd.go",
+				"ptrace_ios.go",
+				"race.go",
+				"readdirent_getdents.go",
+				"sendfile_test.go",
+				"sockcmsg_dragonfly.go",
+				"sockcmsg_linux.go",
+				"syscall_aix.go",
+				"syscall_aix_ppc.go",
+				"syscall_aix_ppc64.go",
+				"syscall_aix_test.go",
+				"syscall_darwin_amd64.go",
+				"syscall_dragonfly.go",
+				"syscall_dragonfly_amd64.go",
+				"syscall_freebsd.go",
+				"syscall_freebsd_386.go",
+				"syscall_freebsd_amd64.go",
+				"syscall_freebsd_arm.go",
+				"syscall_freebsd_arm64.go",
+				"syscall_freebsd_riscv64.go",
+				"syscall_freebsd_test.go",
+				"syscall_hurd.go",
+				"syscall_hurd_386.go",
+				"syscall_illumos.go",
+				"syscall_internal_linux_test.go",
+				"syscall_internal_solaris_test.go",
+				"syscall_linux.go",
+				"syscall_linux_386.go",
+				"syscall_linux_alarm.go",
+				"syscall_linux_amd64.go",
+				"syscall_linux_amd64_gc.go",
+				"syscall_linux_arm.go",
+				"syscall_linux_arm64.go",
+				"syscall_linux_gc.go",
+				"syscall_linux_gc_386.go",
+				"syscall_linux_gc_arm.go",
+				"syscall_linux_gccgo_386.go",
+				"syscall_linux_gccgo_arm.go",
+				"syscall_linux_loong64.go",
+				"syscall_linux_mips64x.go",
+				"syscall_linux_mipsx.go",
+				"syscall_linux_ppc.go",
+				"syscall_linux_ppc64x.go",
+				"syscall_linux_riscv64.go",
+				"syscall_linux_s390x.go",
+				"syscall_linux_sparc64.go",
+				"syscall_linux_test.go",
+				"syscall_netbsd.go",
+				"syscall_netbsd_386.go",
+				"syscall_netbsd_amd64.go",
+				"syscall_netbsd_arm.go",
+				"syscall_netbsd_arm64.go",
+				"syscall_netbsd_test.go",
+				"syscall_openbsd.go",
+				"syscall_openbsd_386.go",
+				"syscall_openbsd_amd64.go",
+				"syscall_openbsd_arm.go",
+				"syscall_openbsd_arm64.go",
+				"syscall_openbsd_libc.go",
+				"syscall_openbsd_mips64.go",
+				"syscall_openbsd_ppc64.go",
+				"syscall_openbsd_riscv64.go",
+				"syscall_openbsd_test.go",
+				"syscall_solaris.go",
+				"syscall_solaris_amd64.go",
+				"syscall_solaris_test.go",
+				"syscall_unix_gc_ppc64x.go",
+				"syscall_zos_s390x.go",
+				"syscall_zos_test.go",
+				"sysctl_netbsd_test.go",
+				"sysvshm_linux.go",
+				"sysvshm_unix_test.go",
+				"types_aix.go",
+				"types_darwin.go",
+				"types_dragonfly.go",
+				"types_freebsd.go",
+				"types_netbsd.go",
+				"types_openbsd.go",
+				"types_solaris.go",
+				"unveil_openbsd.go",
+				"xattr_bsd.go",
+				"zerrors_aix_ppc.go",
+				"zerrors_aix_ppc64.go",
+				"zerrors_darwin_amd64.go",
+				"zerrors_dragonfly_amd64.go",
+				"zerrors_freebsd_386.go",
+				"zerrors_freebsd_amd64.go",
+				"zerrors_freebsd_arm.go",
+				"zerrors_freebsd_arm64.go",
+				"zerrors_freebsd_riscv64.go",
+				"zerrors_linux.go",
+				"zerrors_linux_386.go",
+				"zerrors_linux_amd64.go",
+				"zerrors_linux_arm.go",
+				"zerrors_linux_arm64.go",
+				"zerrors_linux_loong64.go",
+				"zerrors_linux_mips.go",
+				"zerrors_linux_mips64.go",
+				"zerrors_linux_mips64le.go",
+				"zerrors_linux_mipsle.go",
+				"zerrors_linux_ppc.go",
+				"zerrors_linux_ppc64.go",
+				"zerrors_linux_ppc64le.go",
+				"zerrors_linux_riscv64.go",
+				"zerrors_linux_s390x.go",
+				"zerrors_linux_sparc64.go",
+				"zerrors_netbsd_386.go",
+				"zerrors_netbsd_amd64.go",
+				"zerrors_netbsd_arm.go",
+				"zerrors_netbsd_arm64.go",
+				"zerrors_openbsd_386.go",
+				"zerrors_openbsd_amd64.go",
+				"zerrors_openbsd_arm.go",
+				"zerrors_openbsd_arm64.go",
+				"zerrors_openbsd_mips64.go",
+				"zerrors_openbsd_ppc64.go",
+				"zerrors_openbsd_riscv64.go",
+				"zerrors_solaris_amd64.go",
+				"zerrors_zos_s390x.go",
+				"zptrace_armnn_linux.go",
+				"zptrace_linux_arm64.go",
+				"zptrace_mipsnn_linux.go",
+				"zptrace_mipsnnle_linux.go",
+				"zptrace_x86_linux.go",
+				"zsyscall_aix_ppc.go",
+				"zsyscall_aix_ppc64.go",
+				"zsyscall_aix_ppc64_gc.go",
+				"zsyscall_aix_ppc64_gccgo.go",
+				"zsyscall_darwin_amd64.go",
+				"zsyscall_dragonfly_amd64.go",
+				"zsyscall_freebsd_386.go",
+				"zsyscall_freebsd_amd64.go",
+				"zsyscall_freebsd_arm.go",
+				"zsyscall_freebsd_arm64.go",
+				"zsyscall_freebsd_riscv64.go",
+				"zsyscall_illumos_amd64.go",
+				"zsyscall_linux.go",
+				"zsyscall_linux_386.go",
+				"zsyscall_linux_amd64.go",
+				"zsyscall_linux_arm.go",
+				"zsyscall_linux_arm64.go",
+				"zsyscall_linux_loong64.go",
+				"zsyscall_linux_mips.go",
+				"zsyscall_linux_mips64.go",
+				"zsyscall_linux_mips64le.go",
+				"zsyscall_linux_mipsle.go",
+				"zsyscall_linux_ppc.go",
+				"zsyscall_linux_ppc64.go",
+				"zsyscall_linux_ppc64le.go",
+				"zsyscall_linux_riscv64.go",
+				"zsyscall_linux_s390x.go",
+				"zsyscall_linux_sparc64.go",
+				"zsyscall_netbsd_386.go",
+				"zsyscall_netbsd_amd64.go",
+				"zsyscall_netbsd_arm.go",
+				"zsyscall_netbsd_arm64.go",
+				"zsyscall_openbsd_386.go",
+				"zsyscall_openbsd_amd64.go",
+				"zsyscall_openbsd_arm.go",
+				"zsyscall_openbsd_arm64.go",
+				"zsyscall_openbsd_mips64.go",
+				"zsyscall_openbsd_ppc64.go",
+				"zsyscall_openbsd_riscv64.go",
+				"zsyscall_solaris_amd64.go",
+				"zsyscall_zos_s390x.go",
+				"zsysctl_openbsd_386.go",
+				"zsysctl_openbsd_amd64.go",
+				"zsysctl_openbsd_arm.go",
+				"zsysctl_openbsd_arm64.go",
+				"zsysctl_openbsd_mips64.go",
+				"zsysctl_openbsd_ppc64.go",
+				"zsysctl_openbsd_riscv64.go",
+				"zsysnum_darwin_amd64.go",
+				"zsysnum_dragonfly_amd64.go",
+				"zsysnum_freebsd_386.go",
+				"zsysnum_freebsd_amd64.go",
+				"zsysnum_freebsd_arm.go",
+				"zsysnum_freebsd_arm64.go",
+				"zsysnum_freebsd_riscv64.go",
+				"zsysnum_linux_386.go",
+				"zsysnum_linux_amd64.go",
+				"zsysnum_linux_arm.go",
+				"zsysnum_linux_arm64.go",
+				"zsysnum_linux_loong64.go",
+				"zsysnum_linux_mips.go",
+				"zsysnum_linux_mips64.go",
+				"zsysnum_linux_mips64le.go",
+				"zsysnum_linux_mipsle.go",
+				"zsysnum_linux_ppc.go",
+				"zsysnum_linux_ppc64.go",
+				"zsysnum_linux_ppc64le.go",
+				"zsysnum_linux_riscv64.go",
+				"zsysnum_linux_s390x.go",
+				"zsysnum_linux_sparc64.go",
+				"zsysnum_netbsd_386.go",
+				"zsysnum_netbsd_amd64.go",
+				"zsysnum_netbsd_arm.go",
+				"zsysnum_netbsd_arm64.go",
+				"zsysnum_openbsd_386.go",
+				"zsysnum_openbsd_amd64.go",
+				"zsysnum_openbsd_arm.go",
+				"zsysnum_openbsd_arm64.go",
+				"zsysnum_openbsd_mips64.go",
+				"zsysnum_openbsd_ppc64.go",
+				"zsysnum_openbsd_riscv64.go",
+				"zsysnum_zos_s390x.go",
+				"ztypes_aix_ppc.go",
+				"ztypes_aix_ppc64.go",
+				"ztypes_darwin_amd64.go",
+				"ztypes_dragonfly_amd64.go",
+				"ztypes_freebsd_386.go",
+				"ztypes_freebsd_amd64.go",
+				"ztypes_freebsd_arm.go",
+				"ztypes_freebsd_arm64.go",
+				"ztypes_freebsd_riscv64.go",
+				"ztypes_linux.go",
+				"ztypes_linux_386.go",
+				"ztypes_linux_amd64.go",
+				"ztypes_linux_arm.go",
+				"ztypes_linux_arm64.go",
+				"ztypes_linux_loong64.go",
+				"ztypes_linux_mips.go",
+				"ztypes_linux_mips64.go",
+				"ztypes_linux_mips64le.go",
+				"ztypes_linux_mipsle.go",
+				"ztypes_linux_ppc.go",
+				"ztypes_linux_ppc64.go",
+				"ztypes_linux_ppc64le.go",
+				"ztypes_linux_riscv64.go",
+				"ztypes_linux_s390x.go",
+				"ztypes_linux_sparc64.go",
+				"ztypes_netbsd_386.go",
+				"ztypes_netbsd_amd64.go",
+				"ztypes_netbsd_arm.go",
+				"ztypes_netbsd_arm64.go",
+				"ztypes_openbsd_386.go",
+				"ztypes_openbsd_amd64.go",
+				"ztypes_openbsd_arm.go",
+				"ztypes_openbsd_arm64.go",
+				"ztypes_openbsd_mips64.go",
+				"ztypes_openbsd_ppc64.go",
+				"ztypes_openbsd_riscv64.go",
+				"ztypes_solaris_amd64.go",
+				"ztypes_zos_s390x.go",
+				"asm_aix_ppc64.s",
+				"asm_bsd_386.s",
+				"asm_bsd_amd64.s",
+				"asm_bsd_arm.s",
+				"asm_bsd_ppc64.s",
+				"asm_bsd_riscv64.s",
+				"asm_linux_386.s",
+				"asm_linux_amd64.s",
+				"asm_linux_arm.s",
+				"asm_linux_arm64.s",
+				"asm_linux_loong64.s",
+				"asm_linux_mips64x.s",
+				"asm_linux_mipsx.s",
+				"asm_linux_ppc64x.s",
+				"asm_linux_riscv64.s",
+				"asm_linux_s390x.s",
+				"asm_openbsd_mips64.s",
+				"asm_solaris_amd64.s",
+				"asm_zos_s390x.s",
+				"gccgo_c.c",
+				"zsyscall_darwin_amd64.s",
+				"zsyscall_openbsd_386.s",
+				"zsyscall_openbsd_amd64.s",
+				"zsyscall_openbsd_arm.s",
+				"zsyscall_openbsd_arm64.s",
+				"zsyscall_openbsd_mips64.s",
+				"zsyscall_openbsd_ppc64.s",
+				"zsyscall_openbsd_riscv64.s"
+			]
+		},
+		{
+			"path": "golang.org/x/text/secure/bidirule",
+			"ignoredFiles": [
+				"bidirule9.0.0.go",
+				"bidirule9.0.0_test.go"
+			]
+		},
+		{
+			"path": "golang.org/x/text/transform"
+		},
+		{
+			"path": "golang.org/x/text/unicode/bidi",
+			"ignoredFiles": [
+				"gen.go",
+				"gen_ranges.go",
+				"gen_trieval.go",
+				"tables10.0.0.go",
+				"tables11.0.0.go",
+				"tables12.0.0.go",
+				"tables13.0.0.go",
+				"tables9.0.0.go"
+			]
+		},
+		{
+			"path": "golang.org/x/text/unicode/norm",
+			"ignoredFiles": [
+				"data10.0.0_test.go",
+				"data11.0.0_test.go",
+				"data12.0.0_test.go",
+				"data13.0.0_test.go",
+				"data9.0.0_test.go",
+				"forminfo_test.go",
+				"maketables.go",
+				"tables10.0.0.go",
+				"tables11.0.0.go",
+				"tables12.0.0.go",
+				"tables13.0.0.go",
+				"tables9.0.0.go",
+				"triegen.go"
+			]
+		},
+		{
+			"path": "golang.org/x/time/rate"
+		},
+		{
+			"path": "golang.org/x/xerrors"
+		},
+		{
+			"path": "golang.org/x/xerrors/internal"
+		},
+		{
+			"path": "google.golang.org/api/googleapi"
+		},
+		{
+			"path": "google.golang.org/api/googleapi/transport"
+		},
+		{
+			"path": "google.golang.org/api/iamcredentials/v1"
+		},
+		{
+			"path": "google.golang.org/api/idtoken"
+		},
+		{
+			"path": "google.golang.org/api/impersonate"
+		},
+		{
+			"path": "google.golang.org/api/internal"
+		},
+		{
+			"path": "google.golang.org/api/internal/cert"
+		},
+		{
+			"path": "google.golang.org/api/internal/gensupport",
+			"ignoredFiles": [
+				"retryable_linux.go"
+			]
+		},
+		{
+			"path": "google.golang.org/api/internal/impersonate"
+		},
+		{
+			"path": "google.golang.org/api/internal/third_party/uritemplates"
+		},
+		{
+			"path": "google.golang.org/api/iterator"
+		},
+		{
+			"path": "google.golang.org/api/option"
+		},
+		{
+			"path": "google.golang.org/api/option/internaloption"
+		},
+		{
+			"path": "google.golang.org/api/storage/v1"
+		},
+		{
+			"path": "google.golang.org/api/support/bundler"
+		},
+		{
+			"path": "google.golang.org/api/transport"
+		},
+		{
+			"path": "google.golang.org/api/transport/grpc",
+			"ignoredFiles": [
+				"dial_socketopt.go",
+				"dial_socketopt_test.go"
+			]
+		},
+		{
+			"path": "google.golang.org/api/transport/http"
+		},
+		{
+			"path": "google.golang.org/api/transport/http/internal/propagation"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/api",
+			"ignoredFiles": [
+				"tidyfix.go"
+			]
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/api/annotations"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/api/label"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/api/monitoredres"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/cloud/location"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/cloud/tasks/v2"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/devtools/cloudprofiler/v2"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/rpc/code"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/rpc/errdetails"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/rpc/status"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/type/date"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/type/expr"
+		},
+		{
+			"path": "google.golang.org/genproto/googleapis/type/latlng"
+		},
+		{
+			"path": "google.golang.org/grpc"
+		},
+		{
+			"path": "google.golang.org/grpc/attributes"
+		},
+		{
+			"path": "google.golang.org/grpc/backoff"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer/base"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer/grpclb"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer/grpclb/grpc_lb_v1"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer/grpclb/state"
+		},
+		{
+			"path": "google.golang.org/grpc/balancer/roundrobin"
+		},
+		{
+			"path": "google.golang.org/grpc/binarylog/grpc_binarylog_v1"
+		},
+		{
+			"path": "google.golang.org/grpc/channelz"
+		},
+		{
+			"path": "google.golang.org/grpc/codes"
+		},
+		{
+			"path": "google.golang.org/grpc/connectivity"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts",
+			"ignoredFiles": [
+				"alts_test.go",
+				"utils_test.go"
+			]
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal/authinfo"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal/conn"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal/handshaker"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal/handshaker/service"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/alts/internal/proto/grpc_gcp"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/google"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/insecure"
+		},
+		{
+			"path": "google.golang.org/grpc/credentials/oauth"
+		},
+		{
+			"path": "google.golang.org/grpc/encoding"
+		},
+		{
+			"path": "google.golang.org/grpc/encoding/proto"
+		},
+		{
+			"path": "google.golang.org/grpc/grpclog"
+		},
+		{
+			"path": "google.golang.org/grpc/internal"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/backoff"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/balancer/gracefulswitch"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/balancerload"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/binarylog"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/buffer"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/channelz",
+			"ignoredFiles": [
+				"types_linux.go",
+				"util_linux.go",
+				"util_test.go"
+			]
+		},
+		{
+			"path": "google.golang.org/grpc/internal/credentials"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/envconfig"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/googlecloud",
+			"ignoredFiles": [
+				"manufacturer_linux.go",
+				"manufacturer_windows.go"
+			]
+		},
+		{
+			"path": "google.golang.org/grpc/internal/grpclog"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/grpcrand"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/grpcsync"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/grpcutil"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/idle"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/metadata"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/pretty"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/resolver"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/resolver/dns"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/resolver/passthrough"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/resolver/unix"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/serviceconfig"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/status"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/syscall",
+			"ignoredFiles": [
+				"syscall_linux.go"
+			]
+		},
+		{
+			"path": "google.golang.org/grpc/internal/transport"
+		},
+		{
+			"path": "google.golang.org/grpc/internal/transport/networktype"
+		},
+		{
+			"path": "google.golang.org/grpc/keepalive"
+		},
+		{
+			"path": "google.golang.org/grpc/metadata"
+		},
+		{
+			"path": "google.golang.org/grpc/peer"
+		},
+		{
+			"path": "google.golang.org/grpc/resolver"
+		},
+		{
+			"path": "google.golang.org/grpc/serviceconfig"
+		},
+		{
+			"path": "google.golang.org/grpc/stats"
+		},
+		{
+			"path": "google.golang.org/grpc/status"
+		},
+		{
+			"path": "google.golang.org/grpc/tap"
+		},
+		{
+			"path": "google.golang.org/protobuf/encoding/protojson"
+		},
+		{
+			"path": "google.golang.org/protobuf/encoding/prototext"
+		},
+		{
+			"path": "google.golang.org/protobuf/encoding/protowire"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/descfmt"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/descopts"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/detrand"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/encoding/defval"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/encoding/json"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/encoding/messageset"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/encoding/tag"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/encoding/text"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/errors",
+			"ignoredFiles": [
+				"is_go112.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/filedesc"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/filetype"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/flags",
+			"ignoredFiles": [
+				"proto_legacy_enable.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/genid"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/impl",
+			"ignoredFiles": [
+				"codec_map_go111.go",
+				"codec_reflect.go",
+				"pointer_reflect.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/order"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/pragma"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/set"
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/strs",
+			"ignoredFiles": [
+				"strings_pure.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/internal/version"
+		},
+		{
+			"path": "google.golang.org/protobuf/proto",
+			"ignoredFiles": [
+				"proto_reflect.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/reflect/protodesc"
+		},
+		{
+			"path": "google.golang.org/protobuf/reflect/protoreflect",
+			"ignoredFiles": [
+				"value_pure.go"
+			]
+		},
+		{
+			"path": "google.golang.org/protobuf/reflect/protoregistry"
+		},
+		{
+			"path": "google.golang.org/protobuf/runtime/protoiface"
+		},
+		{
+			"path": "google.golang.org/protobuf/runtime/protoimpl"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/descriptorpb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/anypb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/durationpb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/emptypb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/fieldmaskpb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/structpb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/timestamppb"
+		},
+		{
+			"path": "google.golang.org/protobuf/types/known/wrapperspb"
+		},
+		{
+			"path": "gopkg.in/yaml.v2"
+		},
+		{
+			"path": "sigs.k8s.io/yaml"
+		}
+	]
+}
