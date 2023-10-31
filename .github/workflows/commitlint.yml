@@ -9,7 +9,7 @@ jobs:
       contents: "read"
       pull-requests: "read"
     steps:
-      - uses: actions/checkout@v4.1.0
+      - uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v4.0.0
