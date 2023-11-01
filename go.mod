@@ -9,7 +9,7 @@ require (
 	cloud.google.com/go/firestore v1.13.0
 	cloud.google.com/go/profiler v0.3.1
 	cloud.google.com/go/pubsub v1.33.0
-	cloud.google.com/go/storage v1.33.0
+	cloud.google.com/go/storage v1.34.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.19.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/chromedp/chromedp v0.9.2
