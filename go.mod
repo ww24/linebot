@@ -7,7 +7,7 @@ toolchain go1.21.0
 require (
 	cloud.google.com/go/cloudtasks v1.12.4
 	cloud.google.com/go/firestore v1.14.0
-	cloud.google.com/go/profiler v0.3.1
+	cloud.google.com/go/profiler v0.4.0
 	cloud.google.com/go/pubsub v1.33.0
 	cloud.google.com/go/storage v1.35.1
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.20.0
@@ -60,7 +60,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/pprof v0.0.0-20221103000818-d260c55eee4c // indirect
+	github.com/google/pprof v0.0.0-20230602150820-91b7bce49751 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/google/subcommands v1.0.1 // indirect
 	github.com/google/uuid v1.4.0 // indirect
