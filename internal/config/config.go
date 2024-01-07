@@ -11,4 +11,5 @@ var Set = wire.NewSet(
 	NewOtel,
 	NewAccessLog,
 	NewServiceEndpoint,
+	NewSentry,
 )

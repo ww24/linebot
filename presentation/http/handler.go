@@ -43,6 +43,7 @@ func NewHandler(
 	imageHandler usecase.ImageHandler,
 	publisher accesslog.Publisher,
 	cfg *config.AccessLog,
+	cs *config.Sentry,
 ) (http.Handler, error) {
 	h := &handler{
 		bot:          bot,
@@ -54,6 +55,15 @@ func NewHandler(
 			tracer.HTTPMiddleware(),
 			accessLogHandler(publisher, cfg),
 		},
+	}
+
+	if cs.Enable {
+		m, err := newSentryMiddleware(cs)
+		if err != nil {
+			dl := logger.Default(context.Background())
+			dl.Error("failed to initialize Sentry middleware", zap.Error(err))
+		}
+		h.middlewares = append(h.middlewares, m.Handle)
 	}
 
 	mux := http.NewServeMux()
