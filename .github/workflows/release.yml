@@ -10,6 +10,7 @@ jobs:
     permissions:
       contents: read
       packages: read
+      checks: write
     uses: ww24/linebot/.github/workflows/test.yaml@master
 
   image_tag:
