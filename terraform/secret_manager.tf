@@ -32,6 +32,23 @@ resource "google_secret_manager_secret_version" "line-channel-access-token" {
   secret_data = var.line_channel_access_token
 }
 
+resource "google_secret_manager_secret" "sentry-dsn" {
+  secret_id = "sentry-dsn"
+
+  labels = {
+    service = local.name
+  }
+
+  replication {
+    auto {}
+  }
+}
+
+resource "google_secret_manager_secret_version" "sentry-dsn" {
+  secret      = google_secret_manager_secret.sentry-dsn.id
+  secret_data = var.sentry_dsn
+}
+
 resource "google_secret_manager_secret" "maxmind-license-key" {
   secret_id = "maxmind-license-key"
 
