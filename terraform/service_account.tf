@@ -105,6 +105,7 @@ resource "google_storage_bucket_iam_member" "screenshot-storage" {
 resource "google_project_service_identity" "pubsub" {
   provider = google-beta
   service  = "pubsub.googleapis.com"
+  project  = var.project
 }
 
 resource "google_bigquery_table_iam_member" "pubsub_sa_bigquery" {
