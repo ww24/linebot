@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	octrace "go.opencensus.io/trace"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/bridge/opencensus"
 	"go.opentelemetry.io/otel/propagation"
@@ -30,8 +29,7 @@ func init() {
 	)
 
 	// OpenCensus Bridge
-	tracer := otel.Tracer("go.opentelemetry.io/otel/bridge/opencensus")
-	octrace.DefaultTracer = opencensus.NewTracer(tracer)
+	opencensus.InstallTraceBridge()
 }
 
 type Config struct {
