@@ -37,16 +37,16 @@ resource "google_bigquery_dataset" "access_log" {
 }
 
 resource "google_bigquery_table" "access_log" {
-  dataset_id = google_bigquery_dataset.access_log.dataset_id
-  table_id   = "access_log"
-  clustering = ["timestamp"]
-  schema     = file("access_log_schema/v1.json")
+  dataset_id               = google_bigquery_dataset.access_log.dataset_id
+  table_id                 = "access_log"
+  clustering               = ["timestamp"]
+  schema                   = file("access_log_schema/v1.json")
+  require_partition_filter = true
 
   time_partitioning {
-    expiration_ms            = 31536000000 # 1 year
-    type                     = "DAY"
-    field                    = "timestamp"
-    require_partition_filter = true
+    expiration_ms = 31536000000 # 1 year
+    type          = "DAY"
+    field         = "timestamp"
   }
 }
 
