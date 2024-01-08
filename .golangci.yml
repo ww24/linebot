@@ -10,6 +10,7 @@ issues:
         - wrapcheck
         - gochecknoglobals
         - exhaustruct
+        - goconst
       path: _test\.go$
     - linters:
         - gochecknoglobals
