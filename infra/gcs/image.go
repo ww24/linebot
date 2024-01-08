@@ -2,10 +2,13 @@ package gcs
 
 import (
 	"context"
+	"errors"
 	"io"
 
+	"cloud.google.com/go/storage"
 	"golang.org/x/xerrors"
 
+	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
 )
 
@@ -25,6 +28,9 @@ func (w *ImageStore) Fetch(ctx context.Context, key string) (io.ReadCloser, int,
 	obj := w.cli.Bucket(w.bucket).Object(key)
 	reader, err := obj.NewReader(ctx)
 	if err != nil {
+		if errors.Is(err, storage.ErrObjectNotExist) {
+			return nil, 0, code.With(err, code.NotFound)
+		}
 		return nil, 0, xerrors.Errorf("failed to get reader: %w", err)
 	}
 

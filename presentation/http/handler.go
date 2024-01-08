@@ -16,6 +16,7 @@ import (
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/internal/accesslog"
+	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
 	"github.com/ww24/linebot/logger"
 	"github.com/ww24/linebot/tracer"
@@ -207,7 +208,7 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.Default(ctx)
+		cl := logger.Default(ctx).Logger
 		cl.Info("http: serve image")
 
 		w.Header().Set("content-type", "image/png")
@@ -232,8 +233,15 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		key := strings.TrimPrefix(r.URL.Path, prefix)
+		cl = cl.With(zap.String("key", key))
 		rc, size, err := h.imageHandler.Handle(ctx, key)
 		if err != nil {
+			if code.From(err) == code.NotFound {
+				cl.Warn("http: image not found", zap.Error(err))
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+
 			cl.Error("http: failed to serve image", zap.Error(err))
 			w.WriteHeader(http.StatusInternalServerError)
 			return
