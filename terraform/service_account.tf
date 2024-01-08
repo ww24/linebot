@@ -58,6 +58,7 @@ resource "google_secret_manager_secret_iam_member" "linebot-secret" {
   for_each = toset([
     google_secret_manager_secret.line-channel-secret.id,
     google_secret_manager_secret.line-channel-access-token.id,
+    google_secret_manager_secret.sentry-dsn.id,
   ])
   secret_id = each.value
   role      = "roles/secretmanager.secretAccessor"
