@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -31,4 +32,15 @@ func newSentryMiddleware(cfg *config.Sentry) (*sentryhttp.Handler, error) {
 	})
 
 	return sentryHandler, nil
+}
+
+func report(r *http.Request, msg string, err error) {
+	hub := sentry.GetHubFromContext(r.Context())
+	if hub == nil {
+		return
+	}
+	hub.WithScope(func(scope *sentry.Scope) {
+		scope.SetExtra("message", msg)
+		hub.CaptureException(err)
+	})
 }
