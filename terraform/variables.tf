@@ -34,6 +34,11 @@ variable "line_channel_access_token" {
   description = "LINE Channel Access Token"
 }
 
+variable "sentry_dsn" {
+  type        = string
+  description = "Sentry DSN"
+}
+
 variable "allow_conv_ids" {
   type        = string
   description = "Allowed list, conversation ids"

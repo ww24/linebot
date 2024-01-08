@@ -61,6 +61,16 @@ resource "google_cloud_run_service" "linebot" {
         }
 
         env {
+          name = "SENTRY_DSN"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.sentry-dsn.secret_id
+              key  = "latest"
+            }
+          }
+        }
+
+        env {
           name  = "ALLOW_CONV_IDS"
           value = var.allow_conv_ids
         }
@@ -103,6 +113,11 @@ resource "google_cloud_run_service" "linebot" {
         env {
           name  = "ACCESS_LOG_TOPIC"
           value = google_pubsub_topic.access_log_v1.name
+        }
+
+        env {
+          name  = "SENTRY_ENABLE"
+          value = "true"
         }
       }
     }
