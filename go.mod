@@ -14,7 +14,7 @@ require (
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/chromedp/chromedp v0.9.3
 	github.com/getsentry/sentry-go v0.26.0
-	github.com/go-logr/zapr v1.2.4
+	github.com/go-logr/zapr v1.3.0
 	github.com/go-oss/scheduler v0.1.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-jsonnet v0.20.0
