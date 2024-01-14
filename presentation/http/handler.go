@@ -98,14 +98,15 @@ func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 		events, err := h.bot.EventsFromRequest(r)
 		if err != nil {
 			cl.Error("http: failed to parse request", zap.Error(err))
+			report(r, "http: failed to parse request", err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
 		if err := h.eventHandler.Handle(ctx, events); err != nil {
 			cl.Error("http: failed to handle events", zap.Error(err))
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			report(r, "http: failed to handle events", err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 
@@ -141,8 +142,8 @@ func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 
 		if err := h.eventHandler.HandleSchedule(ctx); err != nil {
 			cl.Error("http: failed to execute scheduler", zap.Error(err))
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			report(r, "http: failed to execute scheduler", err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 
@@ -199,8 +200,8 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 
 		if err := h.eventHandler.HandleReminder(ctx, itemIDJSON); err != nil {
 			cl.Error("http: failed to execute reminder", zap.Error(err))
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			report(r, "http: failed to execute reminder", err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 
@@ -246,8 +247,8 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 			}
 
 			cl.Error("http: failed to serve image", zap.Error(err))
-			w.WriteHeader(http.StatusInternalServerError)
 			report(r, "http: failed to serve image", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		defer rc.Close()
@@ -262,6 +263,7 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 			}
 
 			cl.Error("http: failed to copy image", zap.Error(err))
+			report(r, "http: failed to copy image", err)
 			return
 		}
 	}
