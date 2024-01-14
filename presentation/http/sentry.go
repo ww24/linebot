@@ -8,6 +8,7 @@ import (
 	"github.com/getsentry/sentry-go"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 
+	"github.com/ww24/linebot/internal/buildinfo"
 	"github.com/ww24/linebot/internal/config"
 )
 
@@ -20,6 +21,15 @@ func newSentryMiddleware(cfg *config.Sentry) (*sentryhttp.Handler, error) {
 		// of transactions for performance monitoring.
 		// We recommend adjusting this value in production,
 		TracesSampleRate: 1.0,
+		BeforeSend: func(event *sentry.Event, hint *sentry.EventHint) *sentry.Event {
+			const releasePrefix = "linebot@"
+			if buildinfo.Version() != "" {
+				event.Release = releasePrefix + buildinfo.Version()
+			} else {
+				event.Release = releasePrefix + "dev-" + buildinfo.Revision()
+			}
+			return event
+		},
 	}); err != nil {
 		return nil, fmt.Errorf("failed to initialize Sentry: %w", err)
 	}
