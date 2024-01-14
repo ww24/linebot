@@ -24,7 +24,7 @@ jobs:
       GCLOUD_VERSION: "406.0.0"
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: actions/cache@v3.3.2
+      - uses: actions/cache@v3.3.3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
