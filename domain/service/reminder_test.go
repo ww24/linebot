@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"github.com/tenntenn/testtime"
+	"go.uber.org/mock/gomock"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/mock/mock_repository"
