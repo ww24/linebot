@@ -14,7 +14,7 @@ RUN go build -buildmode pie \
   -trimpath \
   -o /usr/local/bin/screenshot ./cmd/screenshot
 
-FROM chromedp/headless-shell:100.0.4896.56
+FROM chromedp/headless-shell:127.0.6510.4
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends dumb-init fonts-ipafont ca-certificates \
