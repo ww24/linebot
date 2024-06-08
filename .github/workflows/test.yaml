@@ -6,7 +6,7 @@ on:
       golangci_lint_version:
         type: string
         required: false
-        default: "v1.55.2"
+        default: "v1.58.1"
 
 jobs:
   lint:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
-      - uses: reviewdog/action-golangci-lint@v2.5.0
+      - uses: reviewdog/action-golangci-lint@v2.6.1
         with:
           go_version_file: go.mod
           github_token: ${{ secrets.github_token }}
