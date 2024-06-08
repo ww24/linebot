@@ -8,7 +8,7 @@ $(BIN)/testtime:
 	$(GO_ENV) $(GO) install github.com/tenntenn/testtime/cmd/testtime@v0.2.2
 
 $(BIN)/mockgen:
-	$(GO_ENV) $(GO) install github.com/golang/mock/mockgen@v1.6.0
+	$(GO_ENV) $(GO) install go.uber.org/mock/mockgen@v0.4.0
 
 $(BIN)/avro-bq-schema:
 	$(GO_ENV) $(GO) install github.com/go-oss/avro-bq-schema@v1.0.0

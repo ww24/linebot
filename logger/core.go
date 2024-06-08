@@ -77,7 +77,7 @@ func chopStack(s []byte) string {
 	}
 	stack = stack[targetLine+1:]
 	// stack has two lines per frame
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		nextLine := bytes.IndexByte(stack, '\n')
 		if nextLine == -1 {
 			return string(s)
