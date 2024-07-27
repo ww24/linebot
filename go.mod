@@ -18,8 +18,8 @@ require (
 	github.com/go-oss/scheduler v0.1.0
 	github.com/google/go-jsonnet v0.20.0
 	github.com/google/wire v0.6.0
-	github.com/ikawaha/kagome-dict/ipa v1.0.10
-	github.com/ikawaha/kagome/v2 v2.9.4
+	github.com/ikawaha/kagome-dict/ipa v1.2.0
+	github.com/ikawaha/kagome/v2 v2.9.11
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/line/line-bot-sdk-go/v7 v7.21.0
 	github.com/rs/xid v1.5.0
@@ -67,7 +67,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.13.0 // indirect
-	github.com/ikawaha/kagome-dict v1.0.9 // indirect
+	github.com/ikawaha/kagome-dict v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
