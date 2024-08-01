@@ -13,7 +13,7 @@ require (
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/chromedp/chromedp v0.9.5
-	github.com/getsentry/sentry-go v0.26.0
+	github.com/getsentry/sentry-go v0.28.1
 	github.com/go-logr/zapr v1.3.0
 	github.com/go-oss/scheduler v0.1.0
 	github.com/google/go-jsonnet v0.20.0
