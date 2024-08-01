@@ -6,7 +6,7 @@ toolchain go1.22.3
 
 require (
 	cloud.google.com/go/cloudtasks v1.12.12
-	cloud.google.com/go/firestore v1.15.0
+	cloud.google.com/go/firestore v1.16.0
 	cloud.google.com/go/profiler v0.4.0
 	cloud.google.com/go/pubsub v1.40.0
 	cloud.google.com/go/storage v1.43.0
