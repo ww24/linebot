@@ -6,7 +6,7 @@ toolchain go1.22.3
 
 require (
 	cloud.google.com/go/cloudtasks v1.12.12
-	cloud.google.com/go/firestore v1.15.0
+	cloud.google.com/go/firestore v1.16.0
 	cloud.google.com/go/profiler v0.4.0
 	cloud.google.com/go/pubsub v1.40.0
 	cloud.google.com/go/storage v1.43.0
@@ -36,18 +36,18 @@ require (
 	golang.org/x/oauth2 v0.21.0
 	golang.org/x/text v0.16.0
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
-	google.golang.org/api v0.189.0
+	google.golang.org/api v0.190.0
 	google.golang.org/grpc v1.65.0
 )
 
 require (
 	cloud.google.com/go v0.115.0 // indirect
-	cloud.google.com/go/auth v0.7.2 // indirect
+	cloud.google.com/go/auth v0.7.3 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.3 // indirect
 	cloud.google.com/go/compute/metadata v0.5.0 // indirect
-	cloud.google.com/go/iam v1.1.10 // indirect
-	cloud.google.com/go/longrunning v0.5.9 // indirect
-	cloud.google.com/go/trace v1.10.10 // indirect
+	cloud.google.com/go/iam v1.1.12 // indirect
+	cloud.google.com/go/longrunning v0.5.11 // indirect
+	cloud.google.com/go/trace v1.10.11 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.1 // indirect
 	github.com/chromedp/cdproto v0.0.0-20240202021202-6d0b6a386732 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
@@ -59,10 +59,9 @@ require (
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/pprof v0.0.0-20230602150820-91b7bce49751 // indirect
-	github.com/google/s2a-go v0.1.7 // indirect
+	github.com/google/s2a-go v0.1.8 // indirect
 	github.com/google/subcommands v1.2.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
@@ -83,9 +82,9 @@ require (
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
-	google.golang.org/genproto v0.0.0-20240722135656-d784300faade // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240722135656-d784300faade // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240722135656-d784300faade // indirect
+	google.golang.org/genproto v0.0.0-20240730163845-b1a4ccb954bf // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240725223205-93522f1f2a9f // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240730163845-b1a4ccb954bf // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
