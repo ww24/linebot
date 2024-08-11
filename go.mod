@@ -12,7 +12,7 @@ require (
 	cloud.google.com/go/storage v1.43.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
-	github.com/chromedp/chromedp v0.9.5
+	github.com/chromedp/chromedp v0.10.0
 	github.com/getsentry/sentry-go v0.28.1
 	github.com/go-logr/zapr v1.3.0
 	github.com/go-oss/scheduler v0.1.0
@@ -49,7 +49,7 @@ require (
 	cloud.google.com/go/longrunning v0.5.9 // indirect
 	cloud.google.com/go/trace v1.10.10 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.1 // indirect
-	github.com/chromedp/cdproto v0.0.0-20240202021202-6d0b6a386732 // indirect
+	github.com/chromedp/cdproto v0.0.0-20240801214329-3f85d328b335 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
-	github.com/gobwas/ws v1.3.2 // indirect
+	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
