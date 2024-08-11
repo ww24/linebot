@@ -11,6 +11,9 @@ updates:
       opentelemetry:
         patterns:
           - go.opentelemetry.io/*
+      google-cloud:
+        patterns:
+          - cloud.google.com/go/*
 
   - package-ecosystem: "github-actions"
     directory: "/"
