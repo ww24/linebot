@@ -58,7 +58,7 @@ jobs:
       contents: read
       packages: read
       checks: write
-    uses: ww24/linebot/.github/workflows/test.yaml@f69a33e6a2adac303c05f8c6ef7f5a1b90ece8b0
+    uses: ww24/linebot/.github/workflows/test.yaml@25c848d584cb26d32665f1e50946cd8019b94b58
 
   docker:
     needs: [test]
@@ -67,7 +67,7 @@ jobs:
       packages: write
       id-token: write
       security-events: write
-    uses: ww24/linebot/.github/workflows/docker.yml@f69a33e6a2adac303c05f8c6ef7f5a1b90ece8b0
+    uses: ww24/linebot/.github/workflows/docker.yml@25c848d584cb26d32665f1e50946cd8019b94b58
     with:
       image_tag: latest
       push: ${{ github.event_name == 'push' }}
