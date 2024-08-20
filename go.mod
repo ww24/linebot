@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go/cloudtasks v1.12.13
 	cloud.google.com/go/firestore v1.16.0
 	cloud.google.com/go/profiler v0.4.1
-	cloud.google.com/go/pubsub v1.41.0
+	cloud.google.com/go/pubsub v1.42.0
 	cloud.google.com/go/storage v1.43.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
