@@ -4,17 +4,16 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"log/slog"
 	"net/url"
 	"time"
 
 	"github.com/chromedp/chromedp"
 	"github.com/google/wire"
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -55,10 +54,9 @@ func (b *Browser) Screenshot(ctx context.Context, target *url.URL, targetSelecto
 	)
 	defer cancel()
 
-	dl := logger.Default(ctx)
-	dl.Info("browser: capture screenshot",
-		zap.String("target", target.String()),
-		zap.String("selector", targetSelector),
+	slog.InfoContext(ctx, "browser: capture screenshot",
+		slog.String("target", target.String()),
+		slog.String("selector", targetSelector),
 	)
 
 	var buf []byte

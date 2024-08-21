@@ -3,9 +3,9 @@ package interactor
 import (
 	"context"
 	"errors"
+	"log/slog"
 
 	"github.com/google/wire"
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
@@ -13,7 +13,7 @@ import (
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/log"
 	"github.com/ww24/linebot/usecase"
 )
 
@@ -76,12 +76,10 @@ func NewEventHandler(
 }
 
 func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error {
-	dl := logger.Default(ctx)
-
 	for _, e := range events {
 		if !h.conversationIDs.Available(e.ConversationID()) {
-			dl.Warn("interactor: not allowed conversation",
-				zap.String("ConversationID", e.ConversationID().String()),
+			slog.WarnContext(ctx, "interactor: not allowed conversation",
+				slog.String("ConversationID", e.ConversationID().String()),
 			)
 			return nil
 		}
@@ -98,7 +96,7 @@ func (h *EventHandler) Handle(ctx context.Context, events []*model.Event) error 
 					return nil
 				}
 
-				dl.Error("interactor: failed to handle event", zap.Error(err))
+				slog.ErrorContext(ctx, "interactor: failed to handle event", log.Err(err))
 				return h.handleError(ctx, e)
 			}
 		}
@@ -127,12 +125,14 @@ func (h *EventHandler) HandleSchedule(ctx context.Context) error {
 }
 
 func (h *EventHandler) HandleReminder(ctx context.Context, itemIDJSON *model.ReminderItemIDJSON) error {
-	dl := logger.Default(ctx)
-
 	item, err := h.reminder.Get(ctx, model.ConversationID(itemIDJSON.ConversationID), model.ReminderItemID(itemIDJSON.ItemID))
 	if err != nil {
 		if code.From(err) == code.NotFound {
-			dl.Info("interactor: reminder item not found", zap.Error(err))
+			slog.InfoContext(ctx, "interactor: reminder item not found",
+				slog.String("ConversationID", itemIDJSON.ConversationID),
+				slog.String("ItemID", itemIDJSON.ItemID),
+				log.Err(err),
+			)
 			return nil
 		}
 		return xerrors.Errorf("failed to get reminder item: %w", err)

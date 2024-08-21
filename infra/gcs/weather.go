@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"log/slog"
 	"math"
 	"path"
 	"strconv"
@@ -11,13 +12,11 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/iterator"
 
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -44,8 +43,7 @@ func (w *WeatherImageStore) Save(ctx context.Context, r io.Reader, t time.Time) 
 	obj := w.cli.Bucket(w.bucket).Object(key)
 	writer := obj.NewWriter(ctx)
 
-	dl := logger.Default(ctx)
-	dl.Info("gcs: upload image", zap.String("key", key))
+	slog.InfoContext(ctx, "gcs: upload image", slog.String("key", key))
 
 	if _, err := io.Copy(writer, r); err != nil {
 		return "", xerrors.Errorf("io.Copy: %w", err)

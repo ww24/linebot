@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 	"net/textproto"
 	"strings"
@@ -9,13 +10,11 @@ import (
 
 	"github.com/rs/xid"
 	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/internal/accesslog"
 	"github.com/ww24/linebot/internal/accesslog/avro"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 )
 
 func panicHandler() func(http.Handler) http.Handler {
@@ -24,8 +23,7 @@ func panicHandler() func(http.Handler) http.Handler {
 			defer func() {
 				if err := recover(); err != nil {
 					ctx := r.Context()
-					dl := logger.Default(ctx)
-					dl.Error("http: paniced in http handler", zap.Any("error", err))
+					slog.ErrorContext(ctx, "http: paniced in http handler", slog.Any("error", err))
 					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 				}
 			}()

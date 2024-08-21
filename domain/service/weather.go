@@ -3,15 +3,14 @@ package service
 import (
 	"context"
 	"io"
+	"log/slog"
 	"time"
 
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/repository"
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -59,8 +58,7 @@ func (w *WeatherImpl) SaveImage(ctx context.Context, r io.Reader) error {
 		return xerrors.Errorf("imageStore.Save: %w", err)
 	}
 
-	dl := logger.Default(ctx)
-	dl.Info("service: weather image saved", zap.String("name", name))
+	slog.Info("service: weather image saved", slog.String("name", name))
 
 	return nil
 }

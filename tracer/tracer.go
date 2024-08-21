@@ -2,9 +2,11 @@ package tracer
 
 import (
 	"context"
+	"log/slog"
 	"strings"
 	"time"
 
+	"github.com/go-logr/logr"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/bridge/opencensus"
 	"go.opentelemetry.io/otel/propagation"
@@ -12,10 +14,9 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/log"
 )
 
 const shutdownTimeout = 5 * time.Second
@@ -45,6 +46,12 @@ func NewConfig(name, version string) *Config {
 }
 
 func New(c *Config, conf *config.Otel, exporter sdktrace.SpanExporter) (trace.TracerProvider, func()) {
+	otel.SetLogger(
+		logr.FromSlogHandler(
+			log.NewLevelHandler(log.LevelFromEnv("OTEL_LOG_SEVERITY_LEVEL"), slog.Default().Handler()),
+		),
+	)
+
 	resources := resource.NewWithAttributes(
 		semconv.SchemaURL,
 		semconv.ServiceNameKey.String(c.name),
@@ -75,8 +82,7 @@ func New(c *Config, conf *config.Otel, exporter sdktrace.SpanExporter) (trace.Tr
 		ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 		defer cancel()
 		if err := tp.Shutdown(ctx); err != nil {
-			dl := logger.Default(ctx)
-			dl.Error("tracer: failed to shutdown Cloud Trace exporter", zap.Error(err))
+			slog.ErrorContext(ctx, "tracer: failed to shutdown Cloud Trace exporter", log.Err(err))
 		}
 	}
 	return tp, cleanup

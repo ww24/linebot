@@ -2,14 +2,13 @@ package service
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/repository"
-	"github.com/ww24/linebot/logger"
 )
 
 const (
@@ -121,15 +120,14 @@ func (r *ReminderImpl) SyncSchedule(ctx context.Context, items model.ReminderIte
 
 	now := time.Now()
 
-	dl := logger.Default(ctx)
-	dl.Info("service: start to sync schedule",
-		zap.Any("items", items),
-		zap.Int("count", len(items)),
+	slog.InfoContext(ctx, "service: start to sync schedule",
+		slog.Any("items", items),
+		slog.Int("count", len(items)),
 	)
 
 	items = items.FilterNextSchedule(now, syncInterval)
 
-	dl.Info("service: FilterNextSchedule", zap.Int("count", len(items)))
+	slog.InfoContext(ctx, "service: FilterNextSchedule", slog.Int("count", len(items)))
 
 	var conversationID model.ConversationID
 	start := 0

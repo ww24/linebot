@@ -2,15 +2,14 @@ package http
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 	"strings"
 
-	"go.uber.org/zap"
 	"golang.org/x/xerrors"
 	"google.golang.org/api/idtoken"
 
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
 )
 
 type Authorizer struct {
@@ -55,10 +54,9 @@ func (a *Authorizer) Authorize(ctx context.Context, r *http.Request) error {
 
 	if payload.Issuer != "https://accounts.google.com" ||
 		payload.Subject != a.invokerServiceAccountID {
-		dl := logger.Default(ctx)
-		dl.Warn("http: invalid token payload",
-			zap.String("iss", payload.Issuer),
-			zap.String("subject", payload.Subject),
+		slog.WarnContext(ctx, "http: invalid token payload",
+			slog.String("iss", payload.Issuer),
+			slog.String("subject", payload.Subject),
 		)
 		return xerrors.New("token is not issued by invoker service account")
 	}

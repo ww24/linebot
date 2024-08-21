@@ -2,19 +2,18 @@ package tracer
 
 import (
 	"context"
+	"log/slog"
 
 	cloudtrace "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	"go.uber.org/zap"
 
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/log"
 )
 
 func NewCloudTraceExporter() sdktrace.SpanExporter {
 	exporter, err := cloudtrace.New()
 	if err != nil {
-		dl := logger.Default(context.Background())
-		dl.Error("tracer: unable to set up cloud trace exporter", zap.Error(err))
+		slog.Error("tracer: unable to set up cloud trace exporter", log.Err(err))
 		return new(noopExporter)
 	}
 	return exporter

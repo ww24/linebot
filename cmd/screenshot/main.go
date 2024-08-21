@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,10 +12,11 @@ import (
 	"cloud.google.com/go/profiler"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/automaxprocs/maxprocs"
-	"go.uber.org/zap"
+	"google.golang.org/grpc/grpclog"
 
 	"github.com/ww24/linebot/internal/buildinfo"
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/internal/gcp"
+	llog "github.com/ww24/linebot/log"
 )
 
 const (
@@ -23,6 +26,10 @@ const (
 //nolint:gochecknoglobals
 var tr = otel.Tracer("github.com/ww24/linebot/cmd/screenshot")
 
+func init() {
+	log.SetFlags(0)
+}
+
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -30,23 +37,34 @@ func main() {
 	ctx, span := tr.Start(ctx, "start job")
 	defer span.End()
 
-	log.SetFlags(0)
-	if err := logger.SetConfig(serviceName, buildinfo.Version()); err != nil {
+	projectID, err := gcp.ProjectID()
+	if err != nil {
+		log.Printf("ERROR gcp.ProjectID: %+v", err)
+	}
+
+	if err := llog.SetOption(
+		llog.Service(serviceName),
+		llog.Version(buildinfo.Version()),
+		llog.Repository(buildinfo.Repository()),
+		llog.RevisionID(buildinfo.Revision()),
+		llog.GCPProjectID(projectID),
+	); err != nil {
+		log.Printf("ERROR log.SetOption: %+v", err)
 		stop()
-		log.Printf("ERROR logger.SetMeta: %+v", err)
 		os.Exit(1)
 	}
-	dl := logger.Default(ctx)
+	grpclog.SetLoggerV2(llog.NewGRPCLogger(slog.Default().Handler()))
 
 	// set GOMAXPROCS
-	if _, err := maxprocs.Set(maxprocs.Logger(dl.Sugar().Infof)); err != nil {
-		dl.Warn("main: failed to set GOMAXPROCS", zap.Error(err))
+	infof := func(format string, args ...interface{}) { slog.Info(fmt.Sprintf(format, args...)) }
+	if _, err := maxprocs.Set(maxprocs.Logger(infof)); err != nil {
+		slog.WarnContext(ctx, "main: failed to set GOMAXPROCS", llog.Err(err))
 	}
 
 	job, cleanup, err := register(ctx)
 	if err != nil {
 		stop()
-		dl.Error("main: register", zap.Error(err))
+		slog.ErrorContext(ctx, "main: register", llog.Err(err))
 		os.Exit(1)
 	}
 	defer cleanup()
@@ -61,17 +79,17 @@ func main() {
 		}
 		if err := profiler.Start(profilerConfig); err != nil {
 			// just log the error if failed to initialize profiler
-			dl.Error("main: failed to start cloud profiler", zap.Error(err))
+			slog.ErrorContext(ctx, "main: failed to start cloud profiler", llog.Err(err))
 		}
 	}
 
-	dl.Info("main: start job")
+	slog.InfoContext(ctx, "main: start job")
 	if err := job.run(ctx); err != nil {
 		stop()
 		cleanup()
-		dl.Error("main: failed to exec job", zap.Error(err))
+		slog.ErrorContext(ctx, "main: failed to exec job", llog.Err(err))
 		os.Exit(1)
 	}
 
-	dl.Info("main: done")
+	slog.InfoContext(ctx, "main: done")
 }
