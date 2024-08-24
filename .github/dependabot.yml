@@ -24,6 +24,10 @@ updates:
     directory: "/terraform"
     schedule:
       interval: "daily"
+    groups:
+      google:
+        patterns:
+          - hashicorp/google*
 
   - package-ecosystem: "docker"
     directory: "/docker"
