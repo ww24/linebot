@@ -27,6 +27,10 @@ issues:
     - linters:
         - wrapcheck
       source: "code.With\\("
+    - linters:
+        - gocritic
+      text: "hugeParam:"
+      source: "slog.Record"
 
 linters-settings:
   gocyclo:

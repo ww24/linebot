@@ -3,14 +3,14 @@ package accesslog
 import (
 	"bytes"
 	"context"
+	"log/slog"
 	"time"
 
 	"cloud.google.com/go/pubsub"
-	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/internal/accesslog/avro"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/log"
 )
 
 const resultChannelSize = 100
@@ -50,9 +50,8 @@ func NewPublisher(p *pubsub.Client, cfg *config.AccessLog) (Publisher, func()) {
 
 func (p *PubSubPublisher) Publish(ctx context.Context, al *avro.AccessLog) {
 	buf := new(bytes.Buffer)
-	dl := logger.Default(ctx)
 	if err := al.Serialize(buf); err != nil {
-		dl.Error("accesslog: failed to serialize access log", zap.Error(err))
+		slog.ErrorContext(ctx, "accesslog: failed to serialize access log", log.Err(err))
 		return
 	}
 	result := p.topic.Publish(ctx, &pubsub.Message{
@@ -61,15 +60,14 @@ func (p *PubSubPublisher) Publish(ctx context.Context, al *avro.AccessLog) {
 	select {
 	case p.results <- result:
 	default:
-		dl.Info("accesslog: publish results is sampled")
+		slog.InfoContext(ctx, "accesslog: publish results is sampled")
 	}
 }
 
 func (p *PubSubPublisher) worker(ctx context.Context) {
-	dl := logger.Default(ctx)
 	for result := range p.results {
 		if _, err := result.Get(ctx); err != nil {
-			dl.Error("accesslog: failed to publish access log", zap.Error(err))
+			slog.ErrorContext(ctx, "accesslog: failed to publish access log", log.Err(err))
 		}
 	}
 }

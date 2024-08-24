@@ -5,20 +5,20 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
 	"syscall"
 
 	"github.com/google/wire"
-	"go.uber.org/zap"
 
 	"github.com/ww24/linebot/domain/model"
 	"github.com/ww24/linebot/domain/service"
 	"github.com/ww24/linebot/internal/accesslog"
 	"github.com/ww24/linebot/internal/code"
 	"github.com/ww24/linebot/internal/config"
-	"github.com/ww24/linebot/logger"
+	"github.com/ww24/linebot/log"
 	"github.com/ww24/linebot/tracer"
 	"github.com/ww24/linebot/usecase"
 )
@@ -61,8 +61,7 @@ func NewHandler(
 	if cs.Enable {
 		m, err := newSentryMiddleware(cs)
 		if err != nil {
-			dl := logger.Default(context.Background())
-			dl.Error("failed to initialize Sentry middleware", zap.Error(err))
+			slog.Error("failed to initialize Sentry middleware", log.Err(err))
 		}
 		h.middlewares = append(h.middlewares, m.Handle)
 	}
@@ -92,19 +91,18 @@ func (h *handler) healthCheck() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.Default(ctx)
-		cl.Info("http: line callback received")
+		slog.InfoContext(ctx, "http: line callback received")
 
 		events, err := h.bot.EventsFromRequest(r)
 		if err != nil {
-			cl.Error("http: failed to parse request", zap.Error(err))
+			slog.ErrorContext(ctx, "http: failed to parse request", log.Err(err))
 			report(r, "http: failed to parse request", err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
 		if err := h.eventHandler.Handle(ctx, events); err != nil {
-			cl.Error("http: failed to handle events", zap.Error(err))
+			slog.ErrorContext(ctx, "http: failed to handle events", log.Err(err))
 			report(r, "http: failed to handle events", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
@@ -117,8 +115,7 @@ func (h *handler) lineCallback() func(w http.ResponseWriter, r *http.Request) {
 func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.Default(ctx)
-		cl.Info("http: execute scheduler")
+		slog.InfoContext(ctx, "http: execute scheduler")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
 		switch r.Method {
@@ -135,13 +132,13 @@ func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 		}
 
 		if err := h.auth.Authorize(ctx, r); err != nil {
-			cl.Warn("http: failed to authorize", zap.Error(err))
+			slog.WarnContext(ctx, "http: failed to authorize", log.Err(err))
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
 
 		if err := h.eventHandler.HandleSchedule(ctx); err != nil {
-			cl.Error("http: failed to execute scheduler", zap.Error(err))
+			slog.ErrorContext(ctx, "http: failed to execute scheduler", log.Err(err))
 			report(r, "http: failed to execute scheduler", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
@@ -154,8 +151,7 @@ func (h *handler) executeScheduler() func(w http.ResponseWriter, r *http.Request
 func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.Default(ctx)
-		cl.Info("http: execute reminder")
+		slog.InfoContext(ctx, "http: execute reminder")
 
 		w.Header().Set("allow", "OPTIONS, HEAD, POST")
 		switch r.Method {
@@ -172,7 +168,7 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 		}
 
 		if err := h.auth.Authorize(ctx, r); err != nil {
-			cl.Warn("http: failed to authorize", zap.Error(err))
+			slog.WarnContext(ctx, "http: failed to authorize", log.Err(err))
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}
@@ -184,22 +180,22 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 
 		itemIDJSON := new(model.ReminderItemIDJSON)
 		if err := json.NewDecoder(r.Body).Decode(itemIDJSON); err != nil {
-			cl.Warn("http: failed to parse request", zap.Error(err))
+			slog.WarnContext(ctx, "http: failed to parse request", log.Err(err))
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
 		if itemIDJSON.ConversationID == "" || itemIDJSON.ItemID == "" {
-			cl.Warn("http: invalid payload: conversation_id or item_id is empty",
-				zap.String("conversation_id", itemIDJSON.ConversationID),
-				zap.String("item_id", itemIDJSON.ItemID),
+			slog.WarnContext(ctx, "http: invalid payload: conversation_id or item_id is empty",
+				slog.String("ConversationID", itemIDJSON.ConversationID),
+				slog.String("ItemID", itemIDJSON.ItemID),
 			)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
 		if err := h.eventHandler.HandleReminder(ctx, itemIDJSON); err != nil {
-			cl.Error("http: failed to execute reminder", zap.Error(err))
+			slog.ErrorContext(ctx, "http: failed to execute reminder", log.Err(err))
 			report(r, "http: failed to execute reminder", err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
@@ -212,8 +208,7 @@ func (h *handler) executeReminder() func(w http.ResponseWriter, r *http.Request)
 func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		cl := logger.Default(ctx).Logger
-		cl.Info("http: serve image")
+		slog.InfoContext(ctx, "http: serve image")
 
 		w.Header().Set("content-type", "image/png")
 		w.Header().Set("allow", "OPTIONS, HEAD, GET")
@@ -237,16 +232,16 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		key := strings.TrimPrefix(r.URL.Path, prefix)
-		cl = cl.With(zap.String("key", key))
+		sl := slog.With(slog.String("key", key))
 		rc, size, err := h.imageHandler.Handle(ctx, key)
 		if err != nil {
 			if code.From(err) == code.NotFound {
-				cl.Warn("http: image not found", zap.Error(err))
+				sl.WarnContext(ctx, "http: image not found", log.Err(err))
 				w.WriteHeader(http.StatusNotFound)
 				return
 			}
 
-			cl.Error("http: failed to serve image", zap.Error(err))
+			sl.ErrorContext(ctx, "http: failed to serve image", log.Err(err))
 			report(r, "http: failed to serve image", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -256,13 +251,13 @@ func (h *handler) serveImage() func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-length", strconv.Itoa(size))
 		if _, err := io.Copy(w, rc); err != nil {
 			if isCanceledByClient(r, err) {
-				cl.Info("http: request canceled by client",
-					zap.Errors("errors", []error{err, r.Context().Err()}),
+				sl.InfoContext(ctx, "http: request canceled by client",
+					slog.Any("errors", []error{err, r.Context().Err()}),
 				)
 				return
 			}
 
-			cl.Error("http: failed to copy image", zap.Error(err))
+			sl.ErrorContext(ctx, "http: failed to copy image", log.Err(err))
 			report(r, "http: failed to copy image", err)
 			return
 		}

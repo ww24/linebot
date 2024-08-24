@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"testing"
@@ -8,24 +8,35 @@ import (
 
 func Test_chopStack(t *testing.T) {
 	t.Parallel()
+	type args struct {
+		s      []byte
+		target string
+	}
 	tests := []struct {
 		name string
-		s    []byte
+		args args
 		want string
 	}{
 		{
 			name: "empty",
-			s:    []byte{},
+			args: args{
+				s:      []byte{},
+				target: "github.com/ww24/linebot/presentation/http.NewHandler.(*handler).lineCallback.func5",
+			},
 			want: "",
 		},
 		{
 			name: "header only",
-			s:    []byte("goroutine 1 [running]:\n"),
+			args: args{
+				s:      []byte("goroutine 1 [running]:\n"),
+				target: "github.com/ww24/linebot/presentation/http.NewHandler.(*handler).lineCallback.func5",
+			},
 			want: "goroutine 1 [running]:\n",
 		},
 		{
 			name: "target frame not found",
-			s: []byte(`goroutine 120 [running]:
+			args: args{
+				s: []byte(`goroutine 120 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:24 +0x5e
 github.com/ww24/linebot/logger.(*core).Write(0xc008d3fee0, {0x2, {0xc13ce36b6e3319a3, 0x199bb75c0e, 0x2a21fcd3dc60}, {0x0, 0x0}, {0x2a21fb10fda0, 0x1d}, {0x1, ...}, ...}, ...)
@@ -58,6 +69,8 @@ net/http.serverHandler.ServeHTTP({0xc009458780?}, {0x2a21fc4771f0?, 0xc00927ed20
 	net/http/server.go:2938 +0x8e
 net/http.(*conn).serve(0xc0085bc6c0, {0x2a21fc479120, 0xc0014ad260})
 	net/http/server.go:2009 +0x5f4`),
+				target: "github.com/ww24/linebot/presentation/http.NewHandler.(*handler).lineCallback.func4",
+			},
 			want: `goroutine 120 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:24 +0x5e
@@ -94,7 +107,8 @@ net/http.(*conn).serve(0xc0085bc6c0, {0x2a21fc479120, 0xc0014ad260})
 		},
 		{
 			name: "target frame found",
-			s: []byte(`goroutine 120 [running]:
+			args: args{
+				s: []byte(`goroutine 120 [running]:
 runtime/debug.Stack()
 	runtime/debug/stack.go:24 +0x5e
 github.com/ww24/linebot/logger.(*core).Write(0xc008d3fee0, {0x2, {0xc13ce36b6e3319a3, 0x199bb75c0e, 0x2a21fcd3dc60}, {0x0, 0x0}, {0x2a21fb10fda0, 0x1d}, {0x1, ...}, ...}, ...)
@@ -127,6 +141,8 @@ net/http.serverHandler.ServeHTTP({0xc009458780?}, {0x2a21fc4771f0?, 0xc00927ed20
 	net/http/server.go:2938 +0x8e
 net/http.(*conn).serve(0xc0085bc6c0, {0x2a21fc479120, 0xc0014ad260})
 	net/http/server.go:2009 +0x5f4`),
+				target: "github.com/ww24/linebot/presentation/http.NewHandler.(*handler).lineCallback.func5",
+			},
 			want: `goroutine 120 [running]:
 github.com/ww24/linebot/presentation/http.NewHandler.(*handler).lineCallback.func5({0x2a21fc4774f0, 0xc0093ff6c0}, 0x0?)
 	github.com/ww24/linebot/presentation/http/handler.go:89 +0x1b0
@@ -158,7 +174,7 @@ net/http.(*conn).serve(0xc0085bc6c0, {0x2a21fc479120, 0xc0014ad260})
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			got := chopStack(tt.s)
+			got := chopStack(tt.args.s, tt.args.target)
 			assert.Equal(t, tt.want, got)
 		})
 	}
