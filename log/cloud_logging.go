@@ -27,6 +27,38 @@ func NewCloudLogging(w io.Writer, opts ...Option) *slog.Logger {
 type CloudLoggingHandler struct {
 	baseHandler slog.Handler
 	projectID   string
+	group       *group
+}
+
+// group is a linked list of groups
+type group struct {
+	name  string
+	attrs []slog.Attr
+	next  *group
+}
+
+func (g *group) clone() *group {
+	if g == nil {
+		return nil
+	}
+	g2 := *g
+	copy(g2.attrs, g.attrs)
+	return &g2
+}
+
+func (g *group) reverse() *group {
+	current := g.clone()
+	next := current.next
+	current.next = nil
+
+	for next != nil {
+		temp := current
+		current = next.clone()
+		next = current.next
+		current.next = temp
+	}
+
+	return current
 }
 
 func (h *CloudLoggingHandler) Enabled(ctx context.Context, level slog.Level) bool {
@@ -34,22 +66,21 @@ func (h *CloudLoggingHandler) Enabled(ctx context.Context, level slog.Level) boo
 }
 
 func (h *CloudLoggingHandler) Handle(ctx context.Context, r slog.Record) error {
-	r = r.Clone()
+	baseHandler := h.baseHandler
 
 	// add source location
 	source := Source(r)
-	r.AddAttrs(sourceLocationField(source))
+	attrs := make([]slog.Attr, 0)
+	attrs = append(attrs, sourceLocationField(source))
 	if r.Level >= slog.LevelError {
-		r.AddAttrs(
-			errorContextReportLocationField(source),
-		)
+		attrs = append(attrs, errorContextReportLocationField(source))
 	}
-	r.AddAttrs(slog.String("stack_trace", StackTrace(r)))
+	attrs = append(attrs, slog.String("stack_trace", StackTrace(r)))
 
 	// add trace context
 	spanCtx := trace.SpanContextFromContext(ctx)
 	if spanCtx.IsValid() && h.projectID != "" {
-		r.AddAttrs(
+		attrs = append(attrs,
 			traceContextFields(
 				spanCtx.TraceID().String(),
 				spanCtx.SpanID().String(),
@@ -59,16 +90,32 @@ func (h *CloudLoggingHandler) Handle(ctx context.Context, r slog.Record) error {
 		)
 	}
 
+	baseHandler = baseHandler.WithAttrs(attrs)
+
+	for group := h.group.reverse(); group != nil; group = group.next {
+		if group.name != "" {
+			baseHandler = baseHandler.WithGroup(group.name)
+		}
+		if len(group.attrs) > 0 {
+			baseHandler = baseHandler.WithAttrs(group.attrs)
+		}
+	}
+
 	//nolint: wrapcheck
-	return h.baseHandler.Handle(ctx, r)
+	return baseHandler.Handle(ctx, r)
 }
 
 func (h *CloudLoggingHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	return &CloudLoggingHandler{baseHandler: h.baseHandler.WithAttrs(attrs), projectID: h.projectID}
+	h2 := *h
+	h2.group = h.group.clone()
+	h2.group.attrs = append(h2.group.attrs, attrs...)
+	return &h2
 }
 
 func (h *CloudLoggingHandler) WithGroup(name string) slog.Handler {
-	return &CloudLoggingHandler{baseHandler: h.baseHandler.WithGroup(name), projectID: h.projectID}
+	h2 := *h
+	h2.group = &group{name: name, next: h2.group}
+	return &h2
 }
 
 func newCloudLoggingHandler(w io.Writer, projectID GCPProjectID) slog.Handler {
@@ -92,7 +139,7 @@ func newCloudLoggingHandler(w io.Writer, projectID GCPProjectID) slog.Handler {
 			return a
 		},
 	})
-	return &CloudLoggingHandler{baseHandler: h, projectID: string(projectID)}
+	return &CloudLoggingHandler{baseHandler: h, projectID: string(projectID), group: &group{}}
 }
 
 func severity(level slog.Level) string {
@@ -166,4 +213,12 @@ func traceContextFields(traceID, spanID string, sampled bool, project string) []
 		slog.String("logging.googleapis.com/spanId", spanID),
 		slog.Bool("logging.googleapis.com/trace_sampled", sampled),
 	}
+}
+
+func attrs(attrs []slog.Attr) []any {
+	a := make([]any, 0, len(attrs))
+	for _, attr := range attrs {
+		a = append(a, attr)
+	}
+	return a
 }
