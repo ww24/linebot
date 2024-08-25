@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/jba/slog/withsupport"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -27,38 +28,7 @@ func NewCloudLogging(w io.Writer, opts ...Option) *slog.Logger {
 type CloudLoggingHandler struct {
 	baseHandler slog.Handler
 	projectID   string
-	group       *group
-}
-
-// group is a linked list of groups
-type group struct {
-	name  string
-	attrs []slog.Attr
-	next  *group
-}
-
-func (g *group) clone() *group {
-	if g == nil {
-		return nil
-	}
-	g2 := *g
-	copy(g2.attrs, g.attrs)
-	return &g2
-}
-
-func (g *group) reverse() *group {
-	current := g.clone()
-	next := current.next
-	current.next = nil
-
-	for next != nil {
-		temp := current
-		current = next.clone()
-		next = current.next
-		current.next = temp
-	}
-
-	return current
+	group       *withsupport.GroupOrAttrs
 }
 
 func (h *CloudLoggingHandler) Enabled(ctx context.Context, level slog.Level) bool {
@@ -92,12 +62,12 @@ func (h *CloudLoggingHandler) Handle(ctx context.Context, r slog.Record) error {
 
 	baseHandler = baseHandler.WithAttrs(attrs)
 
-	for group := h.group.reverse(); group != nil; group = group.next {
-		if group.name != "" {
-			baseHandler = baseHandler.WithGroup(group.name)
+	for _, g := range h.group.Collect() {
+		if g.Group != "" {
+			baseHandler = baseHandler.WithGroup(g.Group)
 		}
-		if len(group.attrs) > 0 {
-			baseHandler = baseHandler.WithAttrs(group.attrs)
+		if len(g.Attrs) > 0 {
+			baseHandler = baseHandler.WithAttrs(g.Attrs)
 		}
 	}
 
@@ -107,14 +77,13 @@ func (h *CloudLoggingHandler) Handle(ctx context.Context, r slog.Record) error {
 
 func (h *CloudLoggingHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	h2 := *h
-	h2.group = h.group.clone()
-	h2.group.attrs = append(h2.group.attrs, attrs...)
+	h2.group = h2.group.WithAttrs(attrs)
 	return &h2
 }
 
 func (h *CloudLoggingHandler) WithGroup(name string) slog.Handler {
 	h2 := *h
-	h2.group = &group{name: name, next: h2.group}
+	h2.group = h2.group.WithGroup(name)
 	return &h2
 }
 
@@ -139,7 +108,7 @@ func newCloudLoggingHandler(w io.Writer, projectID GCPProjectID) slog.Handler {
 			return a
 		},
 	})
-	return &CloudLoggingHandler{baseHandler: h, projectID: string(projectID), group: &group{}}
+	return &CloudLoggingHandler{baseHandler: h, projectID: string(projectID), group: &withsupport.GroupOrAttrs{}}
 }
 
 func severity(level slog.Level) string {
@@ -213,12 +182,4 @@ func traceContextFields(traceID, spanID string, sampled bool, project string) []
 		slog.String("logging.googleapis.com/spanId", spanID),
 		slog.Bool("logging.googleapis.com/trace_sampled", sampled),
 	}
-}
-
-func attrs(attrs []slog.Attr) []any {
-	a := make([]any, 0, len(attrs))
-	for _, attr := range attrs {
-		a = append(a, attr)
-	}
-	return a
 }

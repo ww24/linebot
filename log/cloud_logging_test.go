@@ -65,26 +65,3 @@ func TestCloudLoggingHandler(t *testing.T) {
 		return m
 	})
 }
-
-func Test_group_reverse(t *testing.T) {
-	t.Parallel()
-	g := &group{
-		name: "a",
-		next: &group{
-			name: "b",
-			next: &group{
-				name: "c",
-			},
-		},
-	}
-	g2 := g.reverse()
-	assert.Equal(t, &group{
-		name: "c",
-		next: &group{
-			name: "b",
-			next: &group{
-				name: "a",
-			},
-		},
-	}, g2)
-}
