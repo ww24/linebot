@@ -23,7 +23,7 @@ require (
 	github.com/jba/slog v0.2.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/line/line-bot-sdk-go/v7 v7.21.0
-	github.com/rs/xid v1.5.0
+	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tenntenn/testtime v0.2.2
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0
