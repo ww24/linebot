@@ -5,10 +5,10 @@ go 1.22
 toolchain go1.22.3
 
 require (
-	cloud.google.com/go/cloudtasks v1.13.0
-	cloud.google.com/go/firestore v1.16.0
+	cloud.google.com/go/cloudtasks v1.13.1
+	cloud.google.com/go/firestore v1.17.0
 	cloud.google.com/go/profiler v0.4.1
-	cloud.google.com/go/pubsub v1.42.0
+	cloud.google.com/go/pubsub v1.43.0
 	cloud.google.com/go/storage v1.43.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.1
 	github.com/actgardner/gogen-avro/v10 v10.2.1
@@ -82,7 +82,7 @@ require (
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/genproto v0.0.0-20240903143218-8af14fe29dc1 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240827150818-7e3bb234dfed // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
