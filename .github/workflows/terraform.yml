@@ -20,7 +20,7 @@ jobs:
         working-directory: terraform
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4.1.7
+      - uses: actions/checkout@v4.2.0
       - uses: hashicorp/setup-terraform@v3.1.2
         with:
           terraform_version: 1.5.7
