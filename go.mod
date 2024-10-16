@@ -10,7 +10,7 @@ require (
 	cloud.google.com/go/profiler v0.4.1
 	cloud.google.com/go/pubsub v1.42.0
 	cloud.google.com/go/storage v1.43.0
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.1
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace v1.24.3
 	github.com/actgardner/gogen-avro/v10 v10.2.1
 	github.com/chromedp/chromedp v0.10.0
 	github.com/getsentry/sentry-go v0.28.1
@@ -26,11 +26,11 @@ require (
 	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tenntenn/testtime v0.2.2
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0
-	go.opentelemetry.io/otel v1.29.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.55.0
+	go.opentelemetry.io/otel v1.30.0
 	go.opentelemetry.io/otel/bridge/opencensus v1.29.0
-	go.opentelemetry.io/otel/sdk v1.29.0
-	go.opentelemetry.io/otel/trace v1.29.0
+	go.opentelemetry.io/otel/sdk v1.30.0
+	go.opentelemetry.io/otel/trace v1.30.0
 	go.uber.org/automaxprocs v1.5.3
 	go.uber.org/mock v0.4.0
 	golang.org/x/oauth2 v0.23.0
@@ -48,7 +48,7 @@ require (
 	cloud.google.com/go/iam v1.2.0 // indirect
 	cloud.google.com/go/longrunning v0.6.0 // indirect
 	cloud.google.com/go/trace v1.11.0 // indirect
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.1 // indirect
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.3 // indirect
 	github.com/chromedp/cdproto v0.0.0-20240801214329-3f85d328b335 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -72,13 +72,13 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0 // indirect
-	go.opentelemetry.io/otel/metric v1.29.0 // indirect
+	go.opentelemetry.io/otel/metric v1.30.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.29.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/genproto v0.0.0-20240903143218-8af14fe29dc1 // indirect
