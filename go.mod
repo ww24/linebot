@@ -1,9 +1,6 @@
 module github.com/ww24/linebot
 
 go 1.22
-
-toolchain go1.22.3
-
 require (
 	cloud.google.com/go/cloudtasks v1.13.0
 	cloud.google.com/go/firestore v1.16.0
@@ -25,7 +22,7 @@ require (
 	github.com/line/line-bot-sdk-go/v7 v7.21.0
 	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.9.0
-	github.com/tenntenn/testtime v0.2.2
+	github.com/tenntenn/testtime v0.3.2
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0
 	go.opentelemetry.io/otel v1.29.0
 	go.opentelemetry.io/otel/bridge/opencensus v1.29.0
