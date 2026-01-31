@@ -17,7 +17,7 @@ resource "google_cloud_run_v2_job" "screenshot" {
         resources {
           limits = {
             cpu    = "1000m" # minimum
-            memory = "1Gi"
+            memory = "512Mi"
           }
         }
 
