@@ -53,7 +53,6 @@ func TestReminder_Add(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			err := r.Add(ctx, tt.item)
@@ -143,7 +142,6 @@ func TestReminder_List(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			got, err := r.List(ctx, tt.conversationID)
@@ -202,7 +200,6 @@ func TestReminder_Get(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			got, err := r.Get(ctx, conversationID, tt.itemID)
@@ -246,7 +243,6 @@ func TestReminder_Delete(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			err := r.Delete(ctx, conversationID, tt.itemID)
@@ -292,7 +288,6 @@ func TestReminder_ListAll(t *testing.T) {
 		wantErr error
 	}{}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			reminders, err := r.ListAll(ctx)

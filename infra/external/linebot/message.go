@@ -156,16 +156,11 @@ func (r *ReminderMenu) ToMessage() linebot.SendingMessage {
 		msg = linebot.NewTextMessage(r.text)
 	}
 
-	switch r.replyType {
-	default:
-		msg = msg.WithQuickReplies(&linebot.QuickReplyItems{
-			Items: []*linebot.QuickReplyButton{
-				{Action: linebot.NewPostbackAction("追加", "Reminder#add", "", "追加", "", "")},
-			},
-		})
-	}
-
-	return msg
+	return msg.WithQuickReplies(&linebot.QuickReplyItems{
+		Items: []*linebot.QuickReplyButton{
+			{Action: linebot.NewPostbackAction("追加", "Reminder#add", "", "追加", "", "")},
+		},
+	})
 }
 
 type ReminderChoices struct {

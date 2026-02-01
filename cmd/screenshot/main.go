@@ -11,7 +11,6 @@ import (
 
 	"cloud.google.com/go/profiler"
 	"go.opentelemetry.io/otel"
-	"go.uber.org/automaxprocs/maxprocs"
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/ww24/linebot/internal/buildinfo"
@@ -31,7 +30,14 @@ func init() {
 }
 
 func main() {
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	if err := execute(context.Background()); err != nil {
+		log.Printf("main: %+v", err)
+		os.Exit(1)
+	}
+}
+
+func execute(ctx context.Context) error {
+	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	ctx, span := tr.Start(ctx, "start job")
@@ -39,7 +45,7 @@ func main() {
 
 	projectID, err := gcp.ProjectID()
 	if err != nil {
-		log.Printf("ERROR gcp.ProjectID: %+v", err)
+		return fmt.Errorf("ERROR gcp.ProjectID: %w", err)
 	}
 
 	if err := llog.SetOption(
@@ -49,23 +55,14 @@ func main() {
 		llog.RevisionID(buildinfo.Revision()),
 		llog.GCPProjectID(projectID),
 	); err != nil {
-		log.Printf("ERROR log.SetOption: %+v", err)
-		stop()
-		os.Exit(1)
+		return fmt.Errorf("ERROR log.SetOption: %w", err)
 	}
 	grpclog.SetLoggerV2(llog.NewGRPCLogger(slog.Default().Handler()))
 
-	// set GOMAXPROCS
-	infof := func(format string, args ...interface{}) { slog.Info(fmt.Sprintf(format, args...)) }
-	if _, err := maxprocs.Set(maxprocs.Logger(infof)); err != nil {
-		slog.WarnContext(ctx, "main: failed to set GOMAXPROCS", llog.Err(err))
-	}
-
 	job, cleanup, err := register(ctx)
 	if err != nil {
-		stop()
 		slog.ErrorContext(ctx, "main: register", llog.Err(err))
-		os.Exit(1)
+		return fmt.Errorf("ERROR register: %w", err)
 	}
 	defer cleanup()
 
@@ -85,11 +82,10 @@ func main() {
 
 	slog.InfoContext(ctx, "main: start job")
 	if err := job.run(ctx); err != nil {
-		stop()
-		cleanup()
 		slog.ErrorContext(ctx, "main: failed to exec job", llog.Err(err))
-		os.Exit(1)
+		return fmt.Errorf("ERROR failed to exec job: %w", err)
 	}
 
 	slog.InfoContext(ctx, "main: done")
+	return nil
 }

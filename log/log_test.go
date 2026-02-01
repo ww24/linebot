@@ -171,7 +171,6 @@ net/http.(*conn).serve(0xc0085bc6c0, {0x2a21fc479120, 0xc0014ad260})
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			got := chopStack(tt.args.s, tt.args.target)

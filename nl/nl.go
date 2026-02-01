@@ -87,8 +87,7 @@ func (p *Parser) Parse(str string) *model.Item {
 		}
 
 		pos := token.POS()
-		switch pos[0] {
-		case posNoun:
+		if pos[0] == posNoun {
 			if pos[1] == posNumeral {
 				idx, err := p.parseNumber(token.Surface)
 				if err != nil {
