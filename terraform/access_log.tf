@@ -170,15 +170,15 @@ resource "google_cloud_run_v2_job" "maxmind" {
     template {
       service_account = google_service_account.maxmind.email
       timeout         = "60s"
-      max_retries     = 3
+      max_retries     = 1
 
       containers {
-        image = "us.gcr.io/google.com/cloudsdktool/google-cloud-cli:412.0.0-alpine"
+        image = "us.gcr.io/google.com/cloudsdktool/google-cloud-cli:554.0.0-alpine"
 
         resources {
           limits = {
             cpu    = "1000m" # minimum
-            memory = "512Mi" # minimum
+            memory = "1Gi" # minimum
           }
         }
 
