@@ -3,7 +3,7 @@ package firestore
 import (
 	"context"
 	"errors"
-	"log"
+	"fmt"
 	"testing"
 	"time"
 
@@ -22,7 +22,7 @@ func TestMain(m *testing.M) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	if err := setupTestCli(ctx); err != nil {
-		log.Fatalf("failed to setup firestore client: %v", err)
+		panic(fmt.Sprintf("failed to setup firestore client: %v", err))
 	}
 
 	m.Run()

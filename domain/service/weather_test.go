@@ -89,7 +89,6 @@ func TestWeatherImpl_LatestImage(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			require.True(t, testtime.SetTime(t, tt.time))

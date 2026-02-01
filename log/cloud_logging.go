@@ -116,13 +116,13 @@ func severity(level slog.Level) string {
 	case level < slog.LevelInfo:
 		return "DEBUG"
 	case level == slog.LevelInfo:
-		return "INFO"
+		return "INFO" //nolint: goconst
 	case level < slog.LevelWarn:
 		return "NOTICE"
 	case level < slog.LevelError:
 		return "WARNING"
 	case level == slog.LevelError:
-		return "ERROR"
+		return "ERROR" //nolint: goconst
 	case level > slog.LevelError:
 		return "CRITICAL"
 	default:

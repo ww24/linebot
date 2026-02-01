@@ -49,7 +49,7 @@ func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func
 				Query:        &avro.UnionNullString{String: strings.ToValidUTF8(r.URL.RawQuery, ""), UnionType: avro.UnionNullStringTypeEnumString},
 				Status:       nil,
 				Duration:     nil,
-				RequestSize:  &avro.UnionNullInt{Int: int32(r.ContentLength), UnionType: avro.UnionNullIntTypeEnumInt},
+				RequestSize:  &avro.UnionNullInt{Int: int32(r.ContentLength), UnionType: avro.UnionNullIntTypeEnumInt}, //nolint: gosec
 				ResponseSize: nil,
 			}
 
@@ -69,9 +69,9 @@ func accessLogHandler(publisher accesslog.Publisher, cfg *config.AccessLog) func
 			rw := newResponseWriter(w)
 			next.ServeHTTP(rw, r)
 
-			accessLog.Status = &avro.UnionNullInt{Int: int32(rw.status), UnionType: avro.UnionNullIntTypeEnumInt}
-			accessLog.Duration = &avro.UnionNullInt{Int: int32(time.Since(start).Microseconds()), UnionType: avro.UnionNullIntTypeEnumInt}
-			accessLog.ResponseSize = &avro.UnionNullInt{Int: int32(rw.size), UnionType: avro.UnionNullIntTypeEnumInt}
+			accessLog.Status = &avro.UnionNullInt{Int: int32(rw.status), UnionType: avro.UnionNullIntTypeEnumInt}                          //nolint: gosec
+			accessLog.Duration = &avro.UnionNullInt{Int: int32(time.Since(start).Microseconds()), UnionType: avro.UnionNullIntTypeEnumInt} //nolint: gosec
+			accessLog.ResponseSize = &avro.UnionNullInt{Int: int32(rw.size), UnionType: avro.UnionNullIntTypeEnumInt}                      //nolint: gosec
 
 			publisher.Publish(context.Background(), accessLog)
 		})

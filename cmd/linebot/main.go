@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/profiler"
-	"go.uber.org/automaxprocs/maxprocs"
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/ww24/linebot/internal/buildinfo"
@@ -37,7 +36,7 @@ func main() {
 
 	projectID, err := gcp.ProjectID()
 	if err != nil {
-		log.Printf("ERROR gcp.ProjectID: %+v", err)
+		panic(fmt.Errorf("ERROR gcp.ProjectID: %w", err))
 	}
 
 	if err := llog.SetOption(
@@ -47,17 +46,9 @@ func main() {
 		llog.RevisionID(buildinfo.Revision()),
 		llog.GCPProjectID(projectID),
 	); err != nil {
-		log.Printf("ERROR log.SetOption: %+v", err)
-		stop()
-		os.Exit(1)
+		panic(fmt.Errorf("ERROR log.SetOption: %w", err))
 	}
 	grpclog.SetLoggerV2(llog.NewGRPCLogger(slog.Default().Handler()))
-
-	// set GOMAXPROCS
-	infof := func(format string, args ...interface{}) { slog.Info(fmt.Sprintf(format, args...)) }
-	if _, err := maxprocs.Set(maxprocs.Logger(infof)); err != nil {
-		slog.WarnContext(ctx, "failed to set GOMAXPROCS", llog.Err(err))
-	}
 
 	bot, cleanup, err := register(ctx)
 	if err != nil {

@@ -78,7 +78,7 @@ func (s *Scheduler) Sync(ctx context.Context, conversationID model.ConversationI
 
 	tasks := make([]*scheduler.Task, 0, len(items))
 	for _, item := range items {
-		task, err := s.reminderItemToTask(prefix, item, t)
+		task, err := s.reminderItemToTask(ctx, prefix, item, t)
 		if err != nil {
 			return err
 		}
@@ -95,7 +95,7 @@ func (s *Scheduler) Sync(ctx context.Context, conversationID model.ConversationI
 func (s *Scheduler) Create(ctx context.Context, conversationID model.ConversationID, item *model.ReminderItem, t time.Time) error {
 	prefix := s.prefix(conversationID)
 	sc := scheduler.New(s.cli, s.projectID, s.location, s.queue, prefix)
-	task, err := s.reminderItemToTask(prefix, item, t)
+	task, err := s.reminderItemToTask(ctx, prefix, item, t)
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (s *Scheduler) Create(ctx context.Context, conversationID model.Conversatio
 func (s *Scheduler) Delete(ctx context.Context, conversationID model.ConversationID, item *model.ReminderItem, t time.Time) error {
 	prefix := s.prefix(conversationID)
 	sc := scheduler.New(s.cli, s.projectID, s.location, s.queue, prefix)
-	task, err := s.reminderItemToTask(prefix, item, t)
+	task, err := s.reminderItemToTask(ctx, prefix, item, t)
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func (s *Scheduler) Delete(ctx context.Context, conversationID model.Conversatio
 	return nil
 }
 
-func (s *Scheduler) reminderItemToTask(prefix string, item *model.ReminderItem, t time.Time) (*scheduler.Task, error) {
+func (s *Scheduler) reminderItemToTask(ctx context.Context, prefix string, item *model.ReminderItem, t time.Time) (*scheduler.Task, error) {
 	next, err := item.Scheduler.Next(t)
 	if err != nil {
 		return nil, xerrors.New("failed to get next schedule")
@@ -127,7 +127,7 @@ func (s *Scheduler) reminderItemToTask(prefix string, item *model.ReminderItem, 
 	if err != nil {
 		return nil, xerrors.Errorf("failed to marshal json: %w", err)
 	}
-	req, err := http.NewRequest(http.MethodPost, s.endpoint.String(), bytes.NewReader(data))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, s.endpoint.String(), bytes.NewReader(data))
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create http request: %w", err)
 	}

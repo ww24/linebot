@@ -1,112 +1,30 @@
+version: "2"
+
 run:
   timeout: 3m
 
-issues:
-  exclude-rules:
-    - linters:
-        - exhaustivestruct
-        - errcheck
-        - err113
-        - wrapcheck
-        - gochecknoglobals
-        - exhaustruct
-        - goconst
-      path: _test\.go$
-    - linters:
-        - gochecknoglobals
-      source: "Set = wire.NewSet"
-    - linters:
-        - gochecknoglobals
-      source: "var tracer = otel.Tracer"
-    - linters:
-        - mnd
-      source: "time."
-    - linters:
-        - mnd
-      source: "strconv.Parse"
-    - linters:
-        - wrapcheck
-      source: "code.With\\("
-    - linters:
-        - gocritic
-      text: "hugeParam:"
-      source: "slog.Record"
-
-linters-settings:
-  gocyclo:
-    min-complexity: 15
-  gocritic:
-    enabled-checks:
-      - appendCombine
-      - boolExprSimplify
-      - builtinShadow
-      - commentedOutCode
-      - commentedOutImport
-      - docStub
-      - dupImport
-      - emptyFallthrough
-      - emptyStringTest
-      - equalFold
-      - hexLiteral
-      - hugeParam
-      - importShadow
-      - indexAlloc
-      - initClause
-      - methodExprCall
-      - nestingReduce
-      - nilValReturn
-      - octalLiteral
-      - paramTypeCombine
-      - ptrToRefParam
-      - rangeExprCopy
-      - rangeValCopy
-      - sloppyReassign
-      - stringXbytes
-      - typeAssertChain
-      - typeUnparen
-      - unnecessaryBlock
-      - weakCond
-      - yodaStyleExpr
-  gci:
-    sections:
-      - standard
-      - default
-      - prefix(github.com/ww24/linebot)
-  exhaustive:
-    default-signifies-exhaustive: true
-  exhaustruct:
-    include:
-      - "github.com/ww24/linebot/domain"
-
 linters:
-  disable-all: true
   enable:
     - bodyclose
     - errcheck
     - errorlint
-    - exportloopref
     - gochecknoglobals
     - goconst
     - gocritic
     - gocyclo
     - err113
-    - goimports
-    - gci
     - mnd
-    - gosimple
     - govet
     - ineffassign
     - misspell
     - noctx
     - staticcheck
-    - typecheck
     - unconvert
     - unparam
     - unused
     - nolintlint
     - wrapcheck
     - tparallel
-    - stylecheck
     - prealloc
     - exhaustive
     - exhaustruct
@@ -116,3 +34,88 @@ linters:
     - gosec
     - nestif
     - nakedret
+  settings:
+    gocyclo:
+      min-complexity: 15
+    gocritic:
+      enabled-checks:
+        - appendCombine
+        - boolExprSimplify
+        - builtinShadow
+        - commentedOutCode
+        - commentedOutImport
+        - docStub
+        - dupImport
+        - emptyFallthrough
+        - emptyStringTest
+        - equalFold
+        - hexLiteral
+        - hugeParam
+        - importShadow
+        - indexAlloc
+        - initClause
+        - methodExprCall
+        - nestingReduce
+        - nilValReturn
+        - octalLiteral
+        - paramTypeCombine
+        - ptrToRefParam
+        - rangeExprCopy
+        - rangeValCopy
+        - sloppyReassign
+        - stringXbytes
+        - typeAssertChain
+        - typeUnparen
+        - unnecessaryBlock
+        - weakCond
+        - yodaStyleExpr
+    exhaustive:
+      default-signifies-exhaustive: true
+    exhaustruct:
+      include:
+        - "github.com/ww24/linebot/domain"
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - exhaustivestruct
+          - errcheck
+          - err113
+          - wrapcheck
+          - gochecknoglobals
+          - exhaustruct
+          - goconst
+        path: _test\.go$
+      - linters:
+          - gochecknoglobals
+        source: "Set = wire.NewSet"
+      - linters:
+          - gochecknoglobals
+        source: "var tracer = otel.Tracer"
+      - linters:
+          - mnd
+        source: "time."
+      - linters:
+          - mnd
+        source: "strconv.Parse"
+      - linters:
+          - wrapcheck
+        source: "code.With\\("
+      - linters:
+          - gocritic
+        text: "hugeParam:"
+        source: "slog.Record"
+formatters:
+  enable:
+    - gci
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/ww24/linebot)

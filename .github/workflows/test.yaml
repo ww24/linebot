@@ -6,7 +6,7 @@ on:
       golangci_lint_version:
         type: string
         required: false
-        default: "v1.58.1"
+        default: "v2.8.0"
 
 jobs:
   lint:
@@ -54,7 +54,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v6.0.2
-      - uses: actions/cache@v4.0.2
+      - uses: actions/cache@v5.0.3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}

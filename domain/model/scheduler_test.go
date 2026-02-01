@@ -33,7 +33,6 @@ func TestOneshotScheduler_Next(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run("", func(t *testing.T) {
 			t.Parallel()
 			got, err := tt.scheduler.Next(tt.now)
@@ -75,7 +74,6 @@ func TestDailyScheduler_Next(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run("", func(t *testing.T) {
 			t.Parallel()
 			got, err := tt.scheduler.Next(tt.now)
@@ -111,7 +109,6 @@ func TestParseScheduler(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run("", func(t *testing.T) {
 			t.Parallel()
 			got, err := ParseScheduler(tt.serialized)
