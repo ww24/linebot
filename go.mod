@@ -1,8 +1,6 @@
 module github.com/ww24/linebot
 
-go 1.22
-
-toolchain go1.22.3
+go 1.23.0
 
 require (
 	cloud.google.com/go/cloudtasks v1.13.0
@@ -33,7 +31,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.29.0
 	go.uber.org/automaxprocs v1.5.3
 	go.uber.org/mock v0.4.0
-	golang.org/x/oauth2 v0.23.0
+	golang.org/x/oauth2 v0.27.0
 	golang.org/x/text v0.18.0
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
 	google.golang.org/api v0.196.0
