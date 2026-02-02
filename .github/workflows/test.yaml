@@ -60,7 +60,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - uses: actions/setup-go@v5.0.2
+      - uses: actions/setup-go@v6.2.0
         with:
           go-version-file: go.mod
       - name: Test
@@ -73,7 +73,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v6.0.2
-      - uses: actions/setup-go@v5.0.2
+      - uses: actions/setup-go@v6.2.0
         with:
           go-version-file: go.mod
       - name: Check generated files
