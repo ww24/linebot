@@ -67,7 +67,7 @@ jobs:
       packages: write
       id-token: write
       security-events: write
-    uses: ww24/linebot/.github/workflows/docker.yml@73705893378fa4d1f1bfa0bc76e55de0e7ad9283
+    uses: ww24/linebot/.github/workflows/docker.yml@b243413384e45def73020499800e60221c9db107
     with:
       image_tag: latest
       push: ${{ github.event_name == 'push' }}
